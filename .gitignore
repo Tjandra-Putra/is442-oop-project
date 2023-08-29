@@ -1,0 +1,34 @@
+# Node.js and npm
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build output
+build/
+dist/
+*.zip
+*.tar.gz
+
+# Environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Editor specific files
+.vscode/
+.idea/
+*.iml
+
+# Logs and testing
+*.log
+__tests__/
+coverage/
+
+# Dependency lock files
+yarn.lock
+package-lock.json
+
+# Other
+.DS_Store
+Thumbs.db
