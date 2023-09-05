@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // user routes
-import { Navbar, Footer, Home, Login, Register } from "./routes/Routes";
+import { Navbar, Footer, Home, Login, Register, Sidebar } from "./routes/Routes";
 import "./App.css";
 
 function App() {
@@ -9,6 +9,7 @@ function App() {
     <BrowserRouter>
       {/* Static content goes here */}
       <Navbar />
+
 
       {/* Dynamic content goes here */}
       <Routes>
