@@ -2,4 +2,26 @@
   background-color: #f2f5f6;
   padding-top: 1rem;
   height: 100%;
+  min-height: calc(100vh - 4rem);
+}
+
+.banner {
+  margin-top: -15px !important;
+  background-color: #1a3b71;
+  height: 6rem;
+  color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+}
+
+.allStocksNetFigure {
+  font-weight: 500 !important;
+}
+
+.statusChip {
+  font-weight: 600;
+  background-color: #6396d8;
+  letter-spacing: 1px;
 }

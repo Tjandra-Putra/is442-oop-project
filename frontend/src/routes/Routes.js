@@ -4,6 +4,6 @@ import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import Dashboard from "../pages/Dashboard/Dashboard";
-import AppBarOffset from "../components/Layout/AppBarOffSet/AppBarOffSet";
+import AppBarOffSet from "../components/Layout/AppBarOffSet/AppBarOffSet";
 
-export { Navbar, Footer, Home, Login, Register, Dashboard, AppBarOffset };
+export { Navbar, Footer, Home, Login, Register, Dashboard, AppBarOffSet };

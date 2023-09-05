@@ -2,7 +2,6 @@ import * as React from "react";
 import { styled, useTheme, alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -14,71 +13,26 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import LogoutIcon from "@mui/icons-material/Logout";
-import SearchIcon from "@mui/icons-material/Search";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import Container from "@mui/material/Container";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 
 import style from "./Navbar.module.css";
 
 const drawerWidth = 240;
 
-// Search Bar Styling
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-}));
-
-// Search Icon Styling
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-// Input Base Styling
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
-  },
-}));
-
 // AppBar Styling
 const appBarStyle = {
-  backgroundColor: "#12294d", // Set the background color to your desired color
+  // backgroundColor: "#12294d", // Set the background color to your desired color
+  boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
 };
 
 // Drawer Styling
@@ -96,23 +50,6 @@ const AppBar = styled(MuiAppBar, {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-  }),
-}));
-
-const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(({ theme, open }) => ({
-  flexGrow: 1,
-  padding: theme.spacing(3),
-  transition: theme.transitions.create("margin", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  marginLeft: `-${drawerWidth}px`,
-  ...(open && {
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: 0,
   }),
 }));
 
@@ -199,18 +136,10 @@ const Navbar = () => {
       <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
-            <MailIcon />
+            <EmailOutlinedIcon />
           </Badge>
         </IconButton>
         <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
@@ -220,7 +149,7 @@ const Navbar = () => {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          <AccountCircleOutlinedIcon />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -229,9 +158,9 @@ const Navbar = () => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <AppBar position="fixed" open={open} style={appBarStyle}>
+      <AppBar position="fixed" open={open} style={appBarStyle} color="default">
         <Container maxWidth="xl">
-          <Toolbar style={{ paddingLeft: 13 }}>
+          <Toolbar style={{ paddingLeft: 15 }}>
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -248,22 +177,9 @@ const Navbar = () => {
             <Box sx={{ flexGrow: 1 }} />
 
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <MenuItem>
-                <Search>
-                  <SearchIconWrapper>
-                    <SearchIcon />
-                  </SearchIconWrapper>
-                  <StyledInputBase placeholder="Search…" inputProps={{ "aria-label": "search" }} />
-                </Search>
-              </MenuItem>
               <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                 <Badge badgeContent={4} color="error">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
-              <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-                <Badge badgeContent={17} color="error">
-                  <NotificationsIcon />
+                  <EmailOutlinedIcon />
                 </Badge>
               </IconButton>
               <IconButton
@@ -275,7 +191,7 @@ const Navbar = () => {
                 onClick={handleProfileMenuOpen}
                 color="inherit"
               >
-                <AccountCircle />
+                <AccountCircleOutlinedIcon />
               </IconButton>
             </Box>
           </Toolbar>
@@ -309,7 +225,7 @@ const Navbar = () => {
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton>
-              <ListItemIcon>{<AccountCircleIcon />}</ListItemIcon>
+              <ListItemIcon>{<AccountCircleOutlinedIcon />}</ListItemIcon>
               <ListItemText primary="Profile" />
             </ListItemButton>
           </ListItem>
@@ -332,6 +248,8 @@ const Navbar = () => {
           </ListItem>
         </List>
       </Drawer>
+      {renderMenu}
+      {renderMobileMenu}
     </Box>
   );
 };
