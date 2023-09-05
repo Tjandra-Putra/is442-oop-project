@@ -167,14 +167,22 @@ const Navbar = () => {
             <Typography variant="h6" noWrap component="div" sx={{ display: { xs: "none", sm: "block" } }}>
               Goldman Sachs
             </Typography>
-            <Search>
+            {/* <Search>
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>
               <StyledInputBase placeholder="Search…" inputProps={{ "aria-label": "search" }} />
-            </Search>
+            </Search> */}
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <MenuItem>
+                <Search>
+                  <SearchIconWrapper>
+                    <SearchIcon />
+                  </SearchIconWrapper>
+                  <StyledInputBase placeholder="Search…" inputProps={{ "aria-label": "search" }} />
+                </Search>
+              </MenuItem>
               <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                 <Badge badgeContent={4} color="error">
                   <MailIcon />
