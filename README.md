@@ -1,7 +1,5 @@
 # is442-oop-project
 
-## Description
-
 Briefly describe your project, including its purpose and main features.
 
 ## Table of Contents
