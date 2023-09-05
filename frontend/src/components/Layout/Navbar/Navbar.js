@@ -19,6 +19,7 @@ import Container from "@mui/material/Container";
 
 const appBarStyle = {
   backgroundColor: "#12294d", // Set the background color to your desired color
+  height: "65px",
 };
 
 const Search = styled("div")(({ theme }) => ({
