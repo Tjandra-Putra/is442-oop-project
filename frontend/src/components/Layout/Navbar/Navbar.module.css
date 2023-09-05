@@ -1,3 +1,8 @@
+.navBarMain {
+  position: fixed !important;
+  margin-bottom: 10rem;
+}
+
 .brand {
   font-weight: 500 !important;
 }

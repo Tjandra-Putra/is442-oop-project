@@ -208,7 +208,7 @@ const Navbar = () => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <AppBar position="fixed" open={open} style={appBarStyle}>
+      <AppBar position="static" open={open} style={appBarStyle}>
         <Container>
           <Toolbar>
             <IconButton
