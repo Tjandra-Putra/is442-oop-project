@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // user routes
-import { Navbar, Footer, Home, Login, Register, Sidebar, Dashboard } from "./routes/Routes";
+import { Navbar, Footer, Home, Login, Register, Dashboard } from "./routes/Routes";
 import "./App.css";
 
 function App() {
