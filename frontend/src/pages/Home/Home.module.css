@@ -1,0 +1,28 @@
+.stockone {
+    display:flex;
+    background-image: url("../../../public/image6.jpg");
+    width: 100%;
+    height:30em;
+    background-repeat: no-repeat;
+    background-size: cover;
+    flex-direction: column;
+
+  }
+
+  .stocktwo{
+    margin-top: 20px;
+  }
+
+p{
+   font-family: "Basis Grotesque", Arial, Helvetica, sans-serif;
+   
+}
+
+.landingpage{
+    margin-top: -10px;
+    font-family: "Basis Grotesque", Arial, Helvetica, sans-serif;
+    font-weight: 20;
+    line-height: 82px;
+    word-wrap: break-word;
+   
+}
