@@ -4,5 +4,6 @@ import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import Sidebar from "../components/Layout/Sidebar/Sidebar";
+import Dashboard from "../pages/Dashboard/Dashboard";
 
-export { Navbar, Footer, Home, Login, Register, Sidebar };
+export { Navbar, Footer, Home, Login, Register, Sidebar, Dashboard };

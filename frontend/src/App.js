@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // user routes
-import { Navbar, Footer, Home, Login, Register, Sidebar } from "./routes/Routes";
+import { Navbar, Footer, Home, Login, Register, Sidebar, Dashboard } from "./routes/Routes";
 import "./App.css";
 
 function App() {
@@ -10,12 +10,12 @@ function App() {
       {/* Static content goes here */}
       <Navbar />
 
-
       {/* Dynamic content goes here */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
 
       {/* Static content goes here */}

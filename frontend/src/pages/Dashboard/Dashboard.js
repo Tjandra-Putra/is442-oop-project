@@ -1,13 +1,13 @@
 import React from "react";
-import Chart from 'chart.js/auto'
+import Chart from "chart.js/auto";
+import Sidebar from "../../components/Layout/Sidebar/Sidebar";
 
 const Dashboard = () => {
+  return (
+    <div className="dashboardWrapper">
+      <Sidebar />
+    </div>
+  );
+};
 
-    return (
-        <div>
-        <h1>Dashboard</h1>
-        </div>
-        );
- }
-
- export default Dashboard;
+export default Dashboard;
