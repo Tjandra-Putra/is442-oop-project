@@ -4,6 +4,7 @@ import Container from "@mui/material/Container";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
 
 import Grid from "@mui/material/Grid";
 
@@ -21,9 +22,14 @@ const Dashboard = () => {
       <Container maxWidth="xl">
         <Grid container spacing={2}>
           <Grid item xs={8}>
-            <Typography variant="h3" gutterBottom>
-              h2. Heading
-            </Typography>
+            <Stack direction="row" justifyContent="space-between" alignItems="flex-start" spacing={1}>
+              <Typography variant="h4" gutterBottom>
+                Dashboard
+              </Typography>
+              <Typography variant="h5" gutterBottom>
+                $46,509.00
+              </Typography>
+            </Stack>
           </Grid>
           <Grid item xs={4}>
             Right Side

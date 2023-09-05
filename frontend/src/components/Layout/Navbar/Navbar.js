@@ -33,6 +33,7 @@ import style from "./Navbar.module.css";
 
 const drawerWidth = 240;
 
+// Search Bar Styling
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -49,6 +50,7 @@ const Search = styled("div")(({ theme }) => ({
   },
 }));
 
+// Search Icon Styling
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
   height: "100%",
@@ -59,6 +61,7 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
   justifyContent: "center",
 }));
 
+// Input Base Styling
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
@@ -73,12 +76,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+// AppBar Styling
 const appBarStyle = {
   backgroundColor: "#12294d", // Set the background color to your desired color
-  height: "65px",
-  marginBottom: "2rem",
 };
 
+// Drawer Styling
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
@@ -96,6 +99,24 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
+const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(({ theme, open }) => ({
+  flexGrow: 1,
+  padding: theme.spacing(3),
+  transition: theme.transitions.create("margin", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  marginLeft: `-${drawerWidth}px`,
+  ...(open && {
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  }),
+}));
+
+// Drawer Header Styling
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -126,10 +147,6 @@ const Navbar = () => {
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
-  };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
   };
 
   const handleDrawerOpen = () => {
@@ -212,29 +229,24 @@ const Navbar = () => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <AppBar position="static" open={open} style={appBarStyle}>
+      <AppBar position="fixed" open={open} style={appBarStyle}>
         <Container maxWidth="xl">
-          <Toolbar>
+          <Toolbar style={{ paddingLeft: 13 }}>
             <IconButton
               color="inherit"
               aria-label="open drawer"
               onClick={handleDrawerOpen}
               edge="start"
-              sx={{ mr: 2, ...(open && { display: "none" }) }}
+              sx={{ mr: 2, p: 0, ...(open && { display: "none" }) }}
             >
               <MenuIcon />
             </IconButton>
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ display: { xs: "none", sm: "block" } }}
-              className={style.brand}
-            >
+            <Typography variant="h6" noWrap component="div">
               Goldman Sachs
             </Typography>
 
             <Box sx={{ flexGrow: 1 }} />
+
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <MenuItem>
                 <Search>
@@ -320,9 +332,6 @@ const Navbar = () => {
           </ListItem>
         </List>
       </Drawer>
-
-      {renderMobileMenu}
-      {renderMenu}
     </Box>
   );
 };

@@ -3,9 +3,11 @@ import Container from "@mui/material/Container";
 
 const home = () => {
   return (
-    <Container>
-      <h1>Home</h1>
-    </Container>
+    <div>
+      <Container maxWidth="xl">
+        <h1>Home</h1>
+      </Container>
+    </div>
   );
 };
 
