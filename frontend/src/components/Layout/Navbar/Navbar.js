@@ -19,7 +19,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -77,6 +76,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const appBarStyle = {
   backgroundColor: "#12294d", // Set the background color to your desired color
   height: "65px",
+  marginBottom: "2rem",
 };
 
 const AppBar = styled(MuiAppBar, {
@@ -213,7 +213,7 @@ const Navbar = () => {
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar position="static" open={open} style={appBarStyle}>
-        <Container>
+        <Container maxWidth="xl">
           <Toolbar>
             <IconButton
               color="inherit"
