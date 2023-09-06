@@ -175,7 +175,8 @@ const Navbar = () => {
             </IconButton>
             <Link to="/" style={{ textDecoration: "none", color: "#000000" }}>
               <Typography variant="h6" noWrap component="div" className={style.brand}>
-                Goldman Sachs
+                Goldman <br />
+                Sachs
               </Typography>
             </Link>
 
