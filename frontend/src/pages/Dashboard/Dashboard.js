@@ -10,6 +10,10 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import style from "./Dashboard.module.css";
 
+import BarChart from "../../components/Charts/BarChart/BarChart";
+import PortfolioCard from "../../components/PorfolioCard/PortfolioCard";
+import Menu from "../../components/Menu/Menu";
+
 const Dashboard = () => {
   return (
     <div className={style.dashboardWrapper}>
@@ -23,25 +27,44 @@ const Dashboard = () => {
         </Container>
       </div>
       <Container maxWidth="xl">
-        <Grid container spacing={4} sx={{ mt: 0 }}>
-          <Grid item md={8} xs={12}>
-            <Card sx={{ minHeight: 540 }}>
-              <CardContent>
-                <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-                  <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
-                    <Typography variant="h6" className={style.allStocksNetFigure}>
-                      $46,509.00
-                    </Typography>
-                    <Chip label="+ 1,468" color="primary" className={style.statusChip} />
-                  </Stack>
+        <Grid container spacing={4} mt={0}>
+          <Grid item md={9} xs={12}>
+            <Card className={style.figuresBar}>
+              <Typography variant="h6" className={style.portfolioWorthText}>
+                Portfolios' Worth
+              </Typography>
 
-                  <Typography variant="h6">My Stock Values (USD)</Typography>
-                </Stack>
+              <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+                <Typography variant="h6" mr={2} className={style.portfolioWorthFigure}>
+                  $46,509.00
+                </Typography>
+                <Chip label="+1,468" color="primary" className={style.statusChip} />
+              </Stack>
+            </Card>
+
+            <Card className={style.chart} sx={{ minHeight: 540 }}>
+              <CardContent>
+                <Menu menuName="Filter by Year" style={{ float: "right" }} />
+                <BarChart />
               </CardContent>
             </Card>
+
+            <div className="portfolios">
+              <Grid container spacing={4}>
+                <Grid item md={4} xs={12}>
+                  <PortfolioCard />
+                </Grid>
+                <Grid item md={4} xs={12}>
+                  <PortfolioCard />
+                </Grid>
+                <Grid item md={4} xs={12}>
+                  <PortfolioCard />
+                </Grid>
+              </Grid>
+            </div>
           </Grid>
-          <Grid item md={4} xs={12}>
-            <Card sx={{ minHeight: 540 }}>
+          <Grid item md={3} xs={12}>
+            <Card className={style.rightSection} sx={{ minHeight: 540 }}>
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
                   Lizard

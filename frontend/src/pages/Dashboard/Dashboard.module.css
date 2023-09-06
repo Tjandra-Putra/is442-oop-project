@@ -16,12 +16,38 @@
   text-align: center;
 }
 
-.allStocksNetFigure {
-  font-weight: 500 !important;
+.portfolioWorthFigure {
+  font-weight: 300 !important;
+}
+
+.portfolioWorthText {
+  font-weight: 400 !important;
 }
 
 .statusChip {
-  font-weight: 600;
+  font-weight: 400;
   background-color: #6396d8;
   letter-spacing: 1px;
+}
+
+.figuresBar {
+  height: 3rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  box-shadow: none !important;
+}
+
+.cardShadowNone {
+  box-shadow: none !important;
+}
+
+.chart {
+  box-shadow: none !important;
+}
+
+.rightSection {
+  box-shadow: none !important;
 }

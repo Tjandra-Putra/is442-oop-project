@@ -24,6 +24,7 @@ import Container from "@mui/material/Container";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import { Link } from "react-router-dom";
 
 import style from "./Navbar.module.css";
 
@@ -32,6 +33,7 @@ const drawerWidth = 240;
 // AppBar Styling
 const appBarStyle = {
   // backgroundColor: "#12294d", // Set the background color to your desired color
+  backgroundColor: "#ffffff",
   boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
 };
 
@@ -141,6 +143,7 @@ const Navbar = () => {
         </IconButton>
         <p>Messages</p>
       </MenuItem>
+
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -170,9 +173,11 @@ const Navbar = () => {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap component="div">
-              Goldman Sachs
-            </Typography>
+            <Link to="/" style={{ textDecoration: "none", color: "#000000" }}>
+              <Typography variant="h6" noWrap component="div" className={style.brand}>
+                Goldman Sachs
+              </Typography>
+            </Link>
 
             <Box sx={{ flexGrow: 1 }} />
 

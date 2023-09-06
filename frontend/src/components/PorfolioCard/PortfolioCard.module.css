@@ -1,0 +1,28 @@
+.portfolioCardWrapper {
+  box-shadow: none !important;
+  margin-top: 2rem;
+}
+
+.stockHeader {
+  display: flex;
+  flex-direction: row;
+  height: 3rem;
+  align-items: center;
+  text-transform: uppercase;
+  font-weight: 500;
+  justify-content: space-between;
+}
+
+.stockName {
+  margin-left: 0.5rem;
+}
+
+.stockType {
+  display: flex;
+  align-items: center;
+}
+
+.ticker {
+  color: #00000077;
+  font-weight: 400;
+}
