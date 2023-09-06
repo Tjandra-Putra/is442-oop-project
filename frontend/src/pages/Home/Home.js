@@ -1,13 +1,22 @@
 import React from "react";
-import Container from "@mui/material/Container";
+// import Container from "@mui/material/Container";
 import style from "./Home.module.css";
 
 const home = () => {
   return (
     <div className={style.homeWrapper}>
-      <Container maxWidth="xl">
-        <h1>Home</h1>
-      </Container>
+
+        {/* First div */}
+        <div className={style.firstWrapper}>
+            <div className={style.firstWrappertext}>
+                <p id = {style.FirstWrappertext}>Welcome to Goldman Sachs</p>
+                <p>Here you can find good financial products</p>
+            </div>
+        </div>
+
+        {/* Second div */}
+        <div className={style.emptydiv} ></div>
+
     </div>
   );
 };
