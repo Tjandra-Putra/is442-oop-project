@@ -1,4 +1,4 @@
-.stockone {
+.stockimageone {
   display: flex;
   background-image: url("../../../public/image6.jpg");
   width: 100%;
@@ -9,12 +9,14 @@
   z-index: -1;
 }
 
-  .stocktwo{
+  .stockimagetwo{
+    margin-left: 0px;
     margin-top: 20px;
     display: block;
-     margin-left: auto;
     margin-right: auto;
+    
   }
+
   .stocktwoitem{
     margin-top: 20px;
     display: flex;
@@ -39,9 +41,9 @@ p{
    
 }
 .gridcontainerone {
-  display: unset !important; /* Reset to default value */
-  width: unset !important; /* Reset to default value */
-  grid-template-columns: unset !important; /* Reset to default value */
+  position: relative;
+  width: 100%;
+  display: flex;
 }
 
 
@@ -55,9 +57,16 @@ p{
   grid-template-columns: 1fr 1fr;
 }
 
-.stockthree{
+.stockimagethree{
   margin-top: 20px;
   display: block;
+  margin-right: 0px;
   margin-left: auto;
-  margin-right: auto;
 }
+
+.emptydiv{
+  height: 200px;
+  background-color:#192d47;
+}
+
+
