@@ -25,19 +25,26 @@ const PortfolioCard = () => {
           <div className={style.ticker}>(NETSOL)</div>
         </div>
 
-        <div className={style.stockMiddle}></div>
+        <div className={style.stockMiddle}>
+          <div className="value">RS 128.00</div>
+          <div className="performance">-3(0.58%)</div>
+        </div>
 
-        <div className={style.stockFooter}></div>
-
-        <Typography variant="body2" color="text.secondary">
-          Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents
-          except Antarctica
-        </Typography>
+        <div className={style.stockFooter}>
+          <div className={style.stockFooterLeftItem}>
+            <div className={style.stockFooterText}>Quantity</div>
+            <div className={style.stockFooterFigure}>100</div>
+          </div>
+          <div className={style.stockFooteMiddleItem}>
+            <div className={style.stockFooterText}>Average Cost</div>
+            <div className={style.stockFooterFigure}>Rs 128.00</div>
+          </div>
+          <div className={style.stockFooterRightItem}>
+            <div className={style.stockFooterText}>Market Value</div>
+            <div className={style.stockFooterFigure}>Rs 128.00</div>
+          </div>
+        </div>
       </CardContent>
-      <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button>
-      </CardActions>
     </Card>
   );
 };

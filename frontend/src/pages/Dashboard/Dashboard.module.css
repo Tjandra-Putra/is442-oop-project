@@ -51,3 +51,8 @@
 .rightSection {
   box-shadow: none !important;
 }
+
+.portfoliosText {
+  font-weight: 400 !important;
+  margin-bottom: 1.5rem !important;
+}

@@ -49,7 +49,11 @@ const Dashboard = () => {
               </CardContent>
             </Card>
 
-            <div className="portfolios">
+            <div className="portfolios" style={{ marginTop: "2rem" }}>
+              <Typography variant="h6" className={style.portfoliosText}>
+                You Stock Portfolios
+              </Typography>
+
               <Grid container spacing={4}>
                 <Grid item md={4} xs={12}>
                   <PortfolioCard />
@@ -57,6 +61,14 @@ const Dashboard = () => {
                 <Grid item md={4} xs={12}>
                   <PortfolioCard />
                 </Grid>
+                <Grid item md={4} xs={12}>
+                  <PortfolioCard />
+                </Grid>
+
+                <Grid item md={4} xs={12}>
+                  <PortfolioCard />
+                </Grid>
+
                 <Grid item md={4} xs={12}>
                   <PortfolioCard />
                 </Grid>
