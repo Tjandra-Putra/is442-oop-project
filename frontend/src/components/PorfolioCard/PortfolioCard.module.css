@@ -3,6 +3,11 @@
   margin-top: 0rem;
 }
 
+.portfolioCardWrapper:hover {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+  cursor: pointer;
+}
+
 .stockName {
   margin-left: 0.5rem;
 }

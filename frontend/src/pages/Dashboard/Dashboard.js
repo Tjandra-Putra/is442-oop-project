@@ -44,15 +44,24 @@ const Dashboard = () => {
 
             <Card className={style.chart} sx={{ minHeight: 540 }}>
               <CardContent>
-                <Menu menuName="Filter by Year" style={{ float: "right" }} />
+                <div style={{ textAlign: "right" }}>
+                  <Menu menuName="Filter by Year" />
+                </div>
                 <BarChart />
               </CardContent>
             </Card>
 
-            <div className="portfolios" style={{ marginTop: "2rem" }}>
-              <Typography variant="h6" className={style.portfoliosText}>
-                You Stock Portfolios
-              </Typography>
+            <div className="portfolios" style={{ marginTop: "0rem" }}>
+              <Grid container spacing={4} mt={0}>
+                <Grid item md={6} xs={12}>
+                  <Typography variant="h6" className={style.portfoliosText}>
+                    You Stock Portfolios
+                  </Typography>
+                </Grid>
+                <Grid item md={6} xs={12} style={{ textAlign: "right" }}>
+                  <Menu menuName="Sort by" />
+                </Grid>
+              </Grid>
 
               <Grid container spacing={4}>
                 <Grid item md={4} xs={12}>
@@ -78,12 +87,11 @@ const Dashboard = () => {
           <Grid item md={3} xs={12}>
             <Card className={style.rightSection} sx={{ minHeight: 540 }}>
               <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Lizard
+                <Typography variant="h6" className={style.portfolioWorthText}>
+                  Total Balance
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all
-                  continents except Antarctica
+                <Typography variant="h4" className={style.totalBalance}>
+                  $108,509.00
                 </Typography>
               </CardContent>
               <CardActions>
