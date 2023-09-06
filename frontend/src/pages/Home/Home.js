@@ -26,7 +26,7 @@ const home = () => {
         <div className={style.secondWrapper}>
           {/* First Row */}
           <div className={style.secondWrapperImage}>
-            <img src="image7.jpg"></img>
+            <img src="image7.jpg" style={{width:"70%" , objectFit:"cover" ,  marginLeft:"auto" , marginRight:"auto" , display:"block"}}></img>
           </div>
           {/* Second Row */}
           <div>
@@ -44,7 +44,7 @@ const home = () => {
           </div>
           {/* Second Row */}
           <div>
-          <img src="image7.jpg"></img>
+          <img src="image7.jpg" style={{width:"70%" , objectFit:"cover" ,  marginLeft:"auto" , marginRight:"auto" , display:"block"}}></img>
           </div>
         </div>
 

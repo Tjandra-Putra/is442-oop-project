@@ -31,7 +31,7 @@
   font-family: "Basis Grotesque", Arial, Helvetica, sans-serif;
   font-style: normal;
   font-weight: 100;
-  font-size: 76px;
+  font-size: 40px;
   line-height: 82px;
   color: #000000;
 
@@ -43,11 +43,12 @@
 
 }
 
-.secondWrapperImage{
+/* .secondWrapperImage{
+
   display: block;
   margin-left: auto;
   margin-right: auto;
-}
+} */
 
 .thirdWrapper{
   display: grid;
