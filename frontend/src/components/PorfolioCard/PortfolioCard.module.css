@@ -1,0 +1,55 @@
+.portfolioCardWrapper {
+  box-shadow: none !important;
+  margin-top: 0rem;
+}
+
+.portfolioCardWrapper:hover {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+  cursor: pointer;
+}
+
+.stockName {
+  margin-left: 0.5rem;
+}
+
+.stockType {
+  display: flex;
+  align-items: center;
+}
+
+.ticker {
+  color: #00000077;
+  font-weight: 400;
+}
+
+.stockHeader {
+  display: flex;
+  flex-direction: row;
+  height: 3rem;
+  align-items: center;
+  text-transform: uppercase;
+  font-weight: 500;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.stockMiddle {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: #2e82d6;
+  font-weight: 500;
+}
+
+.stockFooter {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  text-align: start;
+}
+
+.stockFooter .stockFooterText {
+  font-weight: 500;
+  line-height: 1.5rem;
+}

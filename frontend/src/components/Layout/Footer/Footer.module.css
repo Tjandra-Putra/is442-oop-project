@@ -1,0 +1,20 @@
+.footerWrapper {
+  /* background-color: #f4f4f4; */
+  background-color: #6396d8;
+  color: white;
+  height: 100%;
+  min-height: 40vh;
+  padding: 3rem;
+}
+
+.brandName {
+  font-family: var(--font-slabo);
+  font-size: 3rem;
+  line-height: 3rem;
+}
+
+.footerItems {
+  list-style: none;
+  line-height: 3rem;
+  font-weight: 300;
+}
