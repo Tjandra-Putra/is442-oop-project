@@ -29,6 +29,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/create-portfolio" element={<CreatePortfolio />} />
         <Route path="/portfolio/:id" element={<PortfolioDetailed />} />
+        {/* <Route path="/stock/:id" element={<PortfolioDetailed />} /> */}
       </Routes>
 
       {/* Static content goes here */}
