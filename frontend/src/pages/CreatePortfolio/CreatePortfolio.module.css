@@ -1,0 +1,18 @@
+.createPortfolioWrapper {
+  background-color: var(--bg-ocean-light-blue);
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+  height: 100%;
+  min-height: calc(100vh - 4rem);
+}
+
+.banner {
+  margin-top: -15px !important;
+  background-color: var(--bg-ocean-blue);
+  height: 6rem;
+  color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+}

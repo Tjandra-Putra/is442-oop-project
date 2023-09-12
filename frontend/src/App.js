@@ -1,7 +1,17 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // user routes
-import { Navbar, Footer, Home, Login, Register, Dashboard, AppBarOffSet } from "./routes/Routes";
+import {
+  Navbar,
+  Footer,
+  Home,
+  Login,
+  Register,
+  Dashboard,
+  AppBarOffSet,
+  CreatePortfolio,
+  PortfolioDetailed,
+} from "./routes/Routes";
 import "./App.css";
 
 function App() {
@@ -17,6 +27,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/create-portfolio" element={<CreatePortfolio />} />
+        <Route path="/portfolio/:id" element={<PortfolioDetailed />} />
       </Routes>
 
       {/* Static content goes here */}
