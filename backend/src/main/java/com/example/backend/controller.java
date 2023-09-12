@@ -12,4 +12,3 @@ public class controller {
         return "Hello World!";
     }
 }
-
