@@ -4,7 +4,9 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { useParams } from "react-router-dom";
 import Minicard from "../../components/miniCard/miniCard";
-import PortfolioCard from "../../components/PorfolioCard/PortfolioCard";
+import PieChart from "../../components/Charts/PieChart/PieChart";
+import Dashboard from "../Dashboard/Dashboard";
+import SchedulePayment from "../../components/StockGrid/SchedulePayment";
 const PortfolioDetailed = () => {
   // get id from url paramter
   const { id } = useParams();
@@ -22,12 +24,41 @@ const PortfolioDetailed = () => {
       </div>
 
       {/* First container */}
-      <Container className={style.firstContainer}>
-         <Minicard />
-         <Minicard />
-         <Minicard />
-         <Minicard />
+      <Container>
+        <div className={style.firstContainer}>
+          <Minicard />
+          <Minicard />
+          <Minicard />
+          <Minicard />
+        </div>
       </Container>
+
+
+      {/* Second Container */}
+      <Container>
+      <div className={style.ParentContainer}>
+          <div className={style.lefthandside}> 
+              <div className={style.PieChart} >
+                    <div>
+                      <PieChart />
+                    </div>
+                    <div>
+                      <SchedulePayment />
+                    </div>
+                </div>
+
+              <div className={style.outgoingTransactions}>
+                  
+              </div>
+          </div>
+          
+
+        <div>
+          <p>Second Big Column here Do not code here</p>
+        </div>
+      </div>
+      </Container>
+      
     </div>
   );
 };

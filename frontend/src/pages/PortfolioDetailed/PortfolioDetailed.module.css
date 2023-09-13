@@ -19,5 +19,24 @@
 
 .firstContainer{
   display:flex;
-  flex-direction:row;
 }
+.ParentContainer{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.secondContainer{
+  display:flex;
+}
+
+.PieChart{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.lefthandside{
+  display: flex;
+  flex-direction: column;
+}
+
+

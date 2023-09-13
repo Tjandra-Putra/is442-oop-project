@@ -1,0 +1,33 @@
+.PaymentDetails{
+   display: flex;
+   flex-direction: column;
+   width:300px;
+   height:80px;
+   margin-top: 5px;
+   background-color: #E8E8E8;
+   
+}
+
+.firstRow{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+
+.secondRow{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.mySelect{
+    height: 20px;
+    margin-left: 5px;
+}
+
+.mytext{
+    align-self: flex-start; 
+    margin-top: 0px;
+}
+
