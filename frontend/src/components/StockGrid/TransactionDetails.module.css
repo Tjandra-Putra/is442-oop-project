@@ -1,0 +1,10 @@
+.TransactionDetails{
+    display: flex;
+    justify-content: space-between;
+}
+
+.TransactionDetailsIcon{
+    display: flex;
+    align-self: center;
+    align-items: center;
+}
