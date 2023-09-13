@@ -8,6 +8,8 @@
   --font-roboto: "Roboto", sans-serif;
   --font-baskerville: "Libre Baskerville", serif;
   --font-slabo: "Slabo 27px", serif;
+  --bg-ocean-light-blue: #f2f5f6;
+  --bg-ocean-blue: #1a3b71;
 }
 
 body {

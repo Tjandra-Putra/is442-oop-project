@@ -9,7 +9,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import style from "./Dashboard.module.css";
-
+import AddIcon from "@mui/icons-material/Add";
 import BarChart from "../../components/Charts/BarChart/BarChart";
 import PortfolioCard from "../../components/PorfolioCard/PortfolioCard";
 import Menu from "../../components/Menu/Menu";
@@ -59,7 +59,12 @@ const Dashboard = () => {
                   </Typography>
                 </Grid>
                 <Grid item md={6} xs={12} style={{ textAlign: "right" }}>
-                  <Menu menuName="Sort by" />
+                  <Stack direction="row" spacing={1} justifyContent="flex-end">
+                    <Menu menuName="Sort by" />
+                    <Button variant="contained" startIcon={<AddIcon />}>
+                      Add
+                    </Button>
+                  </Stack>
                 </Grid>
               </Grid>
 
