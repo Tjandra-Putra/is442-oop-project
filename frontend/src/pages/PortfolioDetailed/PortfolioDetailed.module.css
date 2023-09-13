@@ -16,3 +16,8 @@
   align-items: center;
   text-align: center;
 }
+
+.firstContainer{
+  display:flex;
+  flex-direction:row;
+}
