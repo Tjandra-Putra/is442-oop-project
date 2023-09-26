@@ -3,7 +3,8 @@ import style from "./PortfolioDetailed.module.css";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { useParams } from "react-router-dom";
-
+import Minicard from "../../components/miniCard/miniCard";
+import PortfolioCard from "../../components/PorfolioCard/PortfolioCard";
 const PortfolioDetailed = () => {
   // get id from url paramter
   const { id } = useParams();
@@ -19,7 +20,14 @@ const PortfolioDetailed = () => {
           </div>
         </Container>
       </div>
-      <Container>{/* Put your code here */}</Container>
+
+      {/* First container */}
+      <Container className={style.firstContainer}>
+         <Minicard />
+         <Minicard />
+         <Minicard />
+         <Minicard />
+      </Container>
     </div>
   );
 };
