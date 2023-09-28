@@ -11,6 +11,8 @@ import gs.model.user.User;
 public interface UserRepo extends CrudRepository<User, Integer>{
 
     @Query(value = "select * from user;", nativeQuery = true)
-    List<Object[]> getStudent();
+    List<Object[]> getUser();
     
+    @Query(value = "select * from user where user_id = ?;", nativeQuery = true)
+    List<Object[]> getUserById(String id);
 }
