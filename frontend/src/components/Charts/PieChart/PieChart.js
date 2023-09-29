@@ -32,6 +32,8 @@ const options  = {
         }
       }
     },
+    width: 400, // Set the desired width
+    height: 300, // Set the desired height
   };
 
 

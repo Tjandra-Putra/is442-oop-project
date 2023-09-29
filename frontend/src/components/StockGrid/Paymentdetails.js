@@ -7,7 +7,7 @@ const PaymentDetails = () => {
     return (
         <div className={style.PaymentDetails}>
             <div className={style.firstRow}>
-                <p>Charity</p>
+                <p style={{ marginLeft: '5px' }} >Charity</p>
                 <MoreVertIcon />
             </div>
             

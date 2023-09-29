@@ -11,6 +11,8 @@ import TransactionDetails from "../../components/StockGrid/TransactionDetails";
 import EditIcon from '@mui/icons-material/Edit';
 import BarChart from "../../components/Charts/BarChart/BarChart";
 import { Bar } from "react-chartjs-2";
+import { Grid } from "@mui/material";
+
 const PortfolioDetailed = () => {
   // get id from url paramter
   const { id } = useParams();
@@ -40,18 +42,18 @@ const PortfolioDetailed = () => {
 
       {/* Second Container */}
       <Container>
-      <div className={style.ParentContainer}>
-          <div className={style.lefthandside}> 
-              <div className={style.PieChart} >
+      <Grid container >
+        <Grid item xs={12} md={7} lg={7}>
+        <div className={style.PieChart} >
                     <div>
                       <PieChart />
                     </div>
                     <div>
                       <SchedulePayment />
                     </div>
-                </div>
+        </div>
 
-              <div className={style.outgoingTransactionsParent}>
+        <div className={style.outgoingTransactionsParent}>
                 <div className={style.outgoingTransactions}>
                     <div>
                       <p>Outgoing Transactions</p>
@@ -80,21 +82,18 @@ const PortfolioDetailed = () => {
                     <TransactionDetails /> 
                 </div>
               </div>
-             
-          </div>
-          
-      {/* Second column of the screen */}
-        <div className={style.righthandside}>
-          <div className={style.activeAccountParent}>
-            <div className={style.activeAccount}>
+        </Grid>
+        <Grid item xs={12} md={5} lg={5}>
+        <div className={style.activeAccount}>
               <div>
                 <p style={{ paddingLeft: '10px' }}>Active Accounts</p>
               </div>
               <div className={style.activeAccountEdit}>
                 <EditIcon />
               </div>
-            </div>
-            <div className={style.activeAccountContent}>
+          </div>
+
+          <div className={style.activeAccountContent}>
                     <div>
                       <p>Account#</p>
                     </div>
@@ -104,9 +103,7 @@ const PortfolioDetailed = () => {
                     <div>
                       <p>Total/Available</p>
                     </div>
-              </div>
           </div>
-
           {/* Active Account Transactions */}
           <div className={style.TransactionDetails}>
           <TransactionDetails /> 
@@ -116,9 +113,14 @@ const PortfolioDetailed = () => {
 
           {/* Barchar */}
           <BarChart />
-        </div>
-      </div>
+
+
+        </Grid>
+
+        
+      </Grid>
       </Container>
+      
       
     </div>
   );

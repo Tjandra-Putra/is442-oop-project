@@ -21,18 +21,18 @@
   display:flex;
 }
 .ParentContainer{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+
 }
 
 .secondContainer{
   display:flex;
 }
 
-.PieChart{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-}
+  .PieChart{
+    display:flex;
+    
+  }
 
 .lefthandside{
   display: flex;
@@ -84,3 +84,21 @@
 .TransactionDetails{
   padding-left: 10px;
 }
+
+
+@media (max-width: 767px) {
+  /* Styles for mobile devices */
+  .PieChart {
+    flex-direction: column; /* Reset flex direction to column for mobile screens */
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Styles for tablets */
+  .PieChart {
+    flex-direction: column; /* Reset flex direction to column for mobile screens */
+  }
+}
+
+
+
