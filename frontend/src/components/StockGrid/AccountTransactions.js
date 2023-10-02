@@ -1,12 +1,12 @@
 import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import style from "./TransactionDetails.module.css";
+import style from "./AccountTransactions.module.css";
 import { DataGrid } from "@mui/x-data-grid";
-const TransactionDetails = () => {
+const AccountTransactions = () => {
     const columns = [
         { field: "id", headerName: "ID", minWidth: 20 },
-        { field: "Name", headerName: "Ticker",minWidth: 70 },
+        { field: "Name", headerName: "Amount ",minWidth: 70 },
         { field: "Description", headerName: "Stock Name" , minWidth: 70},
         {
           field: "Price",
@@ -68,4 +68,4 @@ const TransactionDetails = () => {
     };
 
 
-export default TransactionDetails;
+export default AccountTransactions;
