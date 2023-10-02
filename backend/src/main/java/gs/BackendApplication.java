@@ -6,7 +6,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"gs.controller", "gs.model", "gs.repository", "gs.service"})
+@ComponentScan(
+		basePackages = {"gs.controller", "gs.model", "gs.repository", "gs.service", "gs.config"})
 @RestController
 public class BackendApplication {
 
