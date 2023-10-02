@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import gs.common.ApiModel;
-import gs.common.InputModel;
 import gs.common.NullError;
 import gs.common.RequestModel;
+import gs.inputModel.userInputModel;
 import gs.model.user.User;
 import gs.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,12 +35,12 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/getUser")
-    public ApiModel<ArrayList<InputModel>> getUser(){
+    public ApiModel<ArrayList<userInputModel>> getUser(){
         return ApiModel.ok(userService.getUser());
     }
 
     @GetMapping("/getUser/{id}")
-    public ApiModel<ArrayList<InputModel>> getUserById(
+    public ApiModel<ArrayList<userInputModel>> getUserById(
         @PathVariable("id") String id
     ){
         return ApiModel.ok(userService.getUserById(id));

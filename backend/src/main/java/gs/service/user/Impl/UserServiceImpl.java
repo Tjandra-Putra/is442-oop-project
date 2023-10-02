@@ -8,8 +8,8 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import gs.common.FilterRequestModel;
-import gs.common.InputModel;
 import gs.common.RequestModel;
+import gs.inputModel.userInputModel;
 import gs.model.user.User;
 import gs.repository.UserRepo;
 import gs.service.user.UserService;
@@ -22,39 +22,35 @@ public class UserServiceImpl implements UserService{
     @Resource
     protected UserRepo userRepo;
 
-    public List<InputModel> getUser(){
+    public List<userInputModel> getUser(){
         List<Object[]> userQueryList = userRepo.getUser();
-        List<InputModel> userList = new ArrayList<>();
+        List<userInputModel> userList = new ArrayList<>();
         
         for (Object[] data : userQueryList){
-            InputModel inputModel = new InputModel();
-            Map<String, String> rowList = new HashMap<>();
+            userInputModel inputModel = new userInputModel();
 
-            rowList.put("id", String.valueOf(data[0]));
-            rowList.put("email", String.valueOf(data[1]));
-            rowList.put("password", String.valueOf(data[2]));
-            rowList.put("username", String.valueOf(data[3]));
-
-            inputModel.setData(rowList);
+            inputModel.setId((Integer) (data[0]));
+            inputModel.setEmail(String.valueOf(data[1]));
+            inputModel.setPassword(String.valueOf(data[2]));
+            inputModel.setUsername(String.valueOf(data[3]));
+            
             userList.add(inputModel);
         }
         return userList;
     }
 
-    public List<InputModel> getUserById(String id){
+    public List<userInputModel> getUserById(String id){
         List<Object[]> userQueryList = userRepo.getUserById(id);
-        List<InputModel> userList = new ArrayList<>();
+        List<userInputModel> userList = new ArrayList<>();
         
         for (Object[] data : userQueryList){
-            InputModel inputModel = new InputModel();
-            Map<String, String> rowList = new HashMap<>();
+            userInputModel inputModel = new userInputModel();
 
-            rowList.put("id", String.valueOf(data[0]));
-            rowList.put("email", String.valueOf(data[1]));
-            rowList.put("password", String.valueOf(data[2]));
-            rowList.put("username", String.valueOf(data[3]));
-
-            inputModel.setData(rowList);
+            inputModel.setId((Integer) (data[0]));
+            inputModel.setEmail(String.valueOf(data[1]));
+            inputModel.setPassword(String.valueOf(data[2]));
+            inputModel.setUsername(String.valueOf(data[3]));
+            
             userList.add(inputModel);
         }
         return userList;

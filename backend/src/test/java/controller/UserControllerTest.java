@@ -12,9 +12,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import gs.BackendApplication;
-import gs.common.InputModel;
 import gs.common.RequestModel;
 import gs.controller.UserController;
+import gs.inputModel.userInputModel;
 import gs.service.user.UserService;
 
 import static org.mockito.Mockito.when;
@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
     @MockBean
     RequestModel requestModel = new RequestModel();
-    InputModel inputModel = new InputModel();
+    userInputModel inputModel = new userInputModel();
     
     @MockBean
     UserService userService;
@@ -42,8 +42,8 @@ public class UserControllerTest {
 
     @Test
     public void getUser() throws Exception {
-        List<InputModel> userList = new ArrayList<>();
-        InputModel inputModel = new InputModel();
+        List<userInputModel> userList = new ArrayList<>();
+        userInputModel inputModel = new userInputModel();
         inputModel.setCodeDesc(null);
         inputModel.setCodeValue(null);
         inputModel.setData(null);
