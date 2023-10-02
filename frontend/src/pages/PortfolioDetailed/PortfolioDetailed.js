@@ -6,11 +6,9 @@ import { useParams } from "react-router-dom";
 import StockCard from "../../components/StockCard/StockCard";
 import PieChart from "../../components/Charts/PieChart/PieChart";
 import Dashboard from "../Dashboard/Dashboard";
-import SchedulePayment from "../../components/StockGrid/SchedulePayment";
 import TransactionDetails from "../../components/StockGrid/TransactionDetails";
 import EditIcon from "@mui/icons-material/Edit";
 import BarChart from "../../components/Charts/BarChart/BarChart";
-import { Bar } from "react-chartjs-2";
 import { Grid } from "@mui/material";
 
 const PortfolioDetailed = () => {
@@ -43,19 +41,14 @@ const PortfolioDetailed = () => {
       <Container>
         <Grid container>
           <Grid item xs={12} md={7} lg={7}>
-            <div className={style.PieChart}>
-              <div>
-                <PieChart />
-              </div>
-              <div>
-                <SchedulePayment />
-              </div>
+            <div className={style.pieChart}>
+              <PieChart />
             </div>
 
             <div className={style.outgoingTransactionsParent}>
               <div className={style.outgoingTransactions}>
                 <div>
-                  <p>Outgoing Transactions</p>
+                  <p>Stock Transactions</p>
                 </div>
                 <div>
                   <p>Show all</p>
@@ -85,7 +78,7 @@ const PortfolioDetailed = () => {
           <Grid item xs={12} md={5} lg={5}>
             <div className={style.activeAccount}>
               <div>
-                <p style={{ paddingLeft: "10px" }}>Active Accounts</p>
+                <p style={{ paddingLeft: "10px" }}>Wallet Transactions</p>
               </div>
               <div className={style.activeAccountEdit}>
                 <EditIcon />
