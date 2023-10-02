@@ -55,10 +55,15 @@ public class UserController {
     }
 
     @PostMapping("/addUser2")
-    public ApiModel<String> addUser2(
+    public ApiModel addUser2(
         @RequestBody RequestModel requestModel
     ) throws Exception{
-        userService.addUser2(response, requestModel);
-        return null;
+        ApiModel myApiModel = new ApiModel();
+        
+        userService.addUser2(response, requestModel, myApiModel);
+
+
+        return myApiModel;
+
     }
 }

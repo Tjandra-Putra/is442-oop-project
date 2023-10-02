@@ -3,13 +3,13 @@ package gs.common;
 import java.util.List;
 
 public class RequestModel {
-    private List<FilterRequestModel> filters;
+    private List<DataRequestModel> data;
 
-    public List<FilterRequestModel> getFilters() {
-        return filters;
+    public List<DataRequestModel> getData() {
+        return data;
     }
 
-    public void setFilters(List<FilterRequestModel> filters) {
-        this.filters = filters;
+    public void setData(List<DataRequestModel> data) {
+        this.data = data;
     }
 }

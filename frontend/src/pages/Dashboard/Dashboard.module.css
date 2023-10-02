@@ -60,6 +60,7 @@
   font-weight: 400 !important;
   margin-bottom: 1.5rem !important;
 }
+
 .totalBalance {
   margin-top: 0.5rem !important;
   background-color: #10284d;
@@ -67,4 +68,10 @@
   padding: 0.5rem;
   border-radius: 3px;
   text-align: center;
+}
+
+.horizontalLine {
+  border: 0.8px solid rgba(0, 0, 0, 0.25);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 }

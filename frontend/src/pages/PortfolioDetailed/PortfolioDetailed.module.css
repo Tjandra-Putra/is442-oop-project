@@ -17,74 +17,73 @@
   text-align: center;
 }
 
-.firstContainer{
-  display:flex;
-}
-.ParentContainer{
+.firstContainer {
   display: flex;
-
+}
+.ParentContainer {
+  display: flex;
 }
 
-.secondContainer{
-  display:flex;
+.secondContainer {
+  display: flex;
 }
 
-  .PieChart{
-    display:flex;
-    
-  }
+.pieChart {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  max-height: 20rem;
+}
 
-.lefthandside{
+.lefthandside {
   display: flex;
   flex-direction: column;
 }
 
-.outgoingTransactions{
+.outgoingTransactions {
   display: flex;
   justify-content: space-between;
 }
 
-.outgoingTransactionsParent{
+.outgoingTransactionsParent {
   display: flex;
   flex-direction: column;
 }
 
-.outgoingTransactionsContent{
+.outgoingTransactionsContent {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid wheat;
 }
 
-.righthandside{
+.righthandside {
   display: flex;
   flex-direction: column;
 }
-.activeAccountParent{
+.activeAccountParent {
   display: flex;
   flex-direction: column;
-
 }
-.activeAccount{
+.activeAccount {
   display: flex;
   justify-content: space-between;
 }
 
-.activeAccountEdit{
+.activeAccountEdit {
   display: flex;
   align-items: center;
 }
 
-.activeAccountContent{
+.activeAccountContent {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid wheat;
   padding-left: 10px;
 }
 
-.TransactionDetails{
+.TransactionDetails {
   padding-left: 10px;
 }
-
 
 @media (max-width: 767px) {
   /* Styles for mobile devices */
@@ -99,6 +98,3 @@
     flex-direction: column; /* Reset flex direction to column for mobile screens */
   }
 }
-
-
-

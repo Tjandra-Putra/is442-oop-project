@@ -2,7 +2,7 @@ package gs.common;
 
 import java.util.List;
 
-public class FilterRequestModel {
+public class DataRequestModel {
     private String fieldName;
     private String value;
 
