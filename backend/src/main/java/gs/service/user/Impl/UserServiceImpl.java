@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService{
 
             inputModel.setId((Integer) (data[0]));
             inputModel.setEmail(String.valueOf(data[1]));
-            inputModel.setPassword(String.valueOf(data[2]));
             inputModel.setUsername(String.valueOf(data[3]));
             
             userList.add(inputModel);
@@ -48,7 +47,6 @@ public class UserServiceImpl implements UserService{
 
             inputModel.setId((Integer) (data[0]));
             inputModel.setEmail(String.valueOf(data[1]));
-            inputModel.setPassword(String.valueOf(data[2]));
             inputModel.setUsername(String.valueOf(data[3]));
             
             userList.add(inputModel);

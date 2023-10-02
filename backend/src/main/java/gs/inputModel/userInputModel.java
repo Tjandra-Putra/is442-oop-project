@@ -5,7 +5,6 @@ import java.io.Serializable;
 public class userInputModel implements Serializable {
     private int id;
     private String email;
-    private String password;
     private String username;
 
     public int getId() {
@@ -22,14 +21,6 @@ public class userInputModel implements Serializable {
     
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getUsername() {
