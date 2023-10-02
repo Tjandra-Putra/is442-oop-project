@@ -48,7 +48,7 @@ const AccountTransactions = () => {
         <div>
          <Card className={style.cardCustom}>
               <CardContent>
-                <div style={{ height: 280, width: "100%" }}>
+                <div style={{ height: 270, width: "100%" }}>
                 <DataGrid
                     rows={rows}
                     columns={columns}

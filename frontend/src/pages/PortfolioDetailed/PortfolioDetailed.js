@@ -8,10 +8,10 @@ import PieChart from "../../components/Charts/PieChart/PieChart";
 // import Dashboard from "../Dashboard/Dashboard";
 import TransactionDetails from "../../components/StockGrid/TransactionDetails";
 import AccountTransactions from "../../components/StockGrid/AccountTransactions";
-import EditIcon from "@mui/icons-material/Edit";
+// import EditIcon from "@mui/icons-material/Edit";
 import BarChart from "../../components/Charts/BarChart/BarChart";
 import { Card, Grid , CardContent} from "@mui/material";
-import { Pie } from "react-chartjs-2";
+// import { Pie } from "react-chartjs-2";
 
 const PortfolioDetailed = () => {
   // get id from url paramter
@@ -43,7 +43,7 @@ const PortfolioDetailed = () => {
       <Container>
         <Grid container>
           <Grid item xs={12} md={6} lg={6} >
-          <div style={{ maxHeight: '300px',marginTop:"10px" , marginRight:"10px"}}>
+          <div style={{ maxHeight: '300px',marginTop:"10px" , marginRight:"20px"}}>
             <Card className={style.pieChart}>
               <CardContent>
               <PieChart />
@@ -58,7 +58,7 @@ const PortfolioDetailed = () => {
 
           </Grid>
           <Grid item xs={12} md={6} lg={6} >
-          <div style={{ maxHeight: '300px',marginTop:"10px" , marginRight:"10px"}}>
+          <div style={{ maxHeight: '300px',marginTop:"10px" , marginRight:"20px"}}>
              <TransactionDetails />
             </div>
           </Grid>
