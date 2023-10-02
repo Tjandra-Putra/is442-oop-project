@@ -1,7 +1,6 @@
 package gs.inputModel;
 
 import java.io.Serializable;
-import java.util.Map;
 
 public class userInputModel implements Serializable {
     private int id;
