@@ -8,24 +8,21 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Avatar from "@mui/material/Avatar";
 
-import style from "./minicard.module.css";
+import style from "./StockCard.module.css";
 import stockImage from "../../assets/images/ethereum.png";
 
-const Minicard = () => {
+const StockCard = ({ name, value, percentage }) => {
   return (
     <Card className={style.portfolioCardWrapper} sx={{ maxWidth: 345 }}>
       <CardContent>
         <div className={style.stockHeader}>
-          <p>ethereum</p>
-          <p>4.35%</p>
-         </div>
-         <div>
-           56,542
-         </div>
+          <p>{name}</p>
+          {name == "Wallet" ? <button>Topup</button> : null}
+        </div>
+        <div>{value}</div>
       </CardContent>
     </Card>
   );
 };
 
-export default Minicard;
-
+export default StockCard;
