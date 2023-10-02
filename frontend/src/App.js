@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import axios from "axios";
 
 // user routes
 import {
@@ -13,8 +14,21 @@ import {
   PortfolioDetailed,
 } from "./routes/Routes";
 import "./App.css";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    console.log("AAXIOSS");
+    axios
+      .get("http://localhost:8080/api/user/getUser")
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
   return (
     <BrowserRouter>
       {/* Static content goes here */}

@@ -5,9 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
-import gs.common.FilterRequestModel;
+import gs.common.ApiModel;
+import gs.common.DataRequestModel;
 import gs.common.RequestModel;
 import gs.inputModel.userInputModel;
 import gs.model.user.User;
@@ -75,10 +77,10 @@ public class UserServiceImpl implements UserService{
         }
     }
     
-    public void addUser2(HttpServletResponse response, RequestModel requestModel) throws Exception{
+    public ApiModel addUser2(HttpServletResponse response, RequestModel requestModel, ApiModel apiModel) throws DataAccessException{
         // PAYLOAD
         // {
-        //     "filters": [
+        //     "data": [
         //         {
         //             "fieldName": "email",
         //             "value": "ryan.water@gmail.com"
@@ -89,16 +91,42 @@ public class UserServiceImpl implements UserService{
         //         }
         //     ]
         // }
-        for (FilterRequestModel fe : requestModel.getFilters()){
-            System.out.println("=========HERHE=========");
+
+        for (DataRequestModel fe : requestModel.getData()){
+            User newUser = new User();
+
             if (fe.getFieldName().equalsIgnoreCase("email")){
                 System.out.println(fe.getValue());
+                newUser.setEmail(fe.getValue());
             }
 
             if (fe.getFieldName().equalsIgnoreCase("username")){
                 System.out.println(fe.getValue());
+                newUser.setUsername(fe.getValue());
             }
 
+            try {
+                userRepo.save(newUser);
+                // get ID
+                newUser.getUserId();
+                apiModel.setMessage(String.valueOf(newUser.getUserId()));
+                throw new DataAccessException("Help"){};
+
+            }
+            
+            catch (DataAccessException ex) {
+            // Log the exception for debugging
+            // Optionally, rethrow as a custom exception
+                apiModel.setMessage(ex.getMessage());
+            }
+             
         }
+        System.out.println("==========STATUS==================");
+        System.out.println(apiModel.setStatus(String.valueOf(response.getStatus())));
+
+        System.out.println("==========ERROR MESSAGE==================");
+        // System.out.println(response.get);
+
+        return apiModel;
     }
 }
