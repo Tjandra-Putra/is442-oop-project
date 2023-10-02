@@ -15,4 +15,5 @@ public interface UserRepo extends CrudRepository<User, Integer>{
     
     @Query(value = "select * from user where user_id = ?;", nativeQuery = true)
     List<Object[]> getUserById(String id);
+
 }

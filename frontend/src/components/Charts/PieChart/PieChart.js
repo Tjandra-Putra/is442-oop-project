@@ -1,5 +1,8 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import style from "./PieChart.module.css";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -32,7 +35,7 @@ const options = {
 };
 
 function PieChart() {
-  return <Pie data={data} options={options} />;
+ return <Pie data={data} options={options} />;
 }
 
 export default PieChart;
