@@ -16,4 +16,5 @@ public interface UserService {
     void addUser(List<User> user) throws Exception;
 
     ApiModel addUser2(HttpServletResponse response, RequestModel requestModel, ApiModel apiModel) throws Exception;
+
 }

@@ -1,7 +1,10 @@
-package gs.model.user;
+package gs.model.stock;
 
+import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -11,9 +14,9 @@ import jakarta.persistence.Table;
 public class Stock {
     
     @Id
-    @Column(name = "ticker")
-
+    // @Column(name = "ticker")
     private String ticker;
+
     private String industry;
     private String sector;
     private String country;
@@ -26,6 +29,8 @@ public class Stock {
         this.country = country;
         this.name = name;
     }
+
+    public Stock() {};
 
     public String getTicker() {
         return this.ticker;
