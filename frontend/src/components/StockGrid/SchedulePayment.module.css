@@ -1,0 +1,14 @@
+.topWrapper{
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.PaymentDetails{
+    display: flex;
+    flex-direction: column;
+    
+}
+
+
+

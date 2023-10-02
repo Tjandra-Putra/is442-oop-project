@@ -19,5 +19,86 @@
 
 .firstContainer{
   display:flex;
-  flex-direction:row;
 }
+.ParentContainer{
+  display: flex;
+
+}
+
+.secondContainer{
+  display:flex;
+}
+
+  .PieChart{
+    display:flex;
+    
+  }
+
+.lefthandside{
+  display: flex;
+  flex-direction: column;
+}
+
+.outgoingTransactions{
+  display: flex;
+  justify-content: space-between;
+}
+
+.outgoingTransactionsParent{
+  display: flex;
+  flex-direction: column;
+}
+
+.outgoingTransactionsContent{
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid wheat;
+}
+
+.righthandside{
+  display: flex;
+  flex-direction: column;
+}
+.activeAccountParent{
+  display: flex;
+  flex-direction: column;
+
+}
+.activeAccount{
+  display: flex;
+  justify-content: space-between;
+}
+
+.activeAccountEdit{
+  display: flex;
+  align-items: center;
+}
+
+.activeAccountContent{
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid wheat;
+  padding-left: 10px;
+}
+
+.TransactionDetails{
+  padding-left: 10px;
+}
+
+
+@media (max-width: 767px) {
+  /* Styles for mobile devices */
+  .PieChart {
+    flex-direction: column; /* Reset flex direction to column for mobile screens */
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Styles for tablets */
+  .PieChart {
+    flex-direction: column; /* Reset flex direction to column for mobile screens */
+  }
+}
+
+
+
