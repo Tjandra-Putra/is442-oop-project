@@ -10,7 +10,8 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import style from "./Dashboard.module.css";
 import AddIcon from "@mui/icons-material/Add";
-import BarChart from "../../components/Charts/BarChart/BarChart";
+
+import LineChart from "../../components/Charts/LineChart/LineChart";
 import PortfolioCard from "../../components/PorfolioCard/PortfolioCard";
 import Menu from "../../components/Menu/Menu";
 
@@ -47,7 +48,7 @@ const Dashboard = () => {
                 <div style={{ textAlign: "right" }}>
                   <Menu menuName="Filter by Year" />
                 </div>
-                <BarChart />
+                <LineChart />
               </CardContent>
             </Card>
 
