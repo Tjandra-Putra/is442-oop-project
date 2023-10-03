@@ -1,5 +1,8 @@
 package gs.model.user;
 
+
+import javax.validation.constraints.NotNull;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,11 +16,18 @@ public class User {
     @Id
     @Column(name = "userId")
     @GeneratedValue
-    
     private int userId;
+
+    @NotNull
+    @Column(name = "email")
     private String email;
+
+    @NotNull
+    @Column(name = "username")
     private String username;
-    
+
+    @NotNull
+    @Column(name = "password")
     // CAN ENCRYPT THE PASSWORD IF NEEDBE
     private String password;
 

@@ -55,29 +55,8 @@ public class UserServiceImpl implements UserService{
         }
         return userList;
     }
-
-    public void addUser(List<User> user) throws Exception{
-        // PAYLOAD
-        // [
-        //     {
-        //         "email": "ryan.water@gmail.com",
-        //         "username": "Bob",
-        //         "password": "1234568"
-        //     },
-        //     {
-        //         "email": "yanyan.water@gmail.com",
-        //         "username": "LOL",
-        //         "password": "asdfghjkl"
-        //     }
-        // ]
-        List<User> userList = user;
-
-        for (User data : userList){
-            userRepo.save(data);
-        }
-    }
     
-    public ApiModel addUser2(HttpServletResponse response, RequestModel requestModel, ApiModel apiModel) throws DataAccessException{
+    public ApiModel addUser(HttpServletResponse response, RequestModel requestModel, ApiModel apiModel) throws DataAccessException{
         // PAYLOAD
         // {
         //     "data": [
@@ -91,42 +70,57 @@ public class UserServiceImpl implements UserService{
         //         }
         //     ]
         // }
+        // if (requestModel.getData().size() != 3) {
+        //     apiModel.setMessage("Invalid number of fieldNames");
+        // }  
 
-        for (DataRequestModel fe : requestModel.getData()){
-            User newUser = new User();
+        // else {
+            for (DataRequestModel fe : requestModel.getData()){    
+                User newUser = new User();
 
-            if (fe.getFieldName().equalsIgnoreCase("email")){
-                System.out.println(fe.getValue());
-                newUser.setEmail(fe.getValue());
+                if (fe.getFieldName().equalsIgnoreCase("email")){
+                    newUser.setEmail(fe.getValue());
+                }
+
+                if (fe.getFieldName().equalsIgnoreCase("username")){
+                    newUser.setUsername(fe.getValue());
+                }
+
+                if (fe.getFieldName().equalsIgnoreCase("password")){
+                    newUser.setUsername(fe.getValue());
+                }
+
+                try {
+                    userRepo.save(newUser);
+                    // get ID
+
+                    userInputModel inputModel = new userInputModel();
+
+                    inputModel.setId(newUser.getUserId());
+                    inputModel.setEmail(newUser.getEmail());
+                    inputModel.setUsername(newUser.getUsername());
+
+                    apiModel.setMessage(String.valueOf(newUser.getUserId()));
+                    apiModel.setData(inputModel);
+                }
+                
+                catch (DataAccessException ex) {
+                // Log the exception for debugging
+                // Optionally, rethrow as a custom exception
+                    apiModel.setMessage(ex.getMessage());
+                }
+                
             }
+        // }
 
-            if (fe.getFieldName().equalsIgnoreCase("username")){
-                System.out.println(fe.getValue());
-                newUser.setUsername(fe.getValue());
-            }
-
-            try {
-                userRepo.save(newUser);
-                // get ID
-                newUser.getUserId();
-                apiModel.setMessage(String.valueOf(newUser.getUserId()));
-                throw new DataAccessException("Help"){};
-
-            }
-            
-            catch (DataAccessException ex) {
-            // Log the exception for debugging
-            // Optionally, rethrow as a custom exception
-                apiModel.setMessage(ex.getMessage());
-            }
-             
-        }
         System.out.println("==========STATUS==================");
-        System.out.println(apiModel.setStatus(String.valueOf(response.getStatus())));
+        System.out.println(response.getStatus());
+        apiModel.setStatus(String.valueOf(response.getStatus()));
 
         System.out.println("==========ERROR MESSAGE==================");
         // System.out.println(response.get);
 
         return apiModel;
     }
+
 }
