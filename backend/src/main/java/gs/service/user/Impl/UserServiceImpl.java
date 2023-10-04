@@ -93,7 +93,6 @@ public class UserServiceImpl implements UserService{
                 try {
                     userRepo.save(newUser);
                     // get ID
-
                     userInputModel inputModel = new userInputModel();
 
                     inputModel.setId(newUser.getUserId());
