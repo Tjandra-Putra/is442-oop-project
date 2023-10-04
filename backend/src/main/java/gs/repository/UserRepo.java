@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import gs.model.user.User;
 
-public interface UserRepo extends CrudRepository<User, Integer>{
+public interface UserRepo extends JpaRepository<User, Integer>{
 
     @Query(value = "select * from user;", nativeQuery = true)
     List<Object[]> getUser();
