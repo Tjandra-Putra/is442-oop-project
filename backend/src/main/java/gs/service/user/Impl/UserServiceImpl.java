@@ -75,41 +75,44 @@ public class UserServiceImpl implements UserService{
         // }  
 
         // else {
-            for (DataRequestModel fe : requestModel.getData()){    
+            try {
                 User newUser = new User();
+                for (DataRequestModel fe : requestModel.getData()){    
 
-                if (fe.getFieldName().equalsIgnoreCase("email")){
-                    newUser.setEmail(fe.getValue());
+                    if (fe.getFieldName().equalsIgnoreCase("email")){
+                        newUser.setEmail(fe.getValue());
+                    }
+
+                    if (fe.getFieldName().equalsIgnoreCase("username")){
+                        newUser.setUsername(fe.getValue());
+                    }
+
+                    if (fe.getFieldName().equalsIgnoreCase("password")){
+                        newUser.setPassword(fe.getValue());
+                    }
                 }
 
-                if (fe.getFieldName().equalsIgnoreCase("username")){
-                    newUser.setUsername(fe.getValue());
-                }
+                // save to db
+                userRepo.save(newUser);
+                // get ID
+                userInputModel inputModel = new userInputModel();
 
-                if (fe.getFieldName().equalsIgnoreCase("password")){
-                    newUser.setUsername(fe.getValue());
-                }
+                inputModel.setId(newUser.getUserId());
+                inputModel.setEmail(newUser.getEmail());
+                inputModel.setUsername(newUser.getUsername());
 
-                try {
-                    userRepo.save(newUser);
-                    // get ID
-                    userInputModel inputModel = new userInputModel();
-
-                    inputModel.setId(newUser.getUserId());
-                    inputModel.setEmail(newUser.getEmail());
-                    inputModel.setUsername(newUser.getUsername());
-
-                    apiModel.setMessage(String.valueOf(newUser.getUserId()));
-                    apiModel.setData(inputModel);
-                }
-                
-                catch (DataAccessException ex) {
-                // Log the exception for debugging
-                // Optionally, rethrow as a custom exception
-                    apiModel.setMessage(ex.getMessage());
-                }
-                
+                apiModel.setMessage("Data saved successfully.");
+                apiModel.setData(inputModel);
             }
+            
+            catch (DataAccessException ex) {
+            // Log the exception for debugging
+            // Optionally, rethrow as a custom exception
+                // INPUT LOGGER for error messages
+                System.out.println(ex.getMessage());
+                apiModel.setMessage("An error occurred while performing the database operation.");
+            }
+                
         // }
 
         System.out.println("==========STATUS==================");
