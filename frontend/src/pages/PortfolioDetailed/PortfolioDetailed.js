@@ -10,7 +10,7 @@ import TransactionDetails from "../../components/StockGrid/TransactionDetails";
 import AccountTransactions from "../../components/StockGrid/AccountTransactions";
 // import EditIcon from "@mui/icons-material/Edit";
 import BarChart from "../../components/Charts/BarChart/BarChart";
-import { Card, Grid , CardContent} from "@mui/material";
+import { Card, Grid, CardContent } from "@mui/material";
 // import { Pie } from "react-chartjs-2";
 
 const PortfolioDetailed = () => {
@@ -30,47 +30,77 @@ const PortfolioDetailed = () => {
       </div>
 
       {/* First container */}
-      <Container>
+      {/* <Container>
         <div className={style.firstContainer}>
           <StockCard name="Portfolio Value" value="$6,364" />
           <StockCard name="Total Stocks" value="10" />
           <StockCard name="Net Value" value="20% " />
           <StockCard name="Wallet" value="$20,000" />
         </div>
-      </Container>
+      </Container> */}
 
       {/* Second Container */}
       <Container>
-        <Grid container>
-          <Grid item xs={12} md={6} lg={6} >
-          <div style={{ maxHeight: '300px',marginTop:"10px" , marginRight:"20px"}}>
-            <Card className={style.pieChart}>
-              <CardContent>
-              <PieChart />
-              </CardContent>
-            </Card>
-          </div>
-          </Grid>
-          <Grid item xs={12} md={6} lg={6} >
-            <div style={{ maxHeight: '300px',marginTop:"10px"}}>
-            <AccountTransactions />
+        {/* LEFT SECTION */}
+        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 1 }}>
+          <Grid item xs={12} md={6} lg={6}>
+            <div className={style.firstContainer}>
+              <StockCard name="Portfolio Value" value="$6,364" />
+              <StockCard name="Total Stocks" value="10" />
             </div>
 
-          </Grid>
-          <Grid item xs={12} md={6} lg={6} >
-          <div style={{ maxHeight: '300px',marginTop:"10px" , marginRight:"20px"}}>
-             <TransactionDetails />
+            <div style={{ maxHeight: "300px", marginTop: "10px" }}>
+              <Card className={style.pieChart}>
+                <CardContent>
+                  <PieChart />
+                </CardContent>
+              </Card>
+            </div>
+
+            <div style={{ maxHeight: "300px", marginTop: "10px" }}>
+              <TransactionDetails />
             </div>
           </Grid>
-          <Grid item xs={12} md={6} lg={6} >
-            <div style={{ maxHeight: '300px',marginTop:"10px" }}>
+
+          {/* RIGHT SECTION */}
+          <Grid item xs={12} md={6} lg={6}>
+            <div className={style.firstContainer}>
+              <StockCard name="Net Value" value="20% " />
+              <StockCard name="Wallet" value="$20,000" />
+            </div>
+
+            <div style={{ maxHeight: "300px", marginTop: "10px" }}>
+              <AccountTransactions />
+            </div>
+
+            <div style={{ maxHeight: "300px", marginTop: "10px" }}>
               <Card className={style.barChart}>
-                <CardContent >
+                <CardContent>
                   <BarChart />
                 </CardContent>
               </Card>
             </div>
           </Grid>
+
+          {/* <Grid item xs={12} md={6} lg={6}>
+            <div style={{ maxHeight: "300px", marginTop: "10px" }}>
+              <AccountTransactions />
+            </div>
+          </Grid>
+          <Grid item xs={12} md={6} lg={6}>
+            <div style={{ maxHeight: "300px", marginTop: "10px", marginRight: "20px" }}>
+              <TransactionDetails />
+            </div>
+          </Grid>
+          <Grid item xs={12} md={6} lg={6}>
+            <div style={{ maxHeight: "300px", marginTop: "10px" }}>
+              <Card className={style.barChart}>
+                <CardContent>
+                  <BarChart />
+                </CardContent>
+              </Card>
+            </div>
+          </Grid> */}
         </Grid>
       </Container>
     </div>

@@ -24,20 +24,20 @@
   gap: 10px !important;
 }
 
-.pieChart{
-    margin-top: 10px;
-    max-width: 100%;
-    max-height: 300px;
-    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25) !important;
-    margin-bottom: 1rem;
-    width: 100%;
-    color: #000000a4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.pieChart {
+  margin-top: 10px;
+  max-width: 100%;
+  max-height: 300px;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25) !important;
+  margin-bottom: 1rem;
+  width: 100%;
+  color: #000000a4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.barChart{
+.barChart {
   margin-top: 10px;
   max-width: 100%;
   max-height: 300px;
@@ -49,7 +49,3 @@
   justify-content: center;
   align-items: center;
 }
-
-
-
-
