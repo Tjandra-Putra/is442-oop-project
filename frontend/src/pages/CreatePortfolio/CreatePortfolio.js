@@ -13,6 +13,9 @@ import style from "./CreatePortfolio.module.css";
 
 const CreatePortfolio = () => {
   const [selectedRows, setSelectedRows] = useState([]);
+  const [portfolioName, setPortfolioName] = useState("");
+  const [portfolioDescription, setPortfolioDescription] = useState("");
+  const [portfolioCapital, setPortfolioCapital] = useState("");
 
   // get total price of selected stocks
   const getTotalPrice = () => {
@@ -43,32 +46,34 @@ const CreatePortfolio = () => {
     { id: 6, Name: "Snow", Price: 35 },
   ];
 
-  const [quantityValues, setQuantityValues] = useState(Object.fromEntries(stockRows.map((row) => [row.id, 0])));
+  const [quantityValues, setQuantityValues] = useState(Object.fromEntries(stockRows.map((row) => [row.id, 1])));
 
   const handleQuantityChange = (id, newValue) => {
-    if (newValue < 1) {
-      newValue = 1;
+    newValue = parseInt(newValue, 10);
+
+    if (!isNaN(newValue) && newValue >= 1) {
+      const newSelectedRows = selectedRows.map((row) => {
+        if (row.id === id) {
+          return {
+            ...row,
+            Quantity: newValue,
+            Total: newValue * row.Price,
+          };
+        }
+        return row;
+      });
+
+      setSelectedRows(newSelectedRows);
+
+      // Update the quantityValues state only for the specific row
+      setQuantityValues((prevValues) => ({
+        ...prevValues,
+        [id]: newValue,
+      }));
     }
-
-    setQuantityValues((prevValues) => ({
-      ...prevValues,
-      [id]: newValue,
-    }));
-
-    const newSelectedRows = selectedRows.map((row) => {
-      if (row.id === id) {
-        return {
-          ...row,
-          Quantity: newValue,
-          Total: newValue * row.Price,
-        };
-      }
-      return row;
-    });
-
-    setSelectedRows(newSelectedRows);
   };
 
+  // Material UI DataGrid
   const selectedStockColumns = [
     { field: "id", headerName: "Ticker", width: 80 },
     {
@@ -93,7 +98,7 @@ const CreatePortfolio = () => {
           className={style.quantityInput}
         />
       ),
-      width: 100,
+      width: 80,
     },
     {
       field: "Total",
@@ -103,15 +108,32 @@ const CreatePortfolio = () => {
     },
   ];
 
-  console.log(selectedRows);
-
   const onResetSelectedRows = () => {
     // refresh page
     window.location.reload();
-
-    // setSelectedRows([]);
-    // setQuantityValues(Object.fromEntries(stockRows.map((row) => [row.id, 0])));
   };
+
+  // return state as one object including quantity, portfolio name, description, capital
+  const getSelectedRows = () => {
+    const selectedRowsWithQuantity = selectedRows.map((row) => {
+      return {
+        ...row,
+        Quantity: quantityValues[row.id],
+      };
+    });
+    return {
+      selectedRowsWithQuantity,
+      portfolioName,
+      portfolioDescription,
+      // cast to int
+      portfolioCapital: +portfolioCapital
+        .split("")
+        .filter((char) => char !== "$")
+        .join(""),
+    };
+  };
+
+  console.log(getSelectedRows());
 
   return (
     <div className={style.createPortfolioWrapper}>
@@ -140,6 +162,7 @@ const CreatePortfolio = () => {
                     id="outlined-required"
                     label="Portfolio Name"
                     defaultValue=""
+                    onChange={(e) => setPortfolioName(e.target.value)}
                     sx={{ mt: 3 }}
                   />
                 </CardContent>
@@ -157,6 +180,7 @@ const CreatePortfolio = () => {
                     id="outlined-required"
                     label="Description"
                     defaultValue=""
+                    onChange={(e) => setPortfolioDescription(e.target.value)}
                     sx={{ mt: 3 }}
                   />
                 </CardContent>
@@ -174,6 +198,7 @@ const CreatePortfolio = () => {
                     id="outlined-required"
                     label="Amount of Capital"
                     defaultValue=""
+                    onChange={(e) => setPortfolioCapital(e.target.value)}
                     sx={{ mt: 3 }}
                   />
                 </CardContent>
@@ -200,6 +225,7 @@ const CreatePortfolio = () => {
                         return {
                           id: row.id,
                           Name: row.Name,
+                          // add dollar sign but make it an integer
                           Price: row.Price,
                           Total: row.Total ? row.Total : row.Price,
                         };
