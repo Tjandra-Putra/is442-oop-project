@@ -99,14 +99,14 @@ const Dashboard = () => {
                   $108,509.00
                 </Typography>
 
-                <div className={style.horizontalLine}></div>
+                {/* <div className={style.horizontalLine}></div> */}
 
-                <Typography variant="h6" className={style.portfolioWorthText}>
+                {/* <Typography variant="h6" className={style.portfolioWorthText}>
                   Market Place
                 </Typography>
                 <Button variant="outlined" sx={{ mt: 1 }}>
                   Purchase stocks
-                </Button>
+                </Button> */}
               </CardContent>
             </Card>
           </Grid>

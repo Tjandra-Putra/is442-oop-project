@@ -45,7 +45,7 @@
   width: 100%;
   border: 1px solid #ced4da;
   border-radius: 3px;
-  width: 4rem;
+  text-align: center;
 }
 
 .resetButton {
