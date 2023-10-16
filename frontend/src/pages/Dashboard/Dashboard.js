@@ -10,7 +10,7 @@ import Button from "@mui/material/Button";
 import style from "./Dashboard.module.css";
 import AddIcon from "@mui/icons-material/Add";
 
-import LineChart from "../../components/Charts/LineChart/LineChart";
+import LineChart from "../../components/Charts/Google/LineChart";
 import PortfolioCard from "../../components/PorfolioCard/PortfolioCard";
 import Menu from "../../components/Menu/Menu";
 
@@ -99,14 +99,14 @@ const Dashboard = () => {
                   $108,509.00
                 </Typography>
 
-                <div className={style.horizontalLine}></div>
+                {/* <div className={style.horizontalLine}></div> */}
 
-                <Typography variant="h6" className={style.portfolioWorthText}>
+                {/* <Typography variant="h6" className={style.portfolioWorthText}>
                   Market Place
                 </Typography>
                 <Button variant="outlined" sx={{ mt: 1 }}>
                   Purchase stocks
-                </Button>
+                </Button> */}
               </CardContent>
             </Card>
           </Grid>

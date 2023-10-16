@@ -12,12 +12,12 @@ const StockGrid = () => {
       type: "number",
       width: 90,
     },
-    {
-      field: "Quantity",
-      headerName: "Quantity",
-      type: "number",
-      width: 90,
-    },
+    // {
+    //   field: "Quantity",
+    //   headerName: "Quantity",
+    //   type: "number",
+    //   width: 90,
+    // },
     {
       field: "Total",
       headerName: "Total",
@@ -27,20 +27,20 @@ const StockGrid = () => {
   ];
 
   const rows = [
-    { id: 1, Name: "Snow", Description: "Jon", Price: 35, Quantity: 35, Total: 35 },
-    { id: 2, Name: "Snow", Description: "Jon", Price: 35, Quantity: 35, Total: 35 },
-    { id: 3, Name: "Snow", Description: "Jon", Price: 35, Quantity: 35, Total: 35 },
-    { id: 4, Name: "Snow", Description: "Jon", Price: 35, Quantity: 35, Total: 35 },
-    { id: 5, Name: "Snow", Description: "Jon", Price: 35, Quantity: 35, Total: 35 },
-    { id: 6, Name: "Snow", Description: "Jon", Price: 35, Quantity: 35, Total: 35 },
-    { id: 7, Name: "Snow", Description: "Jon", Price: 35, Quantity: 35, Total: 35 },
-    { id: 8, Name: "Snow", Description: "Jon", Price: 35, Quantity: 35, Total: 35 },
-    { id: 9, Name: "Snow", Description: "Jon", Price: 35, Quantity: 35, Total: 35 },
-    { id: 10, Name: "Snow", Description: "Jon", Price: 35, Quantity: 35, Total: 35 },
-    { id: 11, Name: "Snow", Description: "Jon", Price: 35, Quantity: 35, Total: 35 },
-    { id: 12, Name: "Snow", Description: "Jon", Price: 35, Quantity: 35, Total: 35 },
-    { id: 13, Name: "Snow", Description: "Jon", Price: 35, Quantity: 35, Total: 35 },
-    { id: 14, Name: "Snow", Description: "Jon", Price: 35, Quantity: 35, Total: 35 },
+    { id: 1, Name: "Snow", Description: "Jon", Price: 105, Total: 35 },
+    { id: 2, Name: "Snow", Description: "Jon", Price: 35, Total: 35 },
+    { id: 3, Name: "Snow", Description: "Jon", Price: 10, Total: 35 },
+    { id: 4, Name: "Snow", Description: "Jon", Price: 35, Total: 35 },
+    { id: 5, Name: "Snow", Description: "Jon", Price: 35, Total: 35 },
+    { id: 6, Name: "Snow", Description: "Jon", Price: 35, Total: 35 },
+    { id: 7, Name: "Snow", Description: "Jon", Price: 35, Total: 35 },
+    { id: 8, Name: "Snow", Description: "Jon", Price: 35, Total: 35 },
+    { id: 9, Name: "Snow", Description: "Jon", Price: 35, Total: 35 },
+    { id: 10, Name: "Snow", Description: "Jon", Price: 35, Total: 35 },
+    { id: 11, Name: "Snow", Description: "Jon", Price: 35, Total: 35 },
+    { id: 12, Name: "Snow", Description: "Jon", Price: 35, Total: 35 },
+    { id: 13, Name: "Snow", Description: "Jon", Price: 35, Total: 35 },
+    { id: 14, Name: "Snow", Description: "Jon", Price: 35, Total: 35 },
   ];
 
   return (
