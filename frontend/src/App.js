@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import axios from "axios";
 
 // user routes
 import {
@@ -13,8 +14,43 @@ import {
   PortfolioDetailed,
 } from "./routes/Routes";
 import "./App.css";
+import { useEffect } from "react";
 
 function App() {
+  const postData = {
+    filters: [
+      {
+        fieldName: "email",
+        value: "ryan.water@gmail.com",
+      },
+      {
+        fieldName: "username",
+        value: "ryan.water",
+      },
+    ],
+  };
+
+  useEffect(() => {
+    // get user data
+    // axios
+    //   .get("http://localhost:8080/api/user/getUser")
+    //   .then((res) => {
+    //     console.log(res.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
+    // console.log("POST REQUEST");
+    // axios
+    //   .post("http://localhost:8080/api/user/addUser2", postData)
+    //   .then((res) => {
+    //     console.log(res.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
+  }, []);
+
   return (
     <BrowserRouter>
       {/* Static content goes here */}

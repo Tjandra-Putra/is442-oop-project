@@ -30,8 +30,30 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-top: 1.5rem;
 }
 
 .space {
   margin-top: 1.5rem !important;
+}
+
+.currentStockMarket {
+  height: 29.2rem;
+}
+
+.quantityInput {
+  width: 100%;
+  border: 1px solid #ced4da;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.resetButton {
+  margin-left: 1rem !important;
+}
+
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 32.7rem;
 }

@@ -3,17 +3,9 @@
     margin-bottom: 1rem;
     width: 100%;
     height:300px;
-    
-    
   }
   
   .cardDesc {
     color: #000000a4;
-   
   }
   
-  .actionButtons {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }

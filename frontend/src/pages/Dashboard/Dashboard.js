@@ -5,13 +5,12 @@ import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
 import Chip from "@mui/material/Chip";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import style from "./Dashboard.module.css";
 import AddIcon from "@mui/icons-material/Add";
 
-import LineChart from "../../components/Charts/LineChart/LineChart";
+import PortfolioReturnsChart from "../../components/Charts/PortfolioReturnsChart/PortfolioReturnsChart";
 import PortfolioCard from "../../components/PorfolioCard/PortfolioCard";
 import Menu from "../../components/Menu/Menu";
 
@@ -45,10 +44,10 @@ const Dashboard = () => {
 
             <Card className={style.chart} sx={{ minHeight: 540 }}>
               <CardContent>
-                <div style={{ textAlign: "right" }}>
+                {/* <div style={{ textAlign: "right" }}>
                   <Menu menuName="Filter by Year" />
-                </div>
-                <LineChart />
+                </div> */}
+                <PortfolioReturnsChart />
               </CardContent>
             </Card>
 
@@ -60,7 +59,7 @@ const Dashboard = () => {
                   </Typography>
                 </Grid>
                 <Grid item md={6} xs={12} style={{ textAlign: "right" }}>
-                  <Stack direction="row" spacing={1} justifyContent="flex-end">
+                  <Stack direction="row" spacing={1} justifyContent="flex-end" sx={{ mb: 3 }}>
                     <Menu menuName="Sort by" />
                     <Button variant="contained" startIcon={<AddIcon />}>
                       Add
@@ -91,19 +90,24 @@ const Dashboard = () => {
             </div>
           </Grid>
           <Grid item md={3} xs={12}>
-            <Card className={style.rightSection} sx={{ minHeight: 540 }}>
+            <Card className={style.rightSection}>
               <CardContent>
                 <Typography variant="h6" className={style.portfolioWorthText}>
-                  Total Balance
+                  Wallet Balance
                 </Typography>
                 <Typography variant="h4" className={style.totalBalance}>
                   $108,509.00
                 </Typography>
+
+                {/* <div className={style.horizontalLine}></div> */}
+
+                {/* <Typography variant="h6" className={style.portfolioWorthText}>
+                  Market Place
+                </Typography>
+                <Button variant="outlined" sx={{ mt: 1 }}>
+                  Purchase stocks
+                </Button> */}
               </CardContent>
-              <CardActions>
-                <Button size="small">Share</Button>
-                <Button size="small">Learn More</Button>
-              </CardActions>
             </Card>
           </Grid>
         </Grid>

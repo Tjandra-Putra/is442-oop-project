@@ -13,7 +13,7 @@ import stockImage from "../../assets/images/ethereum.png";
 
 const PortfolioCard = () => {
   return (
-    <Card className={style.portfolioCardWrapper} sx={{ maxWidth: 345 }}>
+    <Card className={style.portfolioCardWrapper}>
       <CardContent>
         <div className={style.stockHeader}>
           <div className={style.stockType}>
