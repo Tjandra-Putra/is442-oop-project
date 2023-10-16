@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
+import { Toaster } from "react-hot-toast";
 
 // user routes
 import {
@@ -56,6 +57,7 @@ function App() {
       {/* Static content goes here */}
       <Navbar />
       <AppBarOffSet />
+      <Toaster />
 
       {/* Dynamic content goes here */}
       <Routes>

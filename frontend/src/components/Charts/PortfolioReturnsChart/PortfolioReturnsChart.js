@@ -3,7 +3,7 @@ import { Chart } from "react-google-charts";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 
 function LineChart() {
   const years = ["2022", "2023", "2024"];
@@ -35,7 +35,7 @@ function LineChart() {
   ];
 
   const options = {
-    title: "Chart with Dynamic Data",
+    title: "Portfolio Performance for " + selectedYear,
     curveType: "function",
     legend: { position: "bottom" },
   };

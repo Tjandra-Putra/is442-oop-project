@@ -25,6 +25,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import style from "./Navbar.module.css";
 
@@ -66,6 +67,8 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -224,7 +227,7 @@ const Navbar = () => {
         <Divider />
         <List>
           <ListItem disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={() => navigate("/dashboard")}>
               <ListItemIcon>{<DashboardIcon />}</ListItemIcon>
               <ListItemText primary="Dashboard" />
             </ListItemButton>
