@@ -1,4 +1,4 @@
-package gs.model.stock;
+package gs.entity.stock;
 
 import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
