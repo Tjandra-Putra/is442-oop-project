@@ -16,6 +16,7 @@ import PortfolioCard from "../../components/PorfolioCard/PortfolioCard";
 import Menu from "../../components/Menu/Menu";
 import MarketExposureByGeographicalLocationChart from "../../components/Charts/MarketExposureByGeographicalLocationChart/MarketExposureByGeographicalLocationChart";
 import { TextField } from "@mui/material";
+import MarketExposureBySegment from "../../components/Charts/MarketExposureBySegment/MarketExposureBySegment";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ const Dashboard = () => {
         </Container>
       </div>
       <Container maxWidth="xl">
-        <Grid container spacing={4} mt={0}>
+        <Grid container spacing={2} mt={0}>
           <Grid item md={3} xs={6}>
             <Card className={style.figuresBar}>
               <div className={style.figuresBarTop}>
@@ -106,7 +107,7 @@ const Dashboard = () => {
           </Grid>
         </Grid>
 
-        <Grid container spacing={4}>
+        <Grid container spacing={2}>
           <Grid item md={9} xs={12}>
             <Card className={style.chart} sx={{ minHeight: 540 }}>
               <CardContent>
@@ -117,6 +118,12 @@ const Dashboard = () => {
             <Card className={style.chart} sx={{ minHeight: 540 }}>
               <CardContent>
                 <MarketExposureByGeographicalLocationChart />
+              </CardContent>
+            </Card>
+
+            <Card className={style.chart} sx={{ minHeight: 540 }}>
+              <CardContent>
+                <MarketExposureBySegment />
               </CardContent>
             </Card>
 
@@ -158,6 +165,7 @@ const Dashboard = () => {
               </Grid>
             </div>
           </Grid>
+
           <Grid item md={3} xs={12}>
             <Card className={style.rightSection}>
               <CardContent>
@@ -173,6 +181,8 @@ const Dashboard = () => {
                   Add New Portfolio
                 </Button>
               </CardContent>
+
+              <hr className={style.horizontalLine} />
 
               <CardContent>
                 <Typography variant="h6" className={style.portfolioWorthText}>
