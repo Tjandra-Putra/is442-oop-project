@@ -3,3 +3,15 @@
   font-size: 1.1rem !important;
   font-family: var(--font-slabo) !important;
 }
+
+.userNameWrapper {
+  margin-left: 0.5rem;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+}
+
+.userNameWrapper {
+  font-size: 1rem;
+  font-weight: 400;
+}

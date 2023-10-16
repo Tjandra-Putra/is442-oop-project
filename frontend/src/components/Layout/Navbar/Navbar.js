@@ -26,48 +26,52 @@ import Menu from "@mui/material/Menu";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import Avatar from "@mui/material/Avatar";
+import { deepOrange, deepPurple } from "@mui/material/colors";
 
 import style from "./Navbar.module.css";
-
-const drawerWidth = 240;
-
-// AppBar Styling
-const appBarStyle = {
-  // backgroundColor: "#12294d", // Set the background color to your desired color
-  backgroundColor: "#ffffff",
-  boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
-};
-
-// Drawer Styling
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  transition: theme.transitions.create(["margin", "width"], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
-// Drawer Header Styling
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-  justifyContent: "flex-end",
-}));
+import { Button } from "@mui/material";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const [isAuth, setIsAuth] = React.useState(true);
+
+  const drawerWidth = 240;
+
+  // AppBar Styling
+  const appBarStyle = {
+    // backgroundColor: "#12294d", // Set the background color to your desired color
+    backgroundColor: "#ffffff",
+    boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
+  };
+
+  // Drawer Styling
+  const AppBar = styled(MuiAppBar, {
+    shouldForwardProp: (prop) => prop !== "open",
+  })(({ theme, open }) => ({
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    ...(open && {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: `${drawerWidth}px`,
+      transition: theme.transitions.create(["margin", "width"], {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    }),
+  }));
+
+  // Drawer Header Styling
+  const DrawerHeader = styled("div")(({ theme }) => ({
+    display: "flex",
+    alignItems: "center",
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: "flex-end",
+  }));
 
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -185,24 +189,31 @@ const Navbar = () => {
 
             <Box sx={{ flexGrow: 1 }} />
 
-            <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                <Badge badgeContent={4} color="error">
-                  <EmailOutlinedIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircleOutlinedIcon />
-              </IconButton>
-            </Box>
+            {isAuth ? (
+              <Box sx={{ display: { xs: "none", md: "flex" } }}>
+                <IconButton
+                  size="large"
+                  edge="end"
+                  aria-label="account of current user"
+                  aria-controls={menuId}
+                  aria-haspopup="true"
+                  onClick={handleProfileMenuOpen}
+                  color="inherit"
+                >
+                  <Avatar sx={{ bgcolor: deepPurple[500], width: 32, height: 32 }}>T</Avatar>
+
+                  {/* <AccountCircleOutlinedIcon /> */}
+                </IconButton>
+
+                <div className={style.userNameWrapper}>
+                  <span className={style.userName}>Tjandra Putra</span>
+                </div>
+              </Box>
+            ) : (
+              <Button variant="contained" href="#contained-buttons" onClick={() => navigate("/login")}>
+                Login
+              </Button>
+            )}
           </Toolbar>
         </Container>
       </AppBar>
