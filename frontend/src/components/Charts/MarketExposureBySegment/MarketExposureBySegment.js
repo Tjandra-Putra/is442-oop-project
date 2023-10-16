@@ -9,6 +9,8 @@ import { Grid } from "@mui/material";
 const MarketExposureBySegment = () => {
   const [selectedIndustry, setSelectedIndustry] = React.useState("USA");
 
+  const industries = ["USA", "China", "Japan", "Germany", "India", "United Kingdom", "France", "Italy"];
+
   const dataSets = [
     ["Country", "Popularity"],
     ["Germany", 200],
@@ -27,27 +29,27 @@ const MarketExposureBySegment = () => {
 
   return (
     <div>
-      {/* <div style={{ textAlign: "right" }}>
+      <div style={{ textAlign: "right" }}>
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-          <InputLabel id="demo-select-small-label">Countries</InputLabel>
+          <InputLabel id="demo-select-small-label">Industries</InputLabel>
           <Select
             labelId="demo-select-small-label"
             id="demo-select-small"
-            value={selectedCountry}
+            value={selectedIndustry}
             label="Year"
-            onChange={(e) => selectedCountry(e.target.value)}
+            onChange={(e) => selectedIndustry(e.target.value)}
           >
-            {countries.map((country) => (
-              <MenuItem key={country} value={country}>
-                {country}
+            {industries.map((industry) => (
+              <MenuItem key={industry} value={industry}>
+                {industry}
               </MenuItem>
             ))}
           </Select>
         </FormControl>
-      </div> */}
+      </div>
 
       <Grid container spacing={4}>
-        <Grid item md={6} xs={12}>
+        <Grid item md={12} xs={12}>
           <Chart chartType="BarChart" data={dataSets} options={options} width={"100%"} height={"400px"} />
         </Grid>
       </Grid>
