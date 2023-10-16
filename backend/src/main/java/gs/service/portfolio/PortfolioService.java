@@ -4,8 +4,10 @@ import java.util.List;
 
 import gs.model.portfolio.Portfolio;
 
-public class PortfolioService {
+public interface PortfolioService {
     List<Object[]> getPortfolio();
 
-    void addPortfolio(List<Portfolio> portfolios) throws Exception;    
+    void addPortfolio(List<Portfolio> portfolio) throws Exception;  
+    
+    
 }

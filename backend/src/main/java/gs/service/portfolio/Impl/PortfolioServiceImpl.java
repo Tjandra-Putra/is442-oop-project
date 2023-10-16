@@ -5,10 +5,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import gs.model.user.User;
+import gs.model.portfolio.Portfolio;
 import gs.repository.PortfolioRepo;
-import gs.repository.UserRepo;
-import gs.service.user.UserService;
+import gs.service.portfolio.PortfolioService;
 import jakarta.annotation.Resource;
 
 @Service
@@ -25,10 +24,10 @@ public class PortfolioServiceImpl implements PortfolioService{
         return PortfolioList;
     }
 
-    public void addPortfolio(List<Portfolio> portfolios) throws Exception{
-        List<Portfolio> portfoliosList = portfolios;
+    public void addPortfolio(List<Portfolio> portfolio) throws Exception{
+        List<Portfolio> portfolioList = portfolio;
 
-        for (Portfolio data : portfoliosList){
+        for (Portfolio data : portfolioList){
             portfolioRepo.save(data);
         }
     }

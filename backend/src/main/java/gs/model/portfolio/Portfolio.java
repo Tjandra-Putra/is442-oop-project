@@ -20,7 +20,7 @@ public class Portfolio {
 
     public Portfolio() {
 
-    }
+    };
 
     public Portfolio(int portfolioId, String portfolioName, String portfolioDescripton, double portfolioCapitalAmt) {
         this.portfolioId = portfolioId;

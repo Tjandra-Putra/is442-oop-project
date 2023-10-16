@@ -24,12 +24,12 @@ public class PortfolioController {
     public List<Object[]> getPortfolio(){
         return portfolioService.getPortfolio();
     }
-
+    
     @PostMapping("/addPortfolio")
     public String addPortfolio(
-        @RequestBody List<Portfolio> portfolios
+        @RequestBody List<Portfolio> portfolio
     ) throws Exception{
-        portfolioService.addPortfolio(portfolios);
+        portfolioService.addPortfolio(portfolio);
         return null;
     }
 }
