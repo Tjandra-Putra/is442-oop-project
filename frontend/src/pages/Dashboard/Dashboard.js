@@ -10,7 +10,7 @@ import Button from "@mui/material/Button";
 import style from "./Dashboard.module.css";
 import AddIcon from "@mui/icons-material/Add";
 
-import LineChart from "../../components/Charts/LineChart/LineChart";
+import PortfolioReturnsChart from "../../components/Charts/PortfolioReturnsChart/PortfolioReturnsChart";
 import PortfolioCard from "../../components/PorfolioCard/PortfolioCard";
 import Menu from "../../components/Menu/Menu";
 
@@ -44,10 +44,10 @@ const Dashboard = () => {
 
             <Card className={style.chart} sx={{ minHeight: 540 }}>
               <CardContent>
-                <div style={{ textAlign: "right" }}>
+                {/* <div style={{ textAlign: "right" }}>
                   <Menu menuName="Filter by Year" />
-                </div>
-                <LineChart />
+                </div> */}
+                <PortfolioReturnsChart />
               </CardContent>
             </Card>
 

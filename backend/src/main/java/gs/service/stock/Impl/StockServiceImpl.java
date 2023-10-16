@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import gs.common.DataRequestModel;
 import gs.common.RequestModel;
+import gs.entity.stock.Stock;
 import gs.inputModel.stockInputModel;
-import gs.model.stock.Stock;
 import gs.repository.StockRepo;
 import gs.service.stock.StockService;
 import jakarta.annotation.Resource;

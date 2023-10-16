@@ -1,9 +1,13 @@
+DROP SCHEMA IF EXISTS GS;
+CREATE DATABASE GS;
+USE GS;
+
 CREATE TABLE USER (
     userID varchar(255) NOT NULL,
     email varchar(255) NOT NULL,
-    username varchar(255) NOT NULL,
 	password varchar(255) NOT NULL,
-    PRIMARY KEY (userID)
+    PRIMARY KEY (userID),
+    UNIQUE (email)
 );
 
 CREATE TABLE PORTFOLIO (
@@ -18,29 +22,33 @@ CREATE TABLE PORTFOLIO (
 
 CREATE TABLE STOCK (
 	ticker varchar(255) NOT NULL,
+	stockName varchar(255) NOT NULL,
+    PRIMARY KEY (ticker)
+);
+
+CREATE TABLE STOCK_INFO (
+    ticker varchar(255) NOT NULL,
     industry varchar(255) NOT NULL,
     sector varchar(255) NOT NULL,
     country varchar(255) NOT NULL,
-	stockName varchar(255) NOT NULL,
-    PRIMARY KEY (ticker)
+    currency varchar(255) NOT NULL,
+    FOREIGN KEY (ticker) REFERENCES STOCK(ticker)
 );
 
 CREATE TABLE PORTFOLIO_STOCK (
 	portfolioID varchar(255) NOT NULL,
     ticker varchar(255) NOT NULL,
-    buyDate date NOT NULL,
     quantity int NOT NULL,
-    price float NOT NULL,
-    PRIMARY KEY (buyDate, portfolioID, ticker),
+    PRIMARY KEY (portfolioID, ticker),
     FOREIGN KEY (portfolioID) REFERENCES PORTFOLIO(portfolioID),
     FOREIGN KEY (ticker) REFERENCES STOCK(ticker)
 );
 
 CREATE TABLE HISTORY (
-	stockHistoryDate date NOT NULL,
+	date date NOT NULL,
 	ticker varchar(255) NOT NULL,
     adjustedClosePrice float NOT NULL,
-    PRIMARY KEY (stockHistoryDate, ticker),
+    PRIMARY KEY (date, ticker),
     FOREIGN KEY (ticker) REFERENCES STOCK(ticker)
 );
     
