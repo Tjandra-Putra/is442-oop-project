@@ -2,12 +2,12 @@ package gs.repository;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 
-import gs.entity.user.User;
+import gs.entity.User;
 
-public interface UserRepo extends CrudRepository<User, Integer>{
+public interface UserRepo extends JpaRepository<User, Long>{
 
     @Query(value = "select * from user;", nativeQuery = true)
     List<Object[]> getUser();

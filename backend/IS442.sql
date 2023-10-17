@@ -3,7 +3,7 @@ CREATE DATABASE GS;
 USE GS;
 
 CREATE TABLE USER (
-    userID varchar(255) NOT NULL,
+    userID int NOT NULL,
     email varchar(255) NOT NULL,
 	password varchar(255) NOT NULL,
     PRIMARY KEY (userID),
@@ -11,11 +11,11 @@ CREATE TABLE USER (
 );
 
 CREATE TABLE PORTFOLIO (
-	portfolioID varchar(255) NOT NULL,
+	portfolioID int NOT NULL,
     portfolioName varchar(255) NOT NULL,
     description varchar(255) NOT NULL,
     capitalAmount float NOT NULL,
-    userID varchar(255) NOT NULL,
+    userID int NOT NULL,
     PRIMARY KEY (portfolioID),
     FOREIGN KEY (userID) REFERENCES USER(userID)
 );
@@ -36,7 +36,7 @@ CREATE TABLE STOCK_INFO (
 );
 
 CREATE TABLE PORTFOLIO_STOCK (
-	portfolioID varchar(255) NOT NULL,
+	portfolioID int NOT NULL,
     ticker varchar(255) NOT NULL,
     quantity int NOT NULL,
     PRIMARY KEY (portfolioID, ticker),

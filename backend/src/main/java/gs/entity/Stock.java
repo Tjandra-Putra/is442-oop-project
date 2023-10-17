@@ -1,4 +1,4 @@
-package gs.entity.stock;
+package gs.entity;
 
 import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
@@ -14,13 +14,21 @@ import jakarta.persistence.Table;
 public class Stock {
     
     @Id
-    // @Column(name = "ticker")
+    @Column(
+        name = "ticker",
+        nullable = false
+        )
     private String ticker;
-    private String name;
 
-    public Stock(String ticker, String name) {
+    @Column(
+        name = "stockName",
+        nullable = false
+        )
+    private String stockName;
+
+    public Stock(String ticker, String stockName) {
         this.ticker = ticker;
-        this.name = name;
+        this.stockName = stockName;
     }
 
     public Stock() {};
@@ -33,11 +41,11 @@ public class Stock {
         this.ticker = ticker;
     }
 
-    public String getName() {
-        return this.name;
+    public String getStockName() {
+        return this.stockName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setStockName(String stockName) {
+        this.stockName = stockName;
     }
 }
