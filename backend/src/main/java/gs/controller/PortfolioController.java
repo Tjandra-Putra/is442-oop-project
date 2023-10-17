@@ -33,11 +33,20 @@ public class PortfolioController {
     @Autowired
     private PortfolioService portfolioService;
 
-    @GetMapping("/getPortfolio/{id}")
+    @GetMapping("/getPortfolio/{userid}")
     public ApiModel<ArrayList<portfolioInputModel>> getPortfolio(
-        @PathVariable("id") String id
+        @PathVariable("userid") String userid
     ){
-        return ApiModel.ok(portfolioService.getPortfolio(id));
+        return ApiModel.ok(portfolioService.getPortfolio(userid));
+    }
+
+    @GetMapping("/getPortfolio/{userid}/{portfolioId}")
+    public ApiModel<ArrayList<portfolioInputModel>> getPortfolioById(
+        @PathVariable("userid") String userid,
+        @PathVariable("portfolioId") String portfolioId
+
+    ){
+        return ApiModel.ok(portfolioService.getPortfolioById(userid, portfolioId));
     }
     
     @PostMapping("/addPortfolio")

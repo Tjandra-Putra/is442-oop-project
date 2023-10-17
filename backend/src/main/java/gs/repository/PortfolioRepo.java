@@ -10,6 +10,9 @@ import gs.entity.Portfolio;
 public interface PortfolioRepo extends JpaRepository<Portfolio, Long>{
     
     @Query(value = "select * from portfolio where user_id = ?;", nativeQuery = true)
-    List<Object[]> getPortfolioById(String id);
+    List<Object[]> getPortfolioByUserId(String userid);
+
+    @Query(value = "select * from portfolio where user_id = ? and portfolio_id = ?;", nativeQuery = true)
+    List<Object[]> getPortfolioById(String userid, String portfolioId);
 
 }
