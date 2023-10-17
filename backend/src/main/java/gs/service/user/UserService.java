@@ -13,8 +13,5 @@ public interface UserService {
 
     List<userInputModel> getUserById(String id);
 
-    void addUser(List<User> user) throws Exception;
-
-    ApiModel addUser2(HttpServletResponse response, RequestModel requestModel, ApiModel apiModel) throws Exception;
-
+    ApiModel addUser(HttpServletResponse response, RequestModel requestModel, ApiModel apiModel) throws Exception;
 }
