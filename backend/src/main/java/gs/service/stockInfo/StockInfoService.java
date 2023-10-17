@@ -9,4 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public interface StockInfoService {
     List<stockInfoInputModel> getStockInfo();
+
+    List<stockInfoInputModel> getStockInfoByTicker(String ticker);
 }

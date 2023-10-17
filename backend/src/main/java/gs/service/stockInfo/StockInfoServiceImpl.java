@@ -42,4 +42,25 @@ public class StockInfoServiceImpl implements StockInfoService {
 
         return stockInfoList;
     }
+
+    public List<stockInfoInputModel> getStockInfoByTicker(String ticker){
+        List<Object[]> stockInfoQueryList = stockInfoRepo.getStockInfoByTicker(ticker);
+        List<stockInfoInputModel> stockInfoList = new ArrayList<>();
+        
+        for (Object[] data : stockInfoQueryList){
+            stockInfoInputModel inputModel = new stockInfoInputModel();
+            // Logic to populate inputModel is missing here
+            // Example: inputModel.setSomeProperty(data[0]);
+            // Add inputModel to stockInfoList
+
+            inputModel.setTicker(String.valueOf(data[0]));
+            inputModel.setCountry(String.valueOf(data[1]));
+            inputModel.setCurrency(String.valueOf(data[2]));
+            inputModel.setIndustry(String.valueOf(data[3]));
+            inputModel.setSector(String.valueOf(data[4]));
+            stockInfoList.add(inputModel);
+        }
+
+        return stockInfoList;
+    }
 }
