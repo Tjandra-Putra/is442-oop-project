@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import gs.model.portfolio.Portfolio;
+import gs.entity.Portfolio;
 
 public interface PortfolioRepo extends CrudRepository<Portfolio, Integer>{
     

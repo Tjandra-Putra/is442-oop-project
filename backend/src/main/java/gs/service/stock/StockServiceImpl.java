@@ -1,4 +1,4 @@
-package gs.service.stock.Impl;
+package gs.service.stock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,10 +9,9 @@ import org.springframework.stereotype.Service;
 
 import gs.common.DataRequestModel;
 import gs.common.RequestModel;
-import gs.entity.stock.Stock;
+import gs.entity.Stock;
 import gs.inputModel.stockInputModel;
 import gs.repository.StockRepo;
-import gs.service.stock.StockService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 

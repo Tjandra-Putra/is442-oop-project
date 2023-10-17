@@ -17,7 +17,7 @@ import gs.controller.UserController;
 import gs.inputModel.userInputModel;
 import gs.repository.UserRepo;
 import gs.service.user.UserService;
-import gs.service.user.Impl.UserServiceImpl;
+import gs.service.user.UserServiceImpl;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletResponse;
 

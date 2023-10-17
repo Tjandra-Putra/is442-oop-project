@@ -1,4 +1,4 @@
-package gs.entity.user;
+package gs.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

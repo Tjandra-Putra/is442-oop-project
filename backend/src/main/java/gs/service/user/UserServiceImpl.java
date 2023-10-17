@@ -1,4 +1,4 @@
-package gs.service.user.Impl;
+package gs.service.user;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,10 +11,9 @@ import org.springframework.stereotype.Service;
 import gs.common.ApiModel;
 import gs.common.DataRequestModel;
 import gs.common.RequestModel;
-import gs.entity.user.User;
+import gs.entity.User;
 import gs.inputModel.userInputModel;
 import gs.repository.UserRepo;
-import gs.service.user.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 

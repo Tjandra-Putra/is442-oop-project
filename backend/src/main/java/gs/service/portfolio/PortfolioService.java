@@ -2,7 +2,7 @@ package gs.service.portfolio;
 
 import java.util.List;
 
-import gs.model.portfolio.Portfolio;
+import gs.entity.Portfolio;
 
 public interface PortfolioService {
     List<Object[]> getPortfolio();

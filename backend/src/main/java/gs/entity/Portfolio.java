@@ -1,4 +1,4 @@
-package gs.model.portfolio;
+package gs.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
