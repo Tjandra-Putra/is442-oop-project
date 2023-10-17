@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import gs.common.ApiModel;
 import gs.common.NullError;
 import gs.common.RequestModel;
-import gs.entity.user.User;
+import gs.entity.User;
 import gs.inputModel.userInputModel;
 import gs.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,7 +1,4 @@
-package gs.entity.user;
-
-
-import javax.validation.constraints.NotNull;
+package gs.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

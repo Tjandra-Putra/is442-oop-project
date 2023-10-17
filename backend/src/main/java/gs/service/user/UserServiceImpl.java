@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import gs.common.ApiModel;
 import gs.common.DataRequestModel;
 import gs.common.RequestModel;
-import gs.entity.user.User;
+import gs.entity.User;
 import gs.inputModel.userInputModel;
 import gs.repository.UserRepo;
 import jakarta.annotation.Resource;
