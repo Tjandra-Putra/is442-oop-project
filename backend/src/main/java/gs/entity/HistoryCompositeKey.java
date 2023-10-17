@@ -1,9 +1,9 @@
-package gs.model.history;
+package gs.entity;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class CompositeKey implements Serializable {
+public class HistoryCompositeKey implements Serializable {
     private String ticker;
     private Date date;
 }

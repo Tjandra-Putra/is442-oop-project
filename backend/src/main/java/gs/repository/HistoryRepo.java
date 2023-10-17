@@ -3,9 +3,12 @@ package gs.repository;
 import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import gs.model.history.History;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface HistoryRepo extends CrudRepository<History, String>{
+
+import gs.entity.History;
+
+public interface HistoryRepo extends JpaRepository<History, String>{
 
     @Query(value = "select * from history;", nativeQuery = true)
     List<Object[]> getAllHistory();

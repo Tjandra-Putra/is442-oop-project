@@ -1,4 +1,4 @@
-package gs.model.history;
+package gs.entity;
 
 import java.util.Date;
 import jakarta.persistence.Entity;
@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "history")
-@IdClass(CompositeKey.class)
+@IdClass(HistoryCompositeKey.class)
 
 public class History{
     @Id

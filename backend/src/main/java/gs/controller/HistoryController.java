@@ -24,6 +24,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class HistoryController {
 
+    @Autowired
     private HistoryService HistoryService;
 
     @GetMapping("/getAllHistory")
