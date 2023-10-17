@@ -8,6 +8,8 @@ import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
+import toast from "react-hot-toast";
 
 import style from "./CreatePortfolio.module.css";
 
@@ -16,6 +18,8 @@ const CreatePortfolio = () => {
   const [portfolioName, setPortfolioName] = useState("");
   const [portfolioDescription, setPortfolioDescription] = useState("");
   const [portfolioCapital, setPortfolioCapital] = useState("");
+
+  const notifyError = (message) => toast.error(message, { duration: 5000 });
 
   // get total price of selected stocks
   const getTotalPrice = () => {
@@ -108,8 +112,8 @@ const CreatePortfolio = () => {
     },
   ];
 
+  // refresh page
   const onResetSelectedRows = () => {
-    // refresh page
     window.location.reload();
   };
 
@@ -133,7 +137,27 @@ const CreatePortfolio = () => {
     };
   };
 
-  console.log(getSelectedRows());
+  // submit form with validation
+  const submitFormHandler = () => {
+    if (portfolioCapital.length === 0) {
+      notifyError("Please enter a valid amount of capital");
+    } else if (portfolioCapital.length < 0) {
+      notifyError("Please enter a valid amount of capital");
+    } else if (portfolioName.length === 0) {
+      notifyError("Please enter a portfolio name");
+    } else if (portfolioDescription.length === 0) {
+      notifyError("Please enter a description");
+    }
+
+    let formData = {
+      portfolioName,
+      portfolioDescription,
+      portfolioCapital,
+      selectedStocks: getSelectedRows(),
+    };
+
+    console.log(formData);
+  };
 
   return (
     <div className={style.createPortfolioWrapper}>
@@ -147,14 +171,14 @@ const CreatePortfolio = () => {
         </Container>
       </div>
       <Container maxWidth="xl">
-        <Grid container spacing={4} mt={0}>
-          <Grid item md={3} xs={12}>
-            <div className={style.inputWrapper}>
-              <Card className={style.cardCustom}>
+        <Box component="form" noValidate autoComplete="off">
+          <Grid container spacing={4} mt={0}>
+            <Grid item md={3} xs={12}>
+              <Card className={style.inputWrapper}>
                 <CardContent>
                   <div className={style.cardTitle}>Portfolio Name</div>
 
-                  <small className={style.cardDesc}>This will be the name that is displayed</small>
+                  {/* <small className={style.cardDesc}>This will be the name that is displayed</small> */}
 
                   <TextField
                     required
@@ -164,15 +188,15 @@ const CreatePortfolio = () => {
                     defaultValue=""
                     onChange={(e) => setPortfolioName(e.target.value)}
                     sx={{ mt: 3 }}
+                    error={portfolioName.length === 0}
+                    helperText="Please enter a portfolio name"
                   />
                 </CardContent>
-              </Card>
 
-              <Card className={style.cardCustom}>
                 <CardContent>
                   <div className={style.cardTitle}>Description</div>
 
-                  <small className={style.cardDesc}>This will be the description that is displayed</small>
+                  {/* <small className={style.cardDesc}>This will be the description that is displayed</small> */}
 
                   <TextField
                     required
@@ -181,123 +205,139 @@ const CreatePortfolio = () => {
                     label="Description"
                     defaultValue=""
                     onChange={(e) => setPortfolioDescription(e.target.value)}
-                    sx={{ mt: 3 }}
+                    sx={{ mt: 2 }}
+                    error={portfolioDescription.length === 0}
+                    helperText="Please enter a description"
                   />
                 </CardContent>
-              </Card>
 
-              <Card className={style.cardCustom}>
                 <CardContent>
                   <div className={style.cardTitle}>Amount of Capital</div>
-
-                  <small className={style.cardDesc}>This will be the amount of capital that is displayed</small>
 
                   <TextField
                     required
                     fullWidth
                     id="outlined-required"
                     label="Amount of Capital"
-                    defaultValue=""
+                    type="number"
                     onChange={(e) => setPortfolioCapital(e.target.value)}
-                    sx={{ mt: 3 }}
+                    sx={{ mt: 2 }}
+                    error={portfolioCapital.length === 0}
+                    helperText="Please enter an amount of capital"
                   />
                 </CardContent>
               </Card>
-            </div>
+            </Grid>
+            <Grid item md={5} xs={12}>
+              <Card className={style.currentStocksWrapper}>
+                <CardContent className={style.currentStockMarket}>
+                  <div className={style.cardTitle}>Current Stock Market</div>
+
+                  <Grid container mt={2} spacing={1}>
+                    <Grid item md={9} xs={12}>
+                      <TextField
+                        id="outlined-basic"
+                        label="Search by ticker or name"
+                        multiline
+                        maxRows={4}
+                        variant="outlined"
+                        sx={{ width: "100%", mr: "2rem" }}
+                      />
+                    </Grid>
+                    <Grid item md={3} sx={12}>
+                      <Button variant="outlined" size="large" sx={{ height: "3.5rem", width: "100%", mb: "1rem" }}>
+                        Seach
+                      </Button>
+                    </Grid>
+                  </Grid>
+
+                  <div style={{ height: 400, width: "100%" }}>
+                    <DataGrid
+                      rows={stockRows}
+                      columns={stockColumns}
+                      checkboxSelection
+                      // onchange
+                      onRowSelectionModelChange={(newSelection) => {
+                        const selectedRows = newSelection.map((id) => {
+                          const row = stockRows.find((row) => row.id === id);
+                          // Extracting only the desired properties
+                          return {
+                            id: row.id,
+                            Name: row.Name,
+                            // add dollar sign but make it an integer
+                            Price: row.Price,
+                            Total: row.Total ? row.Total : row.Price,
+                          };
+                        });
+                        setSelectedRows(selectedRows);
+                      }}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            <Grid item md={4} xs={12}>
+              <Card className={style.selectedStocksWrapper}>
+                <CardContent>
+                  {/* space between */}
+                  <Stack
+                    spacing={{ xs: 1, sm: 2 }}
+                    direction="row"
+                    useFlexGap
+                    flexWrap="wrap"
+                    justifyContent={"space-between"}
+                  >
+                    <div>
+                      <div className={style.cardTitle}>Selected Stocks</div>
+                      {/* <small className={style.cardDesc}>Your chosen stocks</small> */}
+                    </div>
+                    <div>
+                      <span className={style.cardTitle}>Total</span>
+                      <span> ${getTotalPrice()}</span>
+                    </div>
+                  </Stack>
+
+                  <div className={style.space}></div>
+
+                  <div style={{ height: 400, width: "100%" }}>
+                    <DataGrid
+                      sx={{ mt: 2 }}
+                      rows={selectedRows}
+                      columns={selectedStockColumns}
+                      initialState={{
+                        pagination: {
+                          paginationModel: { page: 0, pageSize: 5 },
+                        },
+                      }}
+                    />
+                  </div>
+
+                  <div className={style.actionButtons}>
+                    <div>
+                      <Button variant="outlined" className={style.cancelButton}>
+                        Cancel
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        className={style.resetButton}
+                        color="warning"
+                        onClick={() => onResetSelectedRows()}
+                      >
+                        Reset
+                      </Button>
+                    </div>
+                    <div>
+                      <Button variant="contained" className={style.saveButton} onClick={submitFormHandler}>
+                        Create Portfolio
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Grid>
           </Grid>
-          <Grid item md={5} xs={12}>
-            <Card className={style.cardCustom}>
-              <CardContent className={style.currentStockMarket}>
-                <div className={style.cardTitle}>Current Stock Market</div>
-                <small className={style.cardDesc}>This will be the current stock market that is displayed</small>
-                <div className={style.space}></div>
-
-                <div style={{ height: 400, width: "100%" }}>
-                  <DataGrid
-                    rows={stockRows}
-                    columns={stockColumns}
-                    checkboxSelection
-                    // onchange
-                    onRowSelectionModelChange={(newSelection) => {
-                      const selectedRows = newSelection.map((id) => {
-                        const row = stockRows.find((row) => row.id === id);
-                        // Extracting only the desired properties
-                        return {
-                          id: row.id,
-                          Name: row.Name,
-                          // add dollar sign but make it an integer
-                          Price: row.Price,
-                          Total: row.Total ? row.Total : row.Price,
-                        };
-                      });
-                      setSelectedRows(selectedRows);
-                    }}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item md={4} xs={12}>
-            <Card className={style.cardCustom}>
-              <CardContent>
-                {/* space between */}
-                <Stack
-                  spacing={{ xs: 1, sm: 2 }}
-                  direction="row"
-                  useFlexGap
-                  flexWrap="wrap"
-                  justifyContent={"space-between"}
-                >
-                  <div>
-                    <div className={style.cardTitle}>Selected Stocks</div>
-                    <small className={style.cardDesc}>Your chosen stocks</small>
-                  </div>
-                  <div>
-                    <span className={style.cardTitle}>Total</span>
-                    <span> ${getTotalPrice()}</span>
-                  </div>
-                </Stack>
-
-                <div className={style.space}></div>
-
-                <div style={{ height: 345, width: "100%" }}>
-                  <DataGrid
-                    sx={{ mt: 2 }}
-                    rows={selectedRows}
-                    columns={selectedStockColumns}
-                    initialState={{
-                      pagination: {
-                        paginationModel: { page: 0, pageSize: 5 },
-                      },
-                    }}
-                  />
-                </div>
-
-                <div className={style.actionButtons}>
-                  <div>
-                    <Button variant="outlined" className={style.cancelButton}>
-                      Cancel
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      className={style.resetButton}
-                      color="warning"
-                      onClick={() => onResetSelectedRows()}
-                    >
-                      Reset
-                    </Button>
-                  </div>
-                  <div>
-                    <Button variant="contained" className={style.saveButton}>
-                      Save
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
+        </Box>
       </Container>
     </div>
   );

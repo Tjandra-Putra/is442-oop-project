@@ -47,20 +47,12 @@ public class UserController {
     }
 
     @PostMapping("/addUser")
-    public String addUser(
-        @RequestBody List<User> user
-    ) throws Exception{
-        userService.addUser(user);
-        return null;
-    }
-
-    @PostMapping("/addUser2")
-    public ApiModel addUser2(
+    public ApiModel addUser(
         @RequestBody RequestModel requestModel
     ) throws Exception{
         ApiModel myApiModel = new ApiModel();
         
-        userService.addUser2(response, requestModel, myApiModel);
+        userService.addUser(response, requestModel, myApiModel);
 
 
         return myApiModel;

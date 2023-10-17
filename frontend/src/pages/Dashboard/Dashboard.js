@@ -9,12 +9,25 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import style from "./Dashboard.module.css";
 import AddIcon from "@mui/icons-material/Add";
+import { useNavigate } from "react-router-dom";
 
 import PortfolioReturnsChart from "../../components/Charts/PortfolioReturnsChart/PortfolioReturnsChart";
 import PortfolioCard from "../../components/PorfolioCard/PortfolioCard";
 import Menu from "../../components/Menu/Menu";
+import MarketExposureByGeographicalLocationChart from "../../components/Charts/MarketExposureByGeographicalLocationChart/MarketExposureByGeographicalLocationChart";
+import { TextField } from "@mui/material";
+import MarketExposureBySegment from "../../components/Charts/MarketExposureBySegment/MarketExposureBySegment";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
+  const [portfolioName, setPortfolioName] = React.useState("");
+
+  const handleAddNewPortfolioButton = () => {
+    // Replace '/target-page' with the path of the page you want to redirect to.
+    navigate("/create-portfolio");
+  };
+
   return (
     <div className={style.dashboardWrapper}>
       <div className={style.banner}>
@@ -27,32 +40,95 @@ const Dashboard = () => {
         </Container>
       </div>
       <Container maxWidth="xl">
-        <Grid container spacing={4} mt={0}>
-          <Grid item md={9} xs={12}>
+        <Grid container spacing={2} mt={0}>
+          <Grid item md={3} xs={6}>
             <Card className={style.figuresBar}>
-              <Typography variant="h6" className={style.portfolioWorthText}>
-                Portfolios' Worth
-              </Typography>
+              <div className={style.figuresBarTop}>
+                <div variant="h7" className={style.portfolioWorthText}>
+                  Portfolios' Worth
+                </div>
+                <div className={style.iconWrapper}>
+                  <i class="fa-solid fa-dollar-sign"></i>
+                </div>
+              </div>
 
-              <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-                <Typography variant="h6" mr={2} className={style.portfolioWorthFigure}>
-                  $46,509.00
-                </Typography>
-                <Chip label="+1,468" color="primary" className={style.statusChip} />
-              </Stack>
+              <div variant="h5" mr={2} className={style.portfolioWorthFigure}>
+                $46,509.00
+              </div>
             </Card>
+          </Grid>
+          <Grid item md={3} xs={6}>
+            <Card className={style.figuresBar}>
+              <div className={style.figuresBarTop}>
+                <div variant="h7" className={style.portfolioWorthText}>
+                  Net Profit / Loss
+                </div>
+                <div className={style.iconWrapper}>
+                  <i class="fa-solid fa-chart-line"></i>
+                </div>
+              </div>
 
+              <div variant="h7" mr={2} className={style.portfolioWorthFigure}>
+                $3039.00
+              </div>
+            </Card>
+          </Grid>
+          <Grid item md={3} xs={6}>
+            <Card className={style.figuresBar}>
+              <div className={style.figuresBarTop}>
+                <div variant="h7" className={style.portfolioWorthText}>
+                  Wallet Balance
+                </div>
+                <div className={style.iconWrapper}>
+                  <i class="fa-solid fa-wallet"></i>
+                </div>
+              </div>
+
+              <div variant="h7" mr={2} className={style.portfolioWorthFigure}>
+                $1093.00
+              </div>
+            </Card>
+          </Grid>
+          <Grid item md={3} xs={6}>
+            <Card className={style.figuresBar}>
+              <div className={style.figuresBarTop}>
+                <div variant="h7" className={style.portfolioWorthText}>
+                  Daily Profit / Loss
+                </div>
+                <div className={style.iconWrapper}>
+                  <i class="fa-regular fa-calendar-check"></i>
+                </div>
+              </div>
+
+              <div variant="h7" mr={2} className={style.portfolioWorthFigure}>
+                $204.00
+              </div>
+            </Card>
+          </Grid>
+        </Grid>
+
+        <Grid container spacing={2}>
+          <Grid item md={9} xs={12}>
             <Card className={style.chart} sx={{ minHeight: 540 }}>
               <CardContent>
-                {/* <div style={{ textAlign: "right" }}>
-                  <Menu menuName="Filter by Year" />
-                </div> */}
                 <PortfolioReturnsChart />
               </CardContent>
             </Card>
 
+            <Card className={style.chart} sx={{ minHeight: 540 }}>
+              <CardContent>
+                <MarketExposureByGeographicalLocationChart />
+              </CardContent>
+            </Card>
+
+            <Card className={style.chart} sx={{ minHeight: 540 }}>
+              <CardContent>
+                <MarketExposureBySegment />
+              </CardContent>
+            </Card>
+
             <div className="portfolios" style={{ marginTop: "0rem" }}>
-              <Grid container spacing={4} mt={0}>
+              <Grid container spacing={4}>
                 <Grid item md={6} xs={12}>
                   <Typography variant="h6" className={style.portfoliosText}>
                     You Stock Portfolios
@@ -61,7 +137,7 @@ const Dashboard = () => {
                 <Grid item md={6} xs={12} style={{ textAlign: "right" }}>
                   <Stack direction="row" spacing={1} justifyContent="flex-end" sx={{ mb: 3 }}>
                     <Menu menuName="Sort by" />
-                    <Button variant="contained" startIcon={<AddIcon />}>
+                    <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleAddNewPortfolioButton()}>
                       Add
                     </Button>
                   </Stack>
@@ -89,24 +165,51 @@ const Dashboard = () => {
               </Grid>
             </div>
           </Grid>
+
           <Grid item md={3} xs={12}>
             <Card className={style.rightSection}>
               <CardContent>
                 <Typography variant="h6" className={style.portfolioWorthText}>
-                  Wallet Balance
+                  Create New Portfolio
                 </Typography>
-                <Typography variant="h4" className={style.totalBalance}>
-                  $108,509.00
-                </Typography>
+                <Button
+                  variant="outlined"
+                  size="large"
+                  className={style.addNewPortfolioButton}
+                  onClick={() => handleAddNewPortfolioButton()}
+                >
+                  Add New Portfolio
+                </Button>
+              </CardContent>
 
-                {/* <div className={style.horizontalLine}></div> */}
+              <hr className={style.horizontalLine} />
 
-                {/* <Typography variant="h6" className={style.portfolioWorthText}>
-                  Market Place
+              <CardContent>
+                <Typography variant="h6" className={style.portfolioWorthText}>
+                  Navigate to Portfolio
                 </Typography>
-                <Button variant="outlined" sx={{ mt: 1 }}>
-                  Purchase stocks
-                </Button> */}
+                <TextField
+                  id="outlined-basic"
+                  label="Name of Portfolio"
+                  variant="standard"
+                  multiline
+                  maxRows={2}
+                  sx={{
+                    width: "100%",
+                  }}
+                  value={portfolioName}
+                  onChange={(e) => setPortfolioName(e.target.value)}
+                  helperText="Enter the name of the portfolio you want to navigate to."
+                />
+
+                <Button
+                  size="large"
+                  variant="contained"
+                  className={style.addNewPortfolioButton}
+                  onClick={() => (portfolioName ? navigate(`/portfolio/${portfolioName}`) : null)}
+                >
+                  Go
+                </Button>
               </CardContent>
             </Card>
           </Grid>
