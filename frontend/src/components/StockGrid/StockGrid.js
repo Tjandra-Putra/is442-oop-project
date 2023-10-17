@@ -2,6 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import Modal from "@mui/material/Modal";
@@ -12,6 +13,7 @@ import { GridRowModes, DataGrid, GridActionsCellItem, GridRowEditStopReasons } f
 import { randomTraderName, randomId } from "@mui/x-data-grid-generator";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
+import PortfolioStockCandleStickChart from "../Charts/PortfolioStockCandleStickChart/PortfolioStockCandleStickChart";
 
 import style from "./StockGrid.module.css";
 
@@ -38,10 +40,15 @@ export default function StockGrid({ portfolioId }) {
   const [rowModesModel, setRowModesModel] = React.useState({});
   const roles = ["Market", "Finance", "Development"];
 
-  // modal
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  // ============================== View Stock Modal section ==============================
+  const [viewStockModalOpen, setViewStockModalOpen] = React.useState(false);
+  const handleViewStockModalOpen = () => setViewStockModalOpen(true);
+  const handleViewStockModalClose = () => setViewStockModalOpen(false);
+
+  // ============================== Add Stocks Modal section ==============================
+  const [addStocksModalOpen, setAddStocksModalOpen] = React.useState(false);
+  const handleAddStocksModalOpen = () => setAddStocksModalOpen(true);
+  const handleAddStocksModalClose = () => setAddStocksModalOpen(false);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -80,6 +87,10 @@ export default function StockGrid({ portfolioId }) {
     if (editedRow.isNew) {
       setRows(rows.filter((row) => row.id !== id));
     }
+  };
+
+  const handleViewClick = (id) => () => {
+    handleViewStockModalOpen();
   };
 
   const processRowUpdate = (newRow) => {
@@ -159,6 +170,7 @@ export default function StockGrid({ portfolioId }) {
             color="inherit"
           />,
           <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={handleDeleteClick(id)} color="inherit" />,
+          <GridActionsCellItem icon={<FullscreenIcon />} label="View" onClick={handleViewClick(id)} color="inherit" />,
         ];
       },
     },
@@ -281,10 +293,10 @@ export default function StockGrid({ portfolioId }) {
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} mb={1}>
         <div class={style.cardTitle}>My Stocks</div>
-        <Button onClick={handleOpen}>Add Stocks</Button>
+        <Button onClick={handleAddStocksModalOpen}>Add Stocks</Button>
         <Modal
-          open={open}
-          onClose={handleClose}
+          open={addStocksModalOpen}
+          onClose={handleAddStocksModalClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
@@ -418,6 +430,21 @@ export default function StockGrid({ portfolioId }) {
           }}
         />
       </Box>
+
+      {/* View Stock Modal */}
+      <Modal
+        open={viewStockModalOpen}
+        onClose={handleViewStockModalClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className={style.modal}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Stock Name: Apple
+          </Typography>
+          <PortfolioStockCandleStickChart />
+        </Box>
+      </Modal>
     </>
   );
 }
