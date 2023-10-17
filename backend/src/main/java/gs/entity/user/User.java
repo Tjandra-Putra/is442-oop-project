@@ -1,4 +1,4 @@
-package gs.model.user;
+package gs.entity.user;
 
 
 import javax.validation.constraints.NotNull;

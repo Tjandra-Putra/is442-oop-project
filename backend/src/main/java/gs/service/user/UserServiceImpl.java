@@ -1,4 +1,4 @@
-package gs.service.user.Impl;
+package gs.service.user;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,10 +11,9 @@ import org.springframework.stereotype.Service;
 import gs.common.ApiModel;
 import gs.common.DataRequestModel;
 import gs.common.RequestModel;
+import gs.entity.user.User;
 import gs.inputModel.userInputModel;
-import gs.model.user.User;
 import gs.repository.UserRepo;
-import gs.service.user.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -33,7 +32,6 @@ public class UserServiceImpl implements UserService{
 
             inputModel.setId((Integer) (data[0]));
             inputModel.setEmail(String.valueOf(data[1]));
-            inputModel.setUsername(String.valueOf(data[3]));
             
             userList.add(inputModel);
         }
@@ -49,7 +47,6 @@ public class UserServiceImpl implements UserService{
 
             inputModel.setId((Integer) (data[0]));
             inputModel.setEmail(String.valueOf(data[1]));
-            inputModel.setUsername(String.valueOf(data[3]));
             
             userList.add(inputModel);
         }
@@ -83,23 +80,25 @@ public class UserServiceImpl implements UserService{
                         newUser.setEmail(fe.getValue());
                     }
 
-                    if (fe.getFieldName().equalsIgnoreCase("username")){
-                        newUser.setUsername(fe.getValue());
-                    }
-
                     if (fe.getFieldName().equalsIgnoreCase("password")){
                         newUser.setPassword(fe.getValue());
+                    }
+                    
+                    if (fe.getFieldName().equalsIgnoreCase("username")){
+                        newUser.setUsername(fe.getValue());
                     }
                 }
 
                 // save to db
+                System.out.println("=======HERE=========");
                 userRepo.save(newUser);
+                System.out.println("=======FAILED=========");
                 // get ID
                 userInputModel inputModel = new userInputModel();
 
                 inputModel.setId(newUser.getUserId());
                 inputModel.setEmail(newUser.getEmail());
-                inputModel.setUsername(newUser.getUsername());
+                inputModel.setEmail(newUser.getUsername());
 
                 apiModel.setMessage("Data saved successfully.");
                 apiModel.setData(inputModel);
