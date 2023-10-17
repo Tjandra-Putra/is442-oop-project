@@ -12,8 +12,8 @@ function PortfolioStocksChart() {
 
   const options = {
     chart: {
-      title: "Stocks Performance",
-      subtitle: "Sales, Expenses, and Profit: 2014-2017",
+      // title: "Stocks Performance",
+      // subtitle: "Sales, Expenses, and Profit: 2014-2017",
     },
   };
 

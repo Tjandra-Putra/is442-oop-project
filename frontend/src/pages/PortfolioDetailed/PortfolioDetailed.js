@@ -85,6 +85,9 @@ const PortfolioDetailed = () => {
         <Grid item xs={12} md={12} lg={12}>
           <Card className={style.cardCustom}>
             <CardContent>
+              <div className={style.cardTitle}>Stocks Performance</div>
+              <br />
+              <br />
               <PortfolioStocksChart />
             </CardContent>
           </Card>

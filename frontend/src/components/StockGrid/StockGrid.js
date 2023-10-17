@@ -279,7 +279,8 @@ export default function StockGrid({ portfolioId }) {
 
   return (
     <>
-      <Stack direction="row" justifyContent="flex-end" alignItems="center" spacing={2} mb={1}>
+      <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} mb={1}>
+        <div class={style.cardTitle}>My Stocks</div>
         <Button onClick={handleOpen}>Add Stocks</Button>
         <Modal
           open={open}
@@ -351,7 +352,7 @@ export default function StockGrid({ portfolioId }) {
                     {/* <small className={style.cardDesc}>Your chosen stocks</small> */}
                   </div>
                   <div>
-                    <span className={style.cardTitle}>Total</span>
+                    <span className={style.cardTitle}>Total: </span>
                     <span> ${getTotalPrice()}</span>
                   </div>
                 </Stack>
