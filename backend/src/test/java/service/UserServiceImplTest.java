@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import gs.BackendApplication;
 import gs.common.RequestModel;
 import gs.controller.UserController;
-import gs.inputModel.userInputModel;
+import gs.inputModel.UserInputModel;
 import gs.repository.UserRepo;
 import gs.service.user.UserService;
 import gs.service.user.UserServiceImpl;
@@ -55,7 +55,7 @@ public class UserServiceImplTest {
 
 
         when(userRepo.getUser()).thenReturn(userList);
-        List<userInputModel> result = userServiceImpl.getUser();
+        List<UserInputModel> result = userServiceImpl.getUser();
         System.out.println(result);
         assertEquals(2, result.size());
     }

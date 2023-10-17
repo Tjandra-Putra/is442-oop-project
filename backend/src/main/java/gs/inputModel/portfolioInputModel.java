@@ -2,7 +2,7 @@ package gs.inputModel;
 
 import java.io.Serializable;
 
-public class portfolioInputModel implements Serializable{
+public class PortfolioInputModel implements Serializable{
     private long portfolioId;
     private String portfolioName;
     private double capitalAmt;

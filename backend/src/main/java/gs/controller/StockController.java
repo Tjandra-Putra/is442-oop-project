@@ -16,7 +16,7 @@ import gs.common.NullError;
 import gs.common.RequestModel;
 import gs.entity.Stock;
 import gs.entity.User;
-import gs.inputModel.stockInputModel;
+import gs.inputModel.StockInputModel;
 import gs.service.stock.StockService;
 import gs.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,19 +37,19 @@ public class StockController {
     private StockService StockService;
 
     @GetMapping("/getStock")
-    public ApiModel<ArrayList<stockInputModel>> getStock(){
+    public ApiModel<ArrayList<StockInputModel>> getStock(){
         return ApiModel.ok(StockService.getStock());
     }
 
     @GetMapping("/getStockByTicker/{ticker}")
-    public ApiModel<ArrayList<stockInputModel>> getStockByTicker(
+    public ApiModel<ArrayList<StockInputModel>> getStockByTicker(
         @PathVariable("ticker") String ticker
     ){
         return ApiModel.ok(StockService.getStockByTicker(ticker));
     }
 
     @GetMapping("/getStockByName/{name}")
-    public ApiModel<ArrayList<stockInputModel>> getStockByName(
+    public ApiModel<ArrayList<StockInputModel>> getStockByName(
         @PathVariable("name") String name
     ){
         return ApiModel.ok(StockService.getStockByName(name));

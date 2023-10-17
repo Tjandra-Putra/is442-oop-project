@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import gs.common.ApiModel;
 import gs.common.RequestModel;
 import gs.entity.Portfolio;
-import gs.inputModel.portfolioInputModel;
-import gs.inputModel.userInputModel;
+import gs.inputModel.PortfolioInputModel;
+import gs.inputModel.UserInputModel;
 import gs.service.portfolio.PortfolioService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,14 +36,14 @@ public class PortfolioController {
     private PortfolioService portfolioService;
 
     @GetMapping("/getPortfolio/{userId}")
-    public ApiModel<ArrayList<portfolioInputModel>> getPortfolio(
+    public ApiModel<ArrayList<PortfolioInputModel>> getPortfolio(
         @PathVariable("userId") String userId
     ){
         return ApiModel.ok(portfolioService.getPortfolio(userId));
     }
 
     @GetMapping("/getPortfolio/{userId}/{portfolioId}")
-    public ApiModel<ArrayList<portfolioInputModel>> getPortfolioById(
+    public ApiModel<ArrayList<PortfolioInputModel>> getPortfolioById(
         @PathVariable("userId") String userId,
         @PathVariable("portfolioId") String portfolioId
 
@@ -57,6 +58,18 @@ public class PortfolioController {
     ) throws Exception{
         ApiModel myApiModel = new ApiModel();
         portfolioService.addPortfolio(response, requestModel, myApiModel, userId);
+        
+        return myApiModel;
+    }
+
+    @PutMapping("/editPortfolio/capitalAmt/{userId}/{portfolioId}")
+    public ApiModel editPortfolioCapitalAmt(
+        @PathVariable("userId") String userId,
+        @PathVariable("portfolioId") String portfolioId,
+        @RequestBody RequestModel requestModel
+    ) throws Exception{
+        ApiModel myApiModel = new ApiModel();
+        portfolioService.editPortfolioCapitalAmt(response, requestModel, myApiModel, userId, portfolioId);
         
         return myApiModel;
     }

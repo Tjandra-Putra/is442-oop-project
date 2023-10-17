@@ -2,7 +2,7 @@ package gs.inputModel;
 
 import java.io.Serializable;
 
-public class userInputModel implements Serializable {
+public class UserInputModel implements Serializable {
     private long id;
     private String email;
     private String username;

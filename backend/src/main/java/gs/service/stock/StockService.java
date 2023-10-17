@@ -4,15 +4,15 @@ import java.util.List;
 
 import gs.common.RequestModel;
 import gs.entity.Stock;
-import gs.inputModel.stockInputModel;
+import gs.inputModel.StockInputModel;
 import jakarta.servlet.http.HttpServletResponse;
 
 public interface StockService {
-    List<stockInputModel> getStock();
+    List<StockInputModel> getStock();
 
-    List<stockInputModel> getStockByTicker(String ticker);
+    List<StockInputModel> getStockByTicker(String ticker);
 
-    List<stockInputModel> getStockByName(String name);
+    List<StockInputModel> getStockByName(String name);
 
     void addStock(HttpServletResponse response, RequestModel requestModel) throws Exception;
 }
