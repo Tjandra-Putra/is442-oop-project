@@ -12,7 +12,7 @@
   --bg-ocean-blue: #1a3b71;
 }
 
-body {
-  font-family: var(--font-roboto);
+* {
+  font-family: var(--font-inter);
   margin: 0;
 }
