@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import gs.common.ApiModel;
+import gs.common.RequestModel;
 import gs.entity.Portfolio;
 import gs.inputModel.portfolioInputModel;
 import gs.inputModel.userInputModel;
@@ -33,27 +34,30 @@ public class PortfolioController {
     @Autowired
     private PortfolioService portfolioService;
 
-    @GetMapping("/getPortfolio/{userid}")
+    @GetMapping("/getPortfolio/{userId}")
     public ApiModel<ArrayList<portfolioInputModel>> getPortfolio(
-        @PathVariable("userid") String userid
+        @PathVariable("userId") String userId
     ){
-        return ApiModel.ok(portfolioService.getPortfolio(userid));
+        return ApiModel.ok(portfolioService.getPortfolio(userId));
     }
 
-    @GetMapping("/getPortfolio/{userid}/{portfolioId}")
+    @GetMapping("/getPortfolio/{userId}/{portfolioId}")
     public ApiModel<ArrayList<portfolioInputModel>> getPortfolioById(
-        @PathVariable("userid") String userid,
+        @PathVariable("userId") String userId,
         @PathVariable("portfolioId") String portfolioId
 
     ){
-        return ApiModel.ok(portfolioService.getPortfolioById(userid, portfolioId));
+        return ApiModel.ok(portfolioService.getPortfolioById(userId, portfolioId));
     }
-    
-    @PostMapping("/addPortfolio")
-    public String addPortfolio(
-        @RequestBody List<Portfolio> portfolio
+
+    @PostMapping("/addPortfolio/{userId}")
+    public ApiModel addPortfolio(
+        @PathVariable("userId") String userId,
+        @RequestBody RequestModel requestModel
     ) throws Exception{
-        portfolioService.addPortfolio(portfolio);
-        return null;
+        ApiModel myApiModel = new ApiModel();
+        portfolioService.addPortfolio(response, requestModel, myApiModel, userId);
+        
+        return myApiModel;
     }
 }

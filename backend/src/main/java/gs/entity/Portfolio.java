@@ -82,6 +82,10 @@ public class Portfolio {
         return capitalAmt;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     public void setPortfolioId(int portfolioId) {
         this.portfolioId = portfolioId;
     }
@@ -96,5 +100,9 @@ public class Portfolio {
 
     public void setPortfolioCapitalAmt(double portfolioCapitalAmt) {
         this.capitalAmt = portfolioCapitalAmt;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
