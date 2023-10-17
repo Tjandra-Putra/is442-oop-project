@@ -4,18 +4,23 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { useParams } from "react-router-dom";
 import StockCard from "../../components/StockCard/StockCard";
-import PieChart from "../../components/Charts/PieChart/PieChart";
-// import Dashboard from "../Dashboard/Dashboard";
-import TransactionDetails from "../../components/StockGrid/TransactionDetails";
-import AccountTransactions from "../../components/StockGrid/AccountTransactions";
-// import EditIcon from "@mui/icons-material/Edit";
-import BarChart from "../../components/Charts/BarChart/BarChart";
+import PortfolioStocksAllocationChart from "../../components/Charts/PortfolioStocksAllocationChart/PortfolioStocksAllocationChart";
 import { Card, Grid, CardContent } from "@mui/material";
-// import { Pie } from "react-chartjs-2";
-
+import PortfolioStocksBySegmentChart from "../../components/Charts/PortfolioStocksBySegmentChart/PortfolioStocksBySegmentChart";
+import PortfolioStocksChart from "../../components/Charts/PortfolioStocksChart/PortfolioStocksChart";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Close";
+import StockGrid from "../../components/StockGrid/StockGrid";
 const PortfolioDetailed = () => {
   // get id from url paramter
   const { id } = useParams();
+
+  // get portfolio name by id
 
   return (
     <div className={style.portfolioDetailedWrapper}>
@@ -23,84 +28,74 @@ const PortfolioDetailed = () => {
         <Container maxWidth="xl">
           <div className="banner-content">
             <Typography variant="h5" style={{ letterSpacing: "1px" }}>
-              Portfolio: {id}
+              {id}
             </Typography>
           </div>
         </Container>
       </div>
 
-      {/* First container */}
-      {/* <Container>
-        <div className={style.firstContainer}>
-          <StockCard name="Portfolio Value" value="$6,364" />
-          <StockCard name="Total Stocks" value="10" />
-          <StockCard name="Net Value" value="20% " />
-          <StockCard name="Wallet" value="$20,000" />
-        </div>
-      </Container> */}
-
       {/* Second Container */}
       <Container>
-        {/* LEFT SECTION */}
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 1 }}>
+        <div className={style.portfolioDescription}>
+          <div className="portfolio-description-content">
+            <Typography variant="h6" style={{ letterSpacing: "1px" }}>
+              Portfolio Description
+            </Typography>
+            <Typography variant="body1" style={{ letterSpacing: "1px" }}>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam voluptatum, quibusdam, voluptate, quia
+              voluptas quod quos voluptatibus quae doloribus quidem voluptatem. Quisquam voluptatum, quibusdam,
+              voluptate, quia voluptas quod quos voluptatibus quae doloribus quidem voluptatem. Quisquam voluptatum,
+              quibusdam, voluptate, quia voluptas quod quos voluptatibus quae doloribus
+            </Typography>
+          </div>
+        </div>
+
+        {/* ============================ LEFT SECTION ============================ */}
+        <Grid container rowSpacing={5} columnSpacing={{ xs: 2, sm: 2, md: 1 }}>
           <Grid item xs={12} md={6} lg={6}>
             <div className={style.firstContainer}>
               <StockCard name="Portfolio Value" value="$6,364" />
               <StockCard name="Total Stocks" value="10" />
             </div>
 
-            <div style={{ maxHeight: "300px", marginTop: "10px" }}>
-              <Card className={style.pieChart}>
-                <CardContent>
-                  <PieChart />
-                </CardContent>
-              </Card>
-            </div>
-
-            <div style={{ maxHeight: "300px", marginTop: "10px" }}>
-              <TransactionDetails />
-            </div>
+            <Card className={style.cardCustom}>
+              <CardContent>
+                <div className={style.cardTitle}>Stocks Allocation</div>
+                <PortfolioStocksAllocationChart />
+              </CardContent>
+            </Card>
           </Grid>
 
-          {/* RIGHT SECTION */}
+          {/* ============================ RIGHT SECTION ============================ */}
           <Grid item xs={12} md={6} lg={6}>
             <div className={style.firstContainer}>
               <StockCard name="Net Value" value="20% " />
-              <StockCard name="Wallet" value="$20,000" />
+              <StockCard name="Capital" value="$20,000" />
             </div>
 
-            <div style={{ maxHeight: "300px", marginTop: "10px" }}>
-              <AccountTransactions />
-            </div>
+            <Card className={style.cardCustom}>
+              <CardContent>
+                <div className={style.cardTitle}>Stocks by Segment</div>
+                <PortfolioStocksBySegmentChart />
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
 
-            <div style={{ maxHeight: "300px", marginTop: "10px" }}>
-              <Card className={style.barChart}>
-                <CardContent>
-                  <BarChart />
-                </CardContent>
-              </Card>
-            </div>
-          </Grid>
+        <Grid item xs={12} md={12} lg={12}>
+          <Card className={style.cardCustom}>
+            <CardContent>
+              <PortfolioStocksChart />
+            </CardContent>
+          </Card>
+        </Grid>
 
-          {/* <Grid item xs={12} md={6} lg={6}>
-            <div style={{ maxHeight: "300px", marginTop: "10px" }}>
-              <AccountTransactions />
-            </div>
-          </Grid>
-          <Grid item xs={12} md={6} lg={6}>
-            <div style={{ maxHeight: "300px", marginTop: "10px", marginRight: "20px" }}>
-              <TransactionDetails />
-            </div>
-          </Grid>
-          <Grid item xs={12} md={6} lg={6}>
-            <div style={{ maxHeight: "300px", marginTop: "10px" }}>
-              <Card className={style.barChart}>
-                <CardContent>
-                  <BarChart />
-                </CardContent>
-              </Card>
-            </div>
-          </Grid> */}
+        <Grid item xs={12} md={12} lg={12}>
+          <Card className={style.cardCustom}>
+            <CardContent>
+              <StockGrid />
+            </CardContent>
+          </Card>
         </Grid>
       </Container>
     </div>

@@ -141,7 +141,7 @@ const CreatePortfolio = () => {
   const submitFormHandler = () => {
     if (portfolioCapital.length === 0) {
       notifyError("Please enter a valid amount of capital");
-    } else if (portfolioCapital.length < 0) {
+    } else if (portfolioCapital < 0) {
       notifyError("Please enter a valid amount of capital");
     } else if (portfolioName.length === 0) {
       notifyError("Please enter a portfolio name");
