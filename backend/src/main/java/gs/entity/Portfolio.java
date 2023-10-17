@@ -3,33 +3,70 @@ package gs.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "portfolio")
 public class Portfolio {
+
     @Id
-    @Column(name = "portfolioId")
-    @GeneratedValue
-    
-    private int portfolioId;
+    @SequenceGenerator(
+        name = "portfolio_sequence",
+        sequenceName = "portfolio_sequence",
+        allocationSize = 1
+    )
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "portfolio_sequence"
+    )
+    @Column(
+        name = "portfolio_id",
+        updatable = false
+    )
+    private long portfolioId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Column(
+        name = "portfolio_name",
+        updatable = true,
+        nullable = false
+    )
     private String portfolioName;
-    private String portfolioDescription;
-    private double portfolioCapitalAmt;
+
+    @Column(
+        name = "description",
+        updatable = true,
+        nullable = false
+    )
+    private String description;
+
+    @Column(
+        name = "capital_amount",
+        updatable = true,
+        nullable = false
+    )    
+    private double capitalAmt;
 
     public Portfolio() {
-
     };
 
-    public Portfolio(int portfolioId, String portfolioName, String portfolioDescripton, double portfolioCapitalAmt) {
+    public Portfolio(long portfolioId, String portfolioName, String description, double capitalAmt) {
         this.portfolioId = portfolioId;
         this.portfolioName = portfolioName;
-        this.portfolioDescription = portfolioDescripton;
-        this.portfolioCapitalAmt = portfolioCapitalAmt;
+        this.description = description;
+        this.capitalAmt = capitalAmt;
     }
 
-    public int getPortfolioId() {
+    public long getPortfolioId() {
         return portfolioId;
     }
 
@@ -38,11 +75,11 @@ public class Portfolio {
     }
 
     public String getPortfolioDescription() {
-        return portfolioDescription;
+        return description;
     }
 
     public double getPortfolioCapitalAmt() {
-        return portfolioCapitalAmt;
+        return capitalAmt;
     }
 
     public void setPortfolioId(int portfolioId) {
@@ -54,10 +91,10 @@ public class Portfolio {
     }
 
     public void setPortfolioDescription(String portfolioDescription) {
-        this.portfolioDescription = portfolioDescription;
+        this.description = portfolioDescription;
     }
 
     public void setPortfolioCapitalAmt(double portfolioCapitalAmt) {
-        this.portfolioCapitalAmt = portfolioCapitalAmt;
+        this.capitalAmt = portfolioCapitalAmt;
     }
 }

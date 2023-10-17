@@ -1,13 +1,17 @@
 package gs.entity;
 
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -57,6 +61,9 @@ public class User {
     )
     // CAN ENCRYPT THE PASSWORD IF NEEDBE
     private String password;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Portfolio> portfolio;  
 
     public User(){
     };
