@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService{
         for (Object[] data : userQueryList){
             userInputModel inputModel = new userInputModel();
 
-            inputModel.setId((Integer) (data[0]));
+            inputModel.setId((Long) (data[0]));
             inputModel.setEmail(String.valueOf(data[1]));
             
             userList.add(inputModel);
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService{
         for (Object[] data : userQueryList){
             userInputModel inputModel = new userInputModel();
 
-            inputModel.setId((Integer) (data[0]));
+            inputModel.setId((Long) (data[0]));
             inputModel.setEmail(String.valueOf(data[1]));
             
             userList.add(inputModel);

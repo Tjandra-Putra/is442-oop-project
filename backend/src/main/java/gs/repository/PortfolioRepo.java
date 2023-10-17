@@ -4,13 +4,12 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 
 import gs.entity.Portfolio;
 
-public interface PortfolioRepo extends CrudRepository<Portfolio, Integer>{
+public interface PortfolioRepo extends JpaRepository<Portfolio, Long>{
     
-    @Query(value = "select * from portfolio;", nativeQuery = true)
-    List<Object[]> getPortfolio();
+    @Query(value = "select * from portfolio where user_id = ?;", nativeQuery = true)
+    List<Object[]> getPortfolioById(String id);
 
 }
