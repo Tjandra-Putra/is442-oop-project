@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -25,6 +26,9 @@ public class Stock {
         nullable = false
         )
     private String stockName;
+
+    @OneToOne(mappedBy = "stock")
+    private StockInfo stockInfo;
 
     public Stock(String ticker, String stockName) {
         this.ticker = ticker;
