@@ -2,7 +2,7 @@ package gs.inputModel;
 
 import java.io.Serializable;
 
-public class stockInputModel implements Serializable {
+public class StockInputModel implements Serializable {
 
     private String ticker;
     private String name;
