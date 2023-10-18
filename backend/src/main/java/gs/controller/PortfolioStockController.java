@@ -32,4 +32,13 @@ public class PortfolioStockController {
     ){
         return ApiModel.ok(portfolioStockService.getPortfolioStock(portfolioId));
     }
+
+    
+    @GetMapping("/getPortfolioStock/{portfolioId}/{ticker}")
+    public ApiModel<ArrayList<PortfolioStockInputModel>> getPortfolioStockByTicker(
+        @PathVariable("portfolioId") String portfolioId,
+        @PathVariable("ticker") String ticker
+    ){
+        return ApiModel.ok(portfolioStockService.getPortfolioStockByTicker(portfolioId, ticker));
+    }
 }

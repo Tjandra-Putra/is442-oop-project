@@ -1,13 +1,12 @@
 package gs.inputModel;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class PortfolioStockInputModel implements Serializable{
     private String ticker;
     private long portfolioId;
     private int quantity;
-    private Date buyDate;
+    private String buyDate;
     private double price;
 
     public String getTicker() {
@@ -22,7 +21,7 @@ public class PortfolioStockInputModel implements Serializable{
         return quantity;
     }
 
-    public Date getBuyDate() {
+    public String getBuyDate() {
         return buyDate;
     }
 
@@ -42,7 +41,7 @@ public class PortfolioStockInputModel implements Serializable{
         this.quantity = quantity;
     }
 
-    public void setBuyDate(Date buyDate) {
+    public void setBuyDate(String buyDate) {
         this.buyDate = buyDate;
     }
 
