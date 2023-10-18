@@ -2,7 +2,6 @@ package gs.service.portfolio;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,6 @@ import gs.common.RequestModel;
 import gs.entity.Portfolio;
 import gs.entity.User;
 import gs.inputModel.PortfolioInputModel;
-import gs.inputModel.UserInputModel;
 import gs.repository.PortfolioRepo;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
@@ -98,27 +96,28 @@ public class PortfolioServiceImpl implements PortfolioService{
             apiModel.setMessage("An error occurred while performing the database operation.");
         }
                 
-        // }
-
-        System.out.println("==========STATUS==================");
-        System.out.println(response.getStatus());
         apiModel.setStatus(String.valueOf(response.getStatus()));
-
-        System.out.println("==========ERROR MESSAGE==================");
-        // System.out.println(response.get);
 
         return apiModel;
     }
 
-    public ApiModel editPortfolioCapitalAmt(HttpServletResponse response, RequestModel requestModel, ApiModel myApiModel, String userId, String portfolioId) throws DataAccessException {
+    public ApiModel editPortfolio(HttpServletResponse response, RequestModel requestModel, ApiModel myApiModel, String userId, String portfolioId) throws DataAccessException {
         try {
             Portfolio existingPortfolio = portfolioRepo.getPortfolioById(userId, portfolioId).get(0);
 
-            boolean isNewCapitalAmt = requestModel.getData().get(0).getFieldName().equalsIgnoreCase("capitalAmt");
+            for (DataRequestModel fe : requestModel.getData()){    
 
-            if (isNewCapitalAmt){
-                String fe = requestModel.getData().get(0).getValue();
-                existingPortfolio.setPortfolioCapitalAmt(Double.parseDouble(fe));
+                if (fe.getFieldName().equalsIgnoreCase("capitalAmt")){
+                    existingPortfolio.setPortfolioCapitalAmt(Double.parseDouble(fe.getValue()));
+                }
+
+                if (fe.getFieldName().equalsIgnoreCase("description")){
+                    existingPortfolio.setPortfolioDescription(fe.getValue());
+                }
+                
+                if (fe.getFieldName().equalsIgnoreCase("portfolioName")){
+                    existingPortfolio.setPortfolioName(fe.getValue());
+                }
             }
 
             // save to db
@@ -137,13 +136,8 @@ public class PortfolioServiceImpl implements PortfolioService{
             System.out.println(ex.getMessage());
             myApiModel.setMessage("An error occurred while performing the database operation.");
         }
-                
-        System.out.println("==========STATUS==================");
-        System.out.println(response.getStatus());
-        myApiModel.setStatus(String.valueOf(response.getStatus()));
 
-        System.out.println("==========ERROR MESSAGE==================");
-        // System.out.println(response.get);
+        myApiModel.setStatus(String.valueOf(response.getStatus()));
 
         return myApiModel;
     }
@@ -151,11 +145,6 @@ public class PortfolioServiceImpl implements PortfolioService{
     public ApiModel deletePortfolio(HttpServletResponse response, ApiModel myApiModel,String userId, String portfolioId) throws DataAccessException {
         try {
             Portfolio existingPortfolio = portfolioRepo.getPortfolioById(userId, portfolioId).get(0);
-
-            // if (existingPortfolio){
-            //     String fe = requestModel.getData().get(0).getValue();
-            //     existingPortfolio.setPortfolioCapitalAmt(Double.parseDouble(fe));
-            // }
 
             // save to db
             portfolioRepo.delete(existingPortfolio);
@@ -172,14 +161,9 @@ public class PortfolioServiceImpl implements PortfolioService{
             System.out.println(ex.getMessage());
             myApiModel.setMessage("An error occurred while performing the database operation.");
         }
-                
-        System.out.println("==========STATUS==================");
-        System.out.println(response.getStatus());
+    
         myApiModel.setStatus(String.valueOf(response.getStatus()));
-
-        System.out.println("==========ERROR MESSAGE==================");
-        // System.out.println(response.get);
-
+        
         return myApiModel;
     }
 }

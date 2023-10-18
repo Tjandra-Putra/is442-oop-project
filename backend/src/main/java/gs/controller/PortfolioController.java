@@ -63,14 +63,14 @@ public class PortfolioController {
         return myApiModel;
     }
 
-    @PutMapping("/editPortfolio/capitalAmt/{userId}/{portfolioId}")
-    public ApiModel editPortfolioCapitalAmt(
+    @PutMapping("/editPortfolio/{userId}/{portfolioId}")
+    public ApiModel editPortfolio(
         @PathVariable("userId") String userId,
         @PathVariable("portfolioId") String portfolioId,
         @RequestBody RequestModel requestModel
     ) throws Exception{
         ApiModel myApiModel = new ApiModel();
-        portfolioService.editPortfolioCapitalAmt(response, requestModel, myApiModel, userId, portfolioId);
+        portfolioService.editPortfolio(response, requestModel, myApiModel, userId, portfolioId);
         
         return myApiModel;
     }
