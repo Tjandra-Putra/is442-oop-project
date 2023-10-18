@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.annotations.SourceType;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import gs.common.DataRequestModel;
@@ -66,6 +67,22 @@ public class StockServiceImpl implements StockService {
             stockList.add(inputModel);
         }
         return stockList;
+    }
+
+    public void addStock(String ticker, String stockName) {
+        Stock newStock = new Stock();
+        newStock.setTicker(ticker);
+        newStock.setStockName(stockName);
+        System.out.println("=====DATA=====");
+        System.out.println(newStock.getTicker());
+        System.out.println(newStock.getStockName());
+        try {
+            stockRepo.save(newStock);
+        }
+        catch (DataAccessException e){
+            System.out.println("=====hERERE=====");
+            System.out.println(e.getMessage());
+        }
     }
 
     public void addStock(HttpServletResponse response, RequestModel requestModel) throws Exception{

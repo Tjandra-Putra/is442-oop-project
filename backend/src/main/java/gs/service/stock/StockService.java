@@ -14,5 +14,7 @@ public interface StockService {
 
     List<stockInputModel> getStockByName(String name);
 
+    void addStock(String ticker, String stockName);
+
     void addStock(HttpServletResponse response, RequestModel requestModel) throws Exception;
 }
