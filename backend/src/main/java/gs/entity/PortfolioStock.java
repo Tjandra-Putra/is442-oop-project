@@ -3,6 +3,7 @@ package gs.entity;
 import java.io.Serializable;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
@@ -12,7 +13,6 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "portfolio_stock")
-@IdClass(PortfolioStockId.class)
 public class PortfolioStock {
 
     @Id
