@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.ArrayList;
 import java.util.Map;
 import gs.common.NullError;
-import gs.inputModel.userInputModel;
+import gs.inputModel.UserInputModel;
 
 public class ApiModel<D extends Serializable> implements Serializable {
     private String status;
