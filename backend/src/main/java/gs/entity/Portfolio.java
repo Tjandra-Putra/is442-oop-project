@@ -1,5 +1,7 @@
 package gs.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -55,6 +58,9 @@ public class Portfolio {
         nullable = false
     )    
     private double capitalAmt;
+
+    @OneToMany(mappedBy = "portfolio")
+    private List<PortfolioStock> PortfolioStock;
 
     public Portfolio() {
     };
