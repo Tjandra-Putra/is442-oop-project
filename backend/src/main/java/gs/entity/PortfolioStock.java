@@ -1,12 +1,10 @@
 package gs.entity;
 
-import java.io.Serializable;
+import java.util.Date;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -27,9 +25,32 @@ public class PortfolioStock {
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
-    // Other properties specific to PortfolioStock
+    @Column(
+        name = "quantity",
+        updatable = true,
+        nullable = false
+    )    
+    private int quantity;
 
-    // Constructors, getters, and setters
+    @Column(
+        name = "buy_date",
+        updatable = false,
+        nullable = false
+    )    
+    private Date buyDate;
+
+    @Column(
+        name = "price",
+        updatable = false,
+        nullable = false
+    )    
+    private double price;
+    
+
+
+
+
+
 }
 
 

@@ -92,7 +92,7 @@ public class Portfolio {
         return user;
     }
 
-    public void setPortfolioId(int portfolioId) {
+    public void setPortfolioId(long portfolioId) {
         this.portfolioId = portfolioId;
     }
 
