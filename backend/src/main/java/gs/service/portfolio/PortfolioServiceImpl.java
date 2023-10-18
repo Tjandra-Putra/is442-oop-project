@@ -23,19 +23,24 @@ public class PortfolioServiceImpl implements PortfolioService{
     @Resource
     protected PortfolioRepo portfolioRepo;
 
+    // inputModel fitting methood
+    private PortfolioInputModel inputModel(Portfolio data){
+        PortfolioInputModel inputModel = new PortfolioInputModel();
+        inputModel.setPortfolioId((Long) data.getPortfolioId());
+        inputModel.setCapitalAmt((double) data.getPortfolioCapitalAmt());
+        inputModel.setDescription(String.valueOf(data.getPortfolioDescription()));
+        inputModel.setPortfolioName(String.valueOf(data.getPortfolioName()));
+        inputModel.setUserId((Long) data.getUser().getUserId());
+
+        return inputModel;
+    }
+
     public List<PortfolioInputModel> getPortfolio(String userId){
         List<Portfolio> portfolioQueryList = portfolioRepo.getPortfolioByUserId(userId);
         List<PortfolioInputModel> portfolioList = new ArrayList<>();
 
         for (Portfolio data : portfolioQueryList) {
-            PortfolioInputModel inputModel = new PortfolioInputModel();
-            
-            inputModel.setPortfolioId((Long) data.getPortfolioId());
-            inputModel.setCapitalAmt((double) data.getPortfolioCapitalAmt());
-            inputModel.setDescription(String.valueOf(data.getPortfolioDescription()));
-            inputModel.setPortfolioName(String.valueOf(data.getPortfolioName()));
-            inputModel.setUserId((Long) data.getUser().getUserId());
-
+            PortfolioInputModel inputModel = inputModel(data);
             portfolioList.add(inputModel);
             
         }
@@ -46,15 +51,7 @@ public class PortfolioServiceImpl implements PortfolioService{
         Portfolio portfolioQueryList = portfolioRepo.getPortfolioById(userId, portfolioId).get(0);
         
         List<PortfolioInputModel> portfolioList = new ArrayList<>();
-
-        PortfolioInputModel inputModel = new PortfolioInputModel();
-        
-        inputModel.setPortfolioId((Long) portfolioQueryList.getPortfolioId());
-        inputModel.setCapitalAmt((double) portfolioQueryList.getPortfolioCapitalAmt());
-        inputModel.setDescription(String.valueOf(portfolioQueryList.getPortfolioDescription()));
-        inputModel.setPortfolioName(String.valueOf(portfolioQueryList.getPortfolioName()));
-        inputModel.setUserId((Long) portfolioQueryList.getUser().getUserId());
-
+        PortfolioInputModel inputModel = inputModel(portfolioQueryList);
         portfolioList.add(inputModel);
             
         return portfolioList;
@@ -86,13 +83,8 @@ public class PortfolioServiceImpl implements PortfolioService{
             // save to db
             portfolioRepo.save(newPortfolio);
 
-            // get ID
-            PortfolioInputModel inputModel = new PortfolioInputModel();
-            inputModel.setPortfolioId(newPortfolio.getPortfolioId());
-            inputModel.setPortfolioName(newPortfolio.getPortfolioName());
-            inputModel.setCapitalAmt(newPortfolio.getPortfolioCapitalAmt());
-            inputModel.setDescription(newPortfolio.getPortfolioDescription());
-            inputModel.setUserId(user.getUserId());
+            // instantiate PortfolioInputModel
+            PortfolioInputModel inputModel = inputModel(newPortfolio);
 
             apiModel.setMessage("Data saved successfully.");
             apiModel.setData(inputModel);
@@ -132,13 +124,7 @@ public class PortfolioServiceImpl implements PortfolioService{
             // save to db
             portfolioRepo.save(existingPortfolio);
 
-            // get ID
-            PortfolioInputModel inputModel = new PortfolioInputModel();
-            inputModel.setPortfolioId(existingPortfolio.getPortfolioId());
-            inputModel.setPortfolioName(existingPortfolio.getPortfolioName());
-            inputModel.setCapitalAmt(existingPortfolio.getPortfolioCapitalAmt());
-            inputModel.setDescription(existingPortfolio.getPortfolioDescription());
-            inputModel.setUserId(existingPortfolio.getUser().getUserId());
+            PortfolioInputModel inputModel = inputModel(existingPortfolio);
 
             myApiModel.setMessage("Data updated successfully.");
             myApiModel.setData(inputModel);
@@ -170,18 +156,10 @@ public class PortfolioServiceImpl implements PortfolioService{
             //     String fe = requestModel.getData().get(0).getValue();
             //     existingPortfolio.setPortfolioCapitalAmt(Double.parseDouble(fe));
             // }
-            
+
             // save to db
             portfolioRepo.delete(existingPortfolio);
-
-            // get ID
-
-            PortfolioInputModel inputModel = new PortfolioInputModel();
-            inputModel.setPortfolioId(existingPortfolio.getPortfolioId());
-            inputModel.setPortfolioName(existingPortfolio.getPortfolioName());
-            inputModel.setCapitalAmt(existingPortfolio.getPortfolioCapitalAmt());
-            inputModel.setDescription(existingPortfolio.getPortfolioDescription());
-            inputModel.setUserId(existingPortfolio.getUser().getUserId());
+            PortfolioInputModel inputModel = inputModel(existingPortfolio);
 
             myApiModel.setMessage("Data deleted successfully.");
             myApiModel.setData(inputModel);
