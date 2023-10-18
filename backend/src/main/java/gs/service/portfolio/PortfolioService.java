@@ -16,6 +16,8 @@ public interface PortfolioService {
     ApiModel addPortfolio(HttpServletResponse response, RequestModel requestModel, ApiModel apiModel, String userId) throws Exception;
     
     ApiModel editPortfolioCapitalAmt(HttpServletResponse response, RequestModel requestModel, ApiModel myApiModel, String userId, String portfolioId) throws Exception;
+
+    ApiModel deletePortfolio(HttpServletResponse response, ApiModel myApiModel, String userId, String portfolioId);
     
     
 }

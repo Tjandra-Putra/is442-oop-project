@@ -140,7 +140,7 @@ public class PortfolioServiceImpl implements PortfolioService{
             inputModel.setDescription(existingPortfolio.getPortfolioDescription());
             inputModel.setUserId(existingPortfolio.getUser().getUserId());
 
-            myApiModel.setMessage("Data saved successfully.");
+            myApiModel.setMessage("Data updated successfully.");
             myApiModel.setData(inputModel);
         }
             
@@ -158,7 +158,50 @@ public class PortfolioServiceImpl implements PortfolioService{
 
         System.out.println("==========ERROR MESSAGE==================");
         // System.out.println(response.get);
-        
+
+        return myApiModel;
+    }
+
+    public ApiModel deletePortfolio(HttpServletResponse response, ApiModel myApiModel,String userId, String portfolioId) throws DataAccessException {
+        try {
+            Portfolio existingPortfolio = portfolioRepo.getPortfolioById(userId, portfolioId).get(0);
+
+            // if (existingPortfolio){
+            //     String fe = requestModel.getData().get(0).getValue();
+            //     existingPortfolio.setPortfolioCapitalAmt(Double.parseDouble(fe));
+            // }
+            
+            // save to db
+            portfolioRepo.delete(existingPortfolio);
+
+            // get ID
+
+            PortfolioInputModel inputModel = new PortfolioInputModel();
+            inputModel.setPortfolioId(existingPortfolio.getPortfolioId());
+            inputModel.setPortfolioName(existingPortfolio.getPortfolioName());
+            inputModel.setCapitalAmt(existingPortfolio.getPortfolioCapitalAmt());
+            inputModel.setDescription(existingPortfolio.getPortfolioDescription());
+            inputModel.setUserId(existingPortfolio.getUser().getUserId());
+
+            myApiModel.setMessage("Data deleted successfully.");
+            myApiModel.setData(inputModel);
+        }
+            
+        catch (DataAccessException ex) {
+        // Log the exception for debugging
+        // Optionally, rethrow as a custom exception
+            // INPUT LOGGER for error messages
+            System.out.println(ex.getMessage());
+            myApiModel.setMessage("An error occurred while performing the database operation.");
+        }
+                
+        System.out.println("==========STATUS==================");
+        System.out.println(response.getStatus());
+        myApiModel.setStatus(String.valueOf(response.getStatus()));
+
+        System.out.println("==========ERROR MESSAGE==================");
+        // System.out.println(response.get);
+
         return myApiModel;
     }
 }
