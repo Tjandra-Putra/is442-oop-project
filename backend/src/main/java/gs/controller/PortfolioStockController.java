@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import gs.common.ApiModel;
+import gs.common.RequestModel;
 import gs.inputModel.PortfolioStockInputModel;
 import gs.service.portfolioStock.PortfolioStockService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,5 +43,16 @@ public class PortfolioStockController {
         @PathVariable("ticker") String ticker
     ){
         return ApiModel.ok(portfolioStockService.getPortfolioStockByTicker(portfolioId, ticker));
+    }
+
+    @PostMapping("/addPortfolioStock/{portfolioId}")
+    public ApiModel<ArrayList<PortfolioStockInputModel>> getPortfolioStockByTicker(
+        @PathVariable("portfolioId") String portfolioId,
+        @RequestBody RequestModel requestModel
+    ) throws Exception {
+        ApiModel myApiModel = new ApiModel();
+        portfolioStockService.addPortfolioStock(response, requestModel, myApiModel, portfolioId);
+        
+        return myApiModel;
     }
 }
