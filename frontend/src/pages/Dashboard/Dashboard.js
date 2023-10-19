@@ -127,39 +127,39 @@ const Dashboard = () => {
               </CardContent>
             </Card>
 
-            <div className="portfolios" style={{ marginTop: "0rem" }}>
+            <div className="portfolios" style={{ marginTop: "2rem" }}>
               <Grid container spacing={4}>
                 <Grid item md={6} xs={12}>
                   <Typography variant="h6" className={style.portfoliosText}>
-                    You Stock Portfolios
+                    My Portfolios
                   </Typography>
                 </Grid>
-                <Grid item md={6} xs={12} style={{ textAlign: "right" }}>
+                {/* <Grid item md={6} xs={12} style={{ textAlign: "right" }}>
                   <Stack direction="row" spacing={1} justifyContent="flex-end" sx={{ mb: 3 }}>
                     <Menu menuName="Sort by" />
                     <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleAddNewPortfolioButton()}>
                       Add
                     </Button>
                   </Stack>
-                </Grid>
+                </Grid> */}
               </Grid>
 
               <Grid container spacing={4}>
-                <Grid item md={4} xs={12}>
+                <Grid item md={4} xs={12} onClick={() => navigate("/portfolio/test")}>
                   <PortfolioCard />
                 </Grid>
-                <Grid item md={4} xs={12}>
+                <Grid item md={4} xs={12} onClick={() => navigate("/portfolio/test")}>
                   <PortfolioCard />
                 </Grid>
-                <Grid item md={4} xs={12}>
-                  <PortfolioCard />
-                </Grid>
-
-                <Grid item md={4} xs={12}>
+                <Grid item md={4} xs={12} onClick={() => navigate("/portfolio/test")}>
                   <PortfolioCard />
                 </Grid>
 
-                <Grid item md={4} xs={12}>
+                <Grid item md={4} xs={12} onClick={() => navigate("/portfolio/test")}>
+                  <PortfolioCard />
+                </Grid>
+
+                <Grid item md={4} xs={12} onClick={() => navigate("/portfolio/test")}>
                   <PortfolioCard />
                 </Grid>
               </Grid>
@@ -210,6 +210,44 @@ const Dashboard = () => {
                 >
                   Go
                 </Button>
+              </CardContent>
+
+              <hr className={style.horizontalLine} />
+
+              <CardContent>
+                <Typography variant="h6" className={style.portfolioWorthText}>
+                  Top Performing Portfolio
+                </Typography>
+
+                <ul className={style.topPerformingPortfolios}>
+                  <li className={style.topPerformingPortfolio}>
+                    <span className={style.topPerformingPortfolioName}>Portfolio 1</span>
+                    <Chip
+                      label="+ 5.3%"
+                      // color="primary"
+                      className={style.topPerformingPortfolioReturns}
+                      sx={{ ml: 1 }}
+                    />
+                  </li>
+                  <li className={style.topPerformingPortfolio}>
+                    <span className={style.topPerformingPortfolioName}>Portfolio 2</span>
+                    <Chip
+                      label="+ 3.3%"
+                      // color="primary"
+                      className={style.topPerformingPortfolioReturns}
+                      sx={{ ml: 1 }}
+                    />
+                  </li>
+                  <li className={style.topPerformingPortfolio}>
+                    <span className={style.topPerformingPortfolioName}>Portfolio 3</span>
+                    <Chip
+                      label="+ 2.3%"
+                      // color="primary"
+                      className={style.topPerformingPortfolioReturns}
+                      sx={{ ml: 1 }}
+                    />
+                  </li>
+                </ul>
               </CardContent>
             </Card>
           </Grid>

@@ -8,23 +8,71 @@ import Checkbox from "@mui/material/Checkbox";
 import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import axios from "axios";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./Register.module.css";
 
 const defaultTheme = createTheme();
 
 const Register = () => {
+  const notifyError = (message) => toast.error(message, { duration: 5000 });
+  const notifySuccess = (message) => toast.success(message, { duration: 5000 });
+  const navigate = useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+
     console.log({
       email: data.get("email"),
       password: data.get("password"),
     });
+
+    // validation
+    if (
+      data.get("email") === "" ||
+      data.get("password") === "" ||
+      data.get("firstName") === "" ||
+      data.get("lastName") === ""
+    ) {
+      notifyError("Fields cannot be empty");
+      return;
+    }
+
+    const postData = {
+      data: [
+        {
+          fieldName: "email",
+          value: data.get("email"),
+        },
+        {
+          fieldName: "password",
+          value: data.get("password"),
+        },
+        { fieldName: "username", value: data.get("firstName") + " " + data.get("lastName") },
+      ],
+    };
+
+    axios
+      .post("http://localhost:8080/api/user/addUser", postData)
+      .then((res) => {
+        console.log(res.data);
+
+        if (res.data && res.data.data === null) {
+          notifyError(res.data.message);
+        } else {
+          notifySuccess(res.data.message);
+          navigate("/login");
+        }
+      })
+      .catch((err) => {
+        notifyError(err.response.data.message);
+      });
   };
 
   return (
@@ -34,7 +82,6 @@ const Register = () => {
           <CssBaseline />
           <Box
             sx={{
-              marginTop: 8,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",

@@ -1,0 +1,39 @@
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80rem;
+  height: 40rem;
+  overflow-y: auto;
+  background-color: white;
+  /* border: 2px solid #000; */
+  border-radius: 5px;
+  box-shadow: 24;
+  padding: 20px;
+}
+
+.selectedStockHeader {
+  margin-top: 2.8rem;
+}
+
+.actionButtons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.quantityInput {
+  width: 5rem;
+  height: 0.6rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  margin-left: 1rem;
+}
+
+.cardTitle {
+  font-weight: 500;
+  font-size: 1rem;
+  margin-bottom: 0;
+}

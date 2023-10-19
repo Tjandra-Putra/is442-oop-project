@@ -10,9 +10,9 @@ import gs.entity.User;
 public interface UserRepo extends JpaRepository<User, Long>{
 
     @Query(value = "select * from user;", nativeQuery = true)
-    List<Object[]> getUser();
+    List<User> getUser();
     
     @Query(value = "select * from user where user_id = ?;", nativeQuery = true)
-    List<Object[]> getUserById(String id);
+    List<User> getUserById(String id);
 
 }

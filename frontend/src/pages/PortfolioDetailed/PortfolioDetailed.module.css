@@ -19,33 +19,51 @@
 
 .firstContainer {
   display: flex;
-  margin-top: 20px;
+  margin-top: 10px;
   justify-content: space-between;
   gap: 10px !important;
 }
 
-.pieChart {
+.cardCustom {
   margin-top: 10px;
-  max-width: 100%;
-  max-height: 300px;
+  min-height: 23rem;
   box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25) !important;
-  margin-bottom: 1rem;
-  width: 100%;
-  color: #000000a4;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
-.barChart {
-  margin-top: 10px;
-  max-width: 100%;
-  max-height: 300px;
-  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25) !important;
+.cardCustom:hover {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+}
+
+.cardTitle {
+  font-weight: 500;
+}
+
+.buttonGroups {
+  margin-top: 1rem;
+}
+
+.portfolioDescriptionTitle {
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+}
+
+.portfolioDescription {
+  font-weight: 400;
+  font-size: 0.9rem;
+}
+
+.portfolioDescriptionWrapper {
   margin-bottom: 1rem;
-  width: 100%;
-  color: #000000a4;
-  display: block;
-  justify-content: center;
-  align-items: center;
+}
+
+.updatePortfolioModal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  background-color: white; /* Use the appropriate background color */
+  box-shadow: 24px;
+  padding: 16px; /* p: 4 is equivalent to padding: 16px; in pixels */
+  border-radius: 5px;
 }

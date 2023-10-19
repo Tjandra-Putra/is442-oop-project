@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.annotations.SourceType;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import gs.common.DataRequestModel;
@@ -24,14 +25,14 @@ public class StockServiceImpl implements StockService {
     public StockRepo stockRepo;
 
     public List<StockInputModel> getStock(){
-        List<Object[]> stockQueryList = stockRepo.getStock();
+        List<Stock> stockQueryList = stockRepo.getStock();
         List<StockInputModel> stockList = new ArrayList<>();
         
-        for (Object[] data : stockQueryList){
+        for (Stock data : stockQueryList){
             StockInputModel inputModel = new StockInputModel();
 
-            inputModel.setTicker(String.valueOf(data[0]));
-            inputModel.setName(String.valueOf(data[1]));
+            inputModel.setTicker(String.valueOf(data.getTicker()));
+            inputModel.setName(String.valueOf(data.getStockName()));
             
             stockList.add(inputModel);
         }
@@ -39,14 +40,14 @@ public class StockServiceImpl implements StockService {
     }
 
     public List<StockInputModel> getStockByTicker(String ticker){
-        List<Object[]> stockQueryList = stockRepo.getStockByTicker(ticker);
+        List<Stock> stockQueryList = stockRepo.getStockByTicker(ticker);
         List<StockInputModel> stockList = new ArrayList<>();
         
-        for (Object[] data : stockQueryList){
+        for (Stock data : stockQueryList){
             StockInputModel inputModel = new StockInputModel();
 
-            inputModel.setTicker(String.valueOf(data[0]));
-            inputModel.setName(String.valueOf(data[1]));
+            inputModel.setTicker(String.valueOf(data.getTicker()));
+            inputModel.setName(String.valueOf(data.getStockName()));
             
             stockList.add(inputModel);
         }
@@ -54,18 +55,34 @@ public class StockServiceImpl implements StockService {
     }
 
     public List<StockInputModel> getStockByName(String name){
-        List<Object[]> stockQueryList = stockRepo.getStockByName(name);
+        List<Stock> stockQueryList = stockRepo.getStockByName(name);
         List<StockInputModel> stockList = new ArrayList<>();
         
-        for (Object[] data : stockQueryList){
+        for (Stock data : stockQueryList){
             StockInputModel inputModel = new StockInputModel();
 
-            inputModel.setTicker(String.valueOf(data[0]));
-            inputModel.setName(String.valueOf(data[1]));
+            inputModel.setTicker(String.valueOf(data.getTicker()));
+            inputModel.setName(String.valueOf(data.getStockName()));
             
             stockList.add(inputModel);
         }
         return stockList;
+    }
+
+    public void addStock(String ticker, String stockName) {
+        Stock newStock = new Stock();
+        newStock.setTicker(ticker);
+        newStock.setStockName(stockName);
+        System.out.println("=====DATA=====");
+        System.out.println(newStock.getTicker());
+        System.out.println(newStock.getStockName());
+        try {
+            stockRepo.save(newStock);
+        }
+        catch (DataAccessException e){
+            System.out.println("=====hERERE=====");
+            System.out.println(e.getMessage());
+        }
     }
 
     public void addStock(HttpServletResponse response, RequestModel requestModel) throws Exception{

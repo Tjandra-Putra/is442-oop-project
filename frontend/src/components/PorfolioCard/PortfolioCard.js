@@ -22,26 +22,27 @@ const PortfolioCard = () => {
               Etherium
             </div>
           </div>
-          <div className={style.ticker}>(NETSOL)</div>
+          <div className={style.ticker}>ID: 123943</div>
         </div>
 
-        <div className={style.stockMiddle}>
+        {/* <div className={style.stockMiddle}>
           <div className="value">RS 128.00</div>
           <div className="performance">-3(0.58%)</div>
-        </div>
+        </div> */}
 
         <div className={style.stockFooter}>
           <div className={style.stockFooterLeftItem}>
-            <div className={style.stockFooterText}>Quantity</div>
+            <div className={style.stockFooterText}>Stock Type Count</div>
             <div className={style.stockFooterFigure}>100</div>
           </div>
-          <div className={style.stockFooteMiddleItem}>
+          {/* <div className={style.stockFooteMiddleItem}>
             <div className={style.stockFooterText}>Average Cost</div>
             <div className={style.stockFooterFigure}>Rs 128.00</div>
-          </div>
+          </div> */}
+
           <div className={style.stockFooterRightItem}>
-            <div className={style.stockFooterText}>Market Value</div>
-            <div className={style.stockFooterFigure}>Rs 128.00</div>
+            <div className={style.stockFooterText}>Capital</div>
+            <div className={style.stockFooterFigure}>$128.00</div>
           </div>
         </div>
       </CardContent>

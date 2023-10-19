@@ -1,12 +1,14 @@
 package gs.entity;
 
+import java.util.List;
+
 import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -27,8 +29,8 @@ public class Stock {
         )
     private String stockName;
 
-    @OneToOne(mappedBy = "stock")
-    private StockInfo stockInfo;
+    @OneToMany(mappedBy = "stock")
+    private List<PortfolioStock> PortfolioStock;
 
     public Stock(String ticker, String stockName) {
         this.ticker = ticker;

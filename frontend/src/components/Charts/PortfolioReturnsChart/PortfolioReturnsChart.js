@@ -9,6 +9,9 @@ function LineChart() {
   const years = ["2022", "2023", "2024"];
   const [selectedYear, setSelectedYear] = useState("2023");
 
+  const filterType = ["Yearly", "Quarterly", "Monthly"];
+  const [selectedFilterType, setSelectedFilterType] = useState("Yearly");
+
   const dataSets = {
     2022: {
       portfolio1: [100, 500, 300, 400, 500, 600, 700],
@@ -43,7 +46,7 @@ function LineChart() {
   return (
     <div>
       <div style={{ textAlign: "right" }}>
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+        {/* <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
           <InputLabel id="demo-select-small-label">Year</InputLabel>
           <Select
             labelId="demo-select-small-label"
@@ -55,6 +58,23 @@ function LineChart() {
             {years.map((year) => (
               <MenuItem key={year} value={year}>
                 {year}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl> */}
+
+        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+          <InputLabel id="demo-select-small-label">Filter By</InputLabel>
+          <Select
+            labelId="demo-select-small-label"
+            id="demo-select-small"
+            value={selectedFilterType}
+            label="Filter By"
+            onChange={(e) => setSelectedFilterType(e.target.value)}
+          >
+            {filterType.map((filter) => (
+              <MenuItem key={filter} value={filter}>
+                {filter}
               </MenuItem>
             ))}
           </Select>
