@@ -145,21 +145,21 @@ const Dashboard = () => {
               </Grid>
 
               <Grid container spacing={4}>
-                <Grid item md={4} xs={12}>
+                <Grid item md={4} xs={12} onClick={() => navigate("/portfolio/test")}>
                   <PortfolioCard />
                 </Grid>
-                <Grid item md={4} xs={12}>
+                <Grid item md={4} xs={12} onClick={() => navigate("/portfolio/test")}>
                   <PortfolioCard />
                 </Grid>
-                <Grid item md={4} xs={12}>
-                  <PortfolioCard />
-                </Grid>
-
-                <Grid item md={4} xs={12}>
+                <Grid item md={4} xs={12} onClick={() => navigate("/portfolio/test")}>
                   <PortfolioCard />
                 </Grid>
 
-                <Grid item md={4} xs={12}>
+                <Grid item md={4} xs={12} onClick={() => navigate("/portfolio/test")}>
+                  <PortfolioCard />
+                </Grid>
+
+                <Grid item md={4} xs={12} onClick={() => navigate("/portfolio/test")}>
                   <PortfolioCard />
                 </Grid>
               </Grid>
