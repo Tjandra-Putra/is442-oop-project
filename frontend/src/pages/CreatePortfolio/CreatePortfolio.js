@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
@@ -22,6 +22,9 @@ const CreatePortfolio = () => {
   const [portfolioName, setPortfolioName] = useState("");
   const [portfolioDescription, setPortfolioDescription] = useState("");
   const [portfolioCapital, setPortfolioCapital] = useState("");
+  const [stockMarket, setStockMarket] = useState([]);
+  const [stockColumns, setStockColumns] = useState([]);
+  const [stockRows, setStockRows] = useState([]);
 
   const notifyError = (message) => toast.error(message, { duration: 5000 });
   const notifySuccess = (message) => toast.success(message, { duration: 5000 });
@@ -34,26 +37,6 @@ const CreatePortfolio = () => {
     });
     return totalPrice;
   };
-
-  const stockColumns = [
-    { field: "id", headerName: "Ticker", width: 100 },
-    { field: "Name", headerName: "Name", width: 130 },
-    {
-      field: "Price",
-      headerName: "Price",
-      type: "number",
-      width: 90,
-    },
-  ];
-
-  const stockRows = [
-    { id: 1, Name: "Snow", Price: 105 },
-    { id: 2, Name: "Snow", Price: 35 },
-    { id: 3, Name: "Snow", Price: 10 },
-    { id: 4, Name: "Snow", Price: 35 },
-    { id: 5, Name: "Snow", Price: 35 },
-    { id: 6, Name: "Snow", Price: 35 },
-  ];
 
   const [quantityValues, setQuantityValues] = useState(Object.fromEntries(stockRows.map((row) => [row.id, 1])));
 
@@ -193,6 +176,33 @@ const CreatePortfolio = () => {
         notifyError(err.response.data.message);
       });
   };
+
+  useEffect(() => {
+    // get current stock market
+    axios
+      .get("http://localhost:8080/api/stock/getStock")
+      .then((res) => {
+        let stockData = res.data.data;
+        setStockMarket(stockData);
+        console.log(res.data.data);
+
+        const generatedStockRows = stockData.map((stock, index) => ({
+          id: index + 1, // Start from 1
+          Ticker: stock.ticker,
+          Name: stock.name,
+        }));
+
+        setStockRows(generatedStockRows);
+        setStockColumns([
+          { field: "id", headerName: "Ticker", width: 100 },
+          { field: "Ticker", headerName: "Ticker", width: 100 },
+          { field: "Name", headerName: "Name", width: 130 },
+        ]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div className={style.createPortfolioWrapper}>
