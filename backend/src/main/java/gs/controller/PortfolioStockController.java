@@ -3,6 +3,7 @@ package gs.controller;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,7 +38,7 @@ public class PortfolioStockController {
         return ApiModel.ok(portfolioStockService.getPortfolioStock(portfolioId));
     }
 
-    @GetMapping("/getPortolioStockAllocation/{portfolioId}")
+    @GetMapping("/getPortfolioStockAllocation/{portfolioId}")
     public ApiModel<ArrayList<StockAllocationInputModel>> getPortfolioStockAllocation(
         @PathVariable("portfolioId") String portfolioId
     ){
@@ -62,5 +63,16 @@ public class PortfolioStockController {
         portfolioStockService.addPortfolioStock(response, requestModel, myApiModel, portfolioId);
         
         return myApiModel;
+    }
+
+    @DeleteMapping("/deletePortfolioStock/{portfolioId}/{ticker}")
+    public ApiModel<ArrayList<PortfolioStockInputModel>> deletePortfolioStock(
+        @PathVariable("portfolioId") String portfolioId,
+        @PathVariable("ticker") String ticker
+    ) throws Exception{
+        ApiModel apiModel = new ApiModel();
+        portfolioStockService.deletePortfolioStock(response, apiModel, portfolioId, ticker);
+        
+        return apiModel;
     }
 }

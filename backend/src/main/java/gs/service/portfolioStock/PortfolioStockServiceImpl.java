@@ -167,4 +167,31 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
 
         return apiModel;
     }
+
+    public ApiModel deletePortfolioStock(HttpServletResponse response, ApiModel apiModel, String portfolioId, String ticker) throws DataAccessException {
+        try {
+            PortfolioStock portfolioStockQuery = portfolioStockRepo.getIndividualStock(portfolioId, ticker).get(0);
+
+            // delete row
+            portfolioStockRepo.delete(portfolioStockQuery);
+
+            // instantiate PortfolioStockInputModel
+            PortfolioStockInputModel inputModel = inputModel(portfolioStockQuery);
+
+            apiModel.setMessage("Data deleted successfully.");
+            apiModel.setData(inputModel);
+        }
+            
+        catch (DataAccessException ex) {
+        // Log the exception for debugging
+        // Optionally, rethrow as a custom exception
+            // INPUT LOGGER for error messages
+            System.out.println(ex.getMessage());
+            apiModel.setMessage("An error occurred while performing the database operation.");
+        }
+
+        apiModel.setStatus(String.valueOf(response.getStatus()));
+
+        return apiModel;
+    }
 }
