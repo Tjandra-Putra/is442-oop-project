@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 
 import styles from "./Login.module.css";
 
@@ -21,20 +22,23 @@ const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // console.log({
-    //   email: data.get("email"),
-    //   password: data.get("password"),
-    // });
 
-    // ====================== add users to database for register ======================
-    // axios
-    //   .post("http://localhost:8080/api/user/addUser", postData)
-    //   .then((res) => {
-    //     console.log(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    // ====================== get user info from database ======================
+    const userId = 1;
+    axios
+      .get("http://localhost:8080/api/user/getUser/" + userId)
+      .then((res) => {
+        const objectString = JSON.stringify(res.data.data[0]);
+        Cookies.set("userInfo", objectString, { expires: 7 }); // expires in 7 days
+
+        // get cookie
+        const cookieValue = Cookies.get("userInfo");
+        const object = cookieValue ? JSON.parse(cookieValue) : null;
+        console.log("cookie: " + object);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

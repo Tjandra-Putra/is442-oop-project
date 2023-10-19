@@ -21,7 +21,7 @@ const defaultTheme = createTheme();
 
 const Register = () => {
   const notifyError = (message) => toast.error(message, { duration: 5000 });
-  const notifySuccess = (message) => toast(message, { duration: 5000 });
+  const notifySuccess = (message) => toast.success(message, { duration: 5000 });
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
@@ -63,11 +63,11 @@ const Register = () => {
       .then((res) => {
         console.log(res.data);
 
-        if (res.status == 200) {
+        if (res.data && res.data.data === null) {
+          notifyError(res.data.message);
+        } else {
           notifySuccess(res.data.message);
           navigate("/login");
-        } else {
-          notifyError(res.data.message);
         }
       })
       .catch((err) => {

@@ -33,18 +33,6 @@ function App() {
   };
 
   useEffect(() => {
-    // ====================== get user info from database ======================
-    const userId = 1;
-    console.log("====");
-    axios
-      .get("http://localhost:8080/api/user/getUser/" + userId)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
     // get user data
     // axios
     //   .get("http://localhost:8080/api/user/getUser")
