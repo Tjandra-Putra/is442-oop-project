@@ -18,6 +18,7 @@ import gs.entity.Stock;
 import gs.entity.User;
 import gs.inputModel.PortfolioInputModel;
 import gs.inputModel.PortfolioStockInputModel;
+import gs.inputModel.StockAllocationInputModel;
 import gs.repository.PortfolioRepo;
 import gs.repository.PortfolioStockRepo;
 import gs.repository.StockRepo;
@@ -60,17 +61,39 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
         List<PortfolioStockInputModel> portfolioStockList = new ArrayList<>();
 
         for (PortfolioStock data : portfolioStockQueryList) {
-            PortfolioStockInputModel inputModel = new PortfolioStockInputModel();
-            inputModel.setTicker(data.getStock().getTicker());
-            inputModel.setPortfolioId(data.getPortfolio().getPortfolioId());
-            inputModel.setQuantity(data.getQuantity());
-            inputModel.setBuyDate(dateFormatter(data.getBuyDate(), data));
-            inputModel.setPrice(data.getPrice());
-
+            PortfolioStockInputModel inputModel = inputModel(data);
             portfolioStockList.add(inputModel);
         }
 
         return portfolioStockList;
+    }
+
+    public List<StockAllocationInputModel> getPortfolioStockAllocation(String portfolioId){
+        List<PortfolioStock> portfolioStockQueryList = portfolioStockRepo.getPortfolioStockByPortfolioId(portfolioId);
+
+        double capitalAmt = portfolioStockQueryList.get(0).getPortfolio().getPortfolioCapitalAmt();
+
+        double totalStockPercentage = 0;
+
+        List<StockAllocationInputModel> stockAllocationList = new ArrayList<>();
+
+        for (PortfolioStock portfolioStock : portfolioStockQueryList){
+            StockAllocationInputModel inputModel = new StockAllocationInputModel();
+            inputModel.setAllocationName(portfolioStock.getStock().getTicker());
+
+            double allocationPercentage = ((portfolioStock.getQuantity() * portfolioStock.getPrice()) / capitalAmt) * 100;
+
+            inputModel.setPercentage(allocationPercentage);
+            stockAllocationList.add(inputModel);
+            totalStockPercentage += allocationPercentage;
+        }
+
+        StockAllocationInputModel cashInputModel = new StockAllocationInputModel();
+        cashInputModel.setAllocationName("Cash");
+        cashInputModel.setPercentage(100 - totalStockPercentage);
+        stockAllocationList.add(cashInputModel);
+    
+        return stockAllocationList;
     }
 
     public List<PortfolioStockInputModel> getPortfolioStockByTicker(String portfolioId, String ticker){
@@ -78,15 +101,7 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
 
         List<PortfolioStockInputModel> portfolioStockList = new ArrayList<>();
 
-        PortfolioStockInputModel inputModel = new PortfolioStockInputModel();
-        inputModel.setTicker(individualStockQuery.getStock().getTicker());
-        inputModel.setPortfolioId(individualStockQuery.getPortfolio().getPortfolioId());
-        inputModel.setQuantity(individualStockQuery.getQuantity());
-        
-        inputModel.setBuyDate(dateFormatter(individualStockQuery.getBuyDate(), individualStockQuery));
-
-        inputModel.setPrice(individualStockQuery.getPrice());
-
+        PortfolioStockInputModel inputModel = inputModel(individualStockQuery);
         portfolioStockList.add(inputModel);
 
         return portfolioStockList;
