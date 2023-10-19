@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import style from "./PortfolioDetailed.module.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import StockCard from "../../components/StockCard/StockCard";
 import PortfolioStocksAllocationChart from "../../components/Charts/PortfolioStocksAllocationChart/PortfolioStocksAllocationChart";
 import PortfolioStocksBySegmentChart from "../../components/Charts/PortfolioStocksBySegmentChart/PortfolioStocksBySegmentChart";
@@ -12,9 +12,12 @@ import axios from "axios";
 import { Card, Grid, CardContent, Stack, Button, Typography, Box, Modal, Container, TextField } from "@mui/material";
 
 const PortfolioDetailed = () => {
+  const navigate = useNavigate();
+
   // get id from url paramter
   const { id } = useParams();
   const [portfolio, setPortfolio] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
 
   const notifyError = (message) => toast.error(message, { duration: 5000 });
   const notifySuccess = (message) => toast.success(message, { duration: 5000 });
@@ -22,6 +25,7 @@ const PortfolioDetailed = () => {
   useEffect(() => {
     const userId = 1;
 
+    setLoading(true);
     axios
       .get(`http://localhost:8080/api/portfolio/getPortfolio/${userId}/${id}`)
       .then((res) => {
@@ -31,6 +35,8 @@ const PortfolioDetailed = () => {
       .catch((err) => {
         console.log(err);
       });
+
+    setLoading(false);
   }, []);
 
   // modal update portfolio
@@ -38,14 +44,65 @@ const PortfolioDetailed = () => {
   const handleUpdatePortfolioModalOpen = () => setUpdatePortfolioModalOpen(true);
   const handleUpdatePortfolioModalClose = () => setUpdatePortfolioModalOpen(false);
 
-  const [portfolioTitle, setPortfolioTitle] = React.useState("");
-  const [portfolioDescription, setPortfolioDescription] = React.useState("");
-  const [portfolioCapital, setPortfolioCapital] = React.useState("");
+  const [portfolioTitle, setPortfolioTitle] = React.useState(portfolio ? portfolio.portfolioName : "");
+  const [portfolioDescription, setPortfolioDescription] = React.useState(portfolio ? portfolio.description : "");
+  const [portfolioCapital, setPortfolioCapital] = React.useState(portfolio ? portfolio.capitalAmt : "");
 
   const onSubmitUpdatePortfolioUpdate = () => {
     // update portfolio
-    // ...
-    notifySuccess("Portfolio Updated");
+    const postData = {
+      data: [
+        {
+          fieldName: "capitalAmt",
+          value: portfolioCapital,
+        },
+        {
+          fieldName: "description",
+          value: portfolioDescription,
+        },
+        { fieldName: "portfolioName", value: portfolioTitle },
+      ],
+    };
+
+    const userId = 1;
+
+    axios
+      .put(`http://localhost:8080/api/portfolio/editPortfolio/${userId}/${id}`, postData)
+      .then((res) => {
+        console.log(res.data);
+
+        if (res.data && res.data.data === null) {
+          notifyError(res.data.message);
+        } else {
+          notifySuccess(res.data.message);
+        }
+      })
+      .catch((err) => {
+        notifyError("Error updating portfolio");
+      });
+
+    console.log("portfolioTitle=========");
+    console.log(portfolioTitle);
+  };
+
+  const onDeletePortfolio = () => {
+    const userId = 1;
+
+    axios
+      .delete(`http://localhost:8080/api/portfolio/deletePortfolio/${userId}/${id}`)
+      .then((res) => {
+        console.log(res.data);
+
+        if (res.data && res.data.data === null) {
+          notifyError(res.data.message);
+        } else {
+          notifySuccess(res.data.message);
+          navigate("/dashboard");
+        }
+      })
+      .catch((err) => {
+        notifyError("Error deleting portfolio");
+      });
   };
 
   return (
@@ -77,45 +134,55 @@ const PortfolioDetailed = () => {
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
-              <Box className={style.updatePortfolioModal}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                  Edit Portfolio
-                </Typography>
-                <TextField
-                  id="outlined-basic"
-                  label="Portfolio title"
-                  variant="outlined"
-                  style={{ width: "100%", marginBottom: "1rem", marginTop: "1rem" }}
-                  value={portfolioTitle}
-                  onChange={(e) => setPortfolioTitle(e.target.value)}
-                />
-                <br />
-                <TextField
-                  id="outlined-basic"
-                  label="Portfolio Description"
-                  variant="outlined"
-                  style={{ width: "100%", marginBottom: "1rem" }}
-                  value={portfolioDescription}
-                  onChange={(e) => setPortfolioDescription(e.target.value)}
-                />
-                <br />
-                <TextField
-                  id="outlined-basic"
-                  label="Portfolio Capital"
-                  variant="outlined"
-                  style={{ width: "100%", marginBottom: "1rem" }}
-                  type="number"
-                  value={portfolioCapital}
-                  onChange={(e) => setPortfolioCapital(e.target.value)}
-                />
+              {!loading && (
+                <Box className={style.updatePortfolioModal}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2">
+                    Edit Portfolio
+                  </Typography>
+                  <TextField
+                    id="outlined-basic"
+                    label="Portfolio title"
+                    variant="outlined"
+                    style={{ width: "100%", marginBottom: "1rem", marginTop: "1rem" }}
+                    value={portfolioTitle}
+                    onChange={(e) => setPortfolioTitle(e.target.value)}
+                  />
+                  <br />
+                  <TextField
+                    id="outlined-basic"
+                    label="Portfolio Description"
+                    variant="outlined"
+                    style={{ width: "100%", marginBottom: "1rem" }}
+                    value={portfolioDescription}
+                    onChange={(e) => setPortfolioDescription(e.target.value)}
+                  />
+                  <br />
+                  <TextField
+                    id="outlined-basic"
+                    label="Portfolio Capital"
+                    variant="outlined"
+                    style={{ width: "100%", marginBottom: "1rem" }}
+                    type="number"
+                    value={portfolioCapital}
+                    onChange={(e) => setPortfolioCapital(e.target.value)}
+                  />
 
-                <Button variant="contained" style={{ float: "right" }} onClick={() => onSubmitUpdatePortfolioUpdate()}>
-                  Save Changes
-                </Button>
-              </Box>
+                  <Button
+                    variant="contained"
+                    style={{ float: "right" }}
+                    onClick={() => onSubmitUpdatePortfolioUpdate()}
+                  >
+                    Save Changes
+                  </Button>
+                </Box>
+              )}
             </Modal>
 
-            <Button variant="outlined" style={{ borderColor: "darkred", color: "darkred" }}>
+            <Button
+              variant="outlined"
+              style={{ borderColor: "darkred", color: "darkred" }}
+              onClick={() => onDeletePortfolio()}
+            >
               <i class="fa-solid fa-trash" style={{ marginRight: "7px" }}></i> Delete
             </Button>
           </Stack>
