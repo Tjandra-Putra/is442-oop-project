@@ -15,8 +15,11 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "stockInfo")
 public class StockInfo {
-     @Id
+    @Id
+     private String ticker;
+
     @OneToOne
+    @MapsId
     @JoinColumn(name = "ticker")
     private Stock stock;
 
@@ -45,6 +48,12 @@ public class StockInfo {
         nullable = false
         )
     private String country;
+
+    @Column(
+        name = "todayPrice",
+        nullable = false
+        )
+    private double todayPrice;
     
     public StockInfo() {};
 
@@ -72,6 +81,10 @@ public class StockInfo {
         this.country = country;
     }
 
+    public void setTodayPrice(double todayPrice) {
+        this.todayPrice = todayPrice;
+    }
+
     public String getCurrency() {
         return this.currency;
     }
@@ -86,6 +99,10 @@ public class StockInfo {
     
     public String getCountry() {
         return this.country;
+    }
+
+    public double getTodayPrice() {
+        return todayPrice;
     }
     
 }
