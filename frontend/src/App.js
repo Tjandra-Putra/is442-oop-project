@@ -19,19 +19,32 @@ import { useEffect } from "react";
 
 function App() {
   const postData = {
-    filters: [
+    data: [
       {
         fieldName: "email",
-        value: "ryan.water@gmail.com",
+        value: "ryan.gugu@gmail.com",
       },
       {
-        fieldName: "username",
-        value: "ryan.water",
+        fieldName: "password",
+        value: "123456",
       },
+      { fieldName: "username", value: "Ryan bapok" },
     ],
   };
 
   useEffect(() => {
+    // ====================== get user info from database ======================
+    const userId = 1;
+    console.log("====");
+    axios
+      .get("http://localhost:8080/api/user/getUser/" + userId)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     // get user data
     // axios
     //   .get("http://localhost:8080/api/user/getUser")

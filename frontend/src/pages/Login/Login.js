@@ -4,7 +4,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-// import Link from "@mui/material/Link";
+import axios from "axios";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -21,10 +21,20 @@ const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    // console.log({
+    //   email: data.get("email"),
+    //   password: data.get("password"),
+    // });
+
+    // ====================== add users to database for register ======================
+    // axios
+    //   .post("http://localhost:8080/api/user/addUser", postData)
+    //   .then((res) => {
+    //     console.log(res.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   return (
