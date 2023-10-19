@@ -40,7 +40,7 @@ const Dashboard = () => {
         </Container>
       </div>
       <Container maxWidth="xl">
-        <Grid container spacing={2} mt={0}>
+        {/* <Grid container spacing={2} mt={0}>
           <Grid item md={3} xs={6}>
             <Card className={style.figuresBar}>
               <div className={style.figuresBarTop}>
@@ -61,7 +61,7 @@ const Dashboard = () => {
             <Card className={style.figuresBar}>
               <div className={style.figuresBarTop}>
                 <div variant="h7" className={style.portfolioWorthText}>
-                  Net Profit / Loss
+                  Net Profit / Loss ?
                 </div>
                 <div className={style.iconWrapper}>
                   <i class="fa-solid fa-chart-line"></i>
@@ -77,7 +77,7 @@ const Dashboard = () => {
             <Card className={style.figuresBar}>
               <div className={style.figuresBarTop}>
                 <div variant="h7" className={style.portfolioWorthText}>
-                  Wallet Balance
+                  Wallet Balance ?
                 </div>
                 <div className={style.iconWrapper}>
                   <i class="fa-solid fa-wallet"></i>
@@ -105,9 +105,9 @@ const Dashboard = () => {
               </div>
             </Card>
           </Grid>
-        </Grid>
+        </Grid> */}
 
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ mt: 1 }}>
           <Grid item md={9} xs={12}>
             <Card className={style.chart} sx={{ minHeight: 540 }}>
               <CardContent>

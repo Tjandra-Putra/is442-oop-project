@@ -30,11 +30,6 @@ const Login = () => {
       .then((res) => {
         const objectString = JSON.stringify(res.data.data[0]);
         Cookies.set("userInfo", objectString, { expires: 7 }); // expires in 7 days
-
-        // get cookie
-        const cookieValue = Cookies.get("userInfo");
-        const object = cookieValue ? JSON.parse(cookieValue) : null;
-        console.log("cookie: " + object);
       })
       .catch((err) => {
         console.log(err);
