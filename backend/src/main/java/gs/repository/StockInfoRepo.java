@@ -11,9 +11,9 @@ import gs.entity.StockInfo;
 public interface StockInfoRepo extends JpaRepository<StockInfo, String>{
     
     @Query(value = "select * from stock_info;", nativeQuery = true)
-    List<Object[]> getStockInfo();
+    List<StockInfo> getStockInfo();
 
     @Query(value = "select * from stock_info where ticker = ? ;", nativeQuery = true)
-    List<Object[]> getStockInfoByTicker(String ticker);
+    List<StockInfo> getStockInfoByTicker(String ticker);
     
 }

@@ -16,15 +16,15 @@ import gs.common.NullError;
 import gs.common.RequestModel;
 import gs.entity.Stock;
 import gs.entity.User;
-import gs.inputModel.stockInfoInputModel;
-import gs.inputModel.stockInputModel;
+import gs.inputModel.StockInfoInputModel;
+// import gs.inputModel.stockInputModel;
 import gs.service.stockInfo.StockInfoService;
 import gs.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping(path = "api/stockInfo")
+@RequestMapping(path = "api/StockInfo")
 public class StockInfoController {
     
     @Autowired
@@ -37,12 +37,12 @@ public class StockInfoController {
     private StockInfoService StockInfoService;
 
     @GetMapping("/getStockInfo")
-    public ApiModel<ArrayList<stockInfoInputModel>> getStockInfo(){
+    public ApiModel<ArrayList<StockInfoInputModel>> getStockInfo(){
         return ApiModel.ok(StockInfoService.getStockInfo());
     }
 
-    @GetMapping("/getstockinfo/ticker/{ticker}")
-    public ApiModel<ArrayList<stockInfoInputModel>> getStockInfoByTicker(@PathVariable String ticker){
+    @GetMapping("/getStockInfo/ticker/{ticker}")
+    public ApiModel<ArrayList<StockInfoInputModel>> getStockInfoByTicker(@PathVariable String ticker){
         return ApiModel.ok(StockInfoService.getStockInfoByTicker(ticker));
     }
 }

@@ -3,7 +3,7 @@ package gs.inputModel;
 
 import java.io.Serializable;
 
-public class stockInfoInputModel implements Serializable{
+public class StockInfoInputModel implements Serializable{
     private String ticker;
     private String currency;
     private String sector;

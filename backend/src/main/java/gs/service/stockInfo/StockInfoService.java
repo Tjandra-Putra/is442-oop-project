@@ -4,11 +4,11 @@ import java.util.List;
 
 import gs.common.RequestModel;
 import gs.entity.StockInfo;
-import gs.inputModel.stockInfoInputModel;
+import gs.inputModel.StockInfoInputModel;
 import jakarta.servlet.http.HttpServletResponse;
 
 public interface StockInfoService {
-    List<stockInfoInputModel> getStockInfo();
+    List<StockInfoInputModel> getStockInfo();
 
-    List<stockInfoInputModel> getStockInfoByTicker(String ticker);
+    List<StockInfoInputModel> getStockInfoByTicker(String ticker);
 }

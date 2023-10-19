@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 
 import gs.common.DataRequestModel;
 import gs.common.RequestModel;
+import gs.entity.Portfolio;
 import gs.entity.StockInfo;
-import gs.inputModel.stockInfoInputModel;
+import gs.inputModel.PortfolioInputModel;
+import gs.inputModel.StockInfoInputModel;
 import gs.repository.StockInfoRepo;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,42 +24,39 @@ public class StockInfoServiceImpl implements StockInfoService {
     @Resource
     public StockInfoRepo stockInfoRepo;
 
-    public List<stockInfoInputModel> getStockInfo(){
-        List<Object[]> stockInfoQueryList = stockInfoRepo.getStockInfo();
-        List<stockInfoInputModel> stockInfoList = new ArrayList<>();
-        
-        for (Object[] data : stockInfoQueryList){
-            stockInfoInputModel inputModel = new stockInfoInputModel();
-            // Logic to populate inputModel is missing here
-            // Example: inputModel.setSomeProperty(data[0]);
-            // Add inputModel to stockInfoList
+    private StockInfoInputModel inputModel(StockInfo data){
+        StockInfoInputModel inputModel = new StockInfoInputModel();
+        inputModel.setTicker(String.valueOf(data.getTicker()));
+        inputModel.setCountry(String.valueOf(data.getCountry()));
+        inputModel.setCurrency(String.valueOf(data.getCurrency()));
+        inputModel.setIndustry(String.valueOf(data.getIndustry()));
+        inputModel.setSector(String.valueOf(data.getSector()));
 
-            inputModel.setTicker(String.valueOf(data[0]));
-            inputModel.setCountry(String.valueOf(data[1]));
-            inputModel.setCurrency(String.valueOf(data[2]));
-            inputModel.setIndustry(String.valueOf(data[3]));
-            inputModel.setSector(String.valueOf(data[4]));
+        return inputModel;
+    }
+
+    public List<StockInfoInputModel> getStockInfo() {
+        List<StockInfo> stockInfoQueryList = stockInfoRepo.getStockInfo();
+        List<StockInfoInputModel> stockInfoList = new ArrayList<>();
+
+        for (StockInfo data : stockInfoQueryList) {
+            StockInfoInputModel inputModel = inputModel(data);
             stockInfoList.add(inputModel);
         }
 
         return stockInfoList;
     }
 
-    public List<stockInfoInputModel> getStockInfoByTicker(String ticker){
-        List<Object[]> stockInfoQueryList = stockInfoRepo.getStockInfoByTicker(ticker);
-        List<stockInfoInputModel> stockInfoList = new ArrayList<>();
+    public List<StockInfoInputModel> getStockInfoByTicker(String ticker){
+        List<StockInfo> stockInfoQueryList = stockInfoRepo.getStockInfoByTicker(ticker);
+        List<StockInfoInputModel> stockInfoList = new ArrayList<>();
         
-        for (Object[] data : stockInfoQueryList){
-            stockInfoInputModel inputModel = new stockInfoInputModel();
+        for (StockInfo data : stockInfoQueryList){
             // Logic to populate inputModel is missing here
             // Example: inputModel.setSomeProperty(data[0]);
             // Add inputModel to stockInfoList
 
-            inputModel.setTicker(String.valueOf(data[0]));
-            inputModel.setCountry(String.valueOf(data[1]));
-            inputModel.setCurrency(String.valueOf(data[2]));
-            inputModel.setIndustry(String.valueOf(data[3]));
-            inputModel.setSector(String.valueOf(data[4]));
+            StockInfoInputModel inputModel = inputModel(data);
             stockInfoList.add(inputModel);
         }
 
