@@ -26,7 +26,7 @@ public class StockInfoServiceImpl implements StockInfoService {
 
     private StockInfoInputModel inputModel(StockInfo data){
         StockInfoInputModel inputModel = new StockInfoInputModel();
-        inputModel.setTicker(String.valueOf(data.getTicker()));
+        // inputModel.setTicker(String.valueOf(data.getTicker()));
         inputModel.setCountry(String.valueOf(data.getCountry()));
         inputModel.setCurrency(String.valueOf(data.getCurrency()));
         inputModel.setIndustry(String.valueOf(data.getIndustry()));

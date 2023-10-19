@@ -7,18 +7,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "stockInfo")
 public class StockInfo {
-    @Id
-    @Column(
-        name = "ticker",
-        nullable = false
-        )
-    private String ticker;
+     @Id
+    @OneToOne
+    @JoinColumn(name = "ticker")
+    private Stock stock;
+
 
     @Column(
         name = "currency",
@@ -45,27 +46,15 @@ public class StockInfo {
         )
     private String country;
     
-    @OneToOne
-    @JoinColumn(name = "ticker", referencedColumnName = "ticker")
-    private Stock stock;
-
-    public StockInfo(String ticker, String currency, String sector, String industry, String country) {
-        this.ticker = ticker;
-        this.currency = currency;
-        this.sector = sector;
-        this.industry = industry;
-        this.country = country;
-    }
-
     public StockInfo() {};
 
-    public String getTicker() {
-        return this.ticker;
-    }
+    // public String getTicker() {
+    //     return this.ticker;
+    // }
 
-    public void setTicker(String ticker) {
-        this.ticker = ticker;
-    }
+    // public void setTicker(String ticker) {
+    //     this.ticker = ticker;
+    // }
 
     public void setCurrency(String currency) {
         this.currency = currency;
