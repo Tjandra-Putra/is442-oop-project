@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import style from "./PortfolioDetailed.module.css";
 import { useParams } from "react-router-dom";
 import StockCard from "../../components/StockCard/StockCard";
@@ -7,17 +7,31 @@ import PortfolioStocksBySegmentChart from "../../components/Charts/PortfolioStoc
 import PortfolioStocksChart from "../../components/Charts/PortfolioStocksChart/PortfolioStocksChart";
 import StockGrid from "../../components/StockGrid/StockGrid";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 import { Card, Grid, CardContent, Stack, Button, Typography, Box, Modal, Container, TextField } from "@mui/material";
 
 const PortfolioDetailed = () => {
   // get id from url paramter
   const { id } = useParams();
+  const [portfolio, setPortfolio] = React.useState(null);
+
   const notifyError = (message) => toast.error(message, { duration: 5000 });
   const notifySuccess = (message) => toast.success(message, { duration: 5000 });
 
-  // get portfolio name by id
-  // ...
+  useEffect(() => {
+    const userId = 1;
+
+    axios
+      .get(`http://localhost:8080/api/portfolio/getPortfolio/${userId}/${id}`)
+      .then((res) => {
+        console.log(res.data.data[0]);
+        setPortfolio(res.data.data[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   // modal update portfolio
   const [updatePortfolioModalOpen, setUpdatePortfolioModalOpen] = React.useState(false);
@@ -40,7 +54,7 @@ const PortfolioDetailed = () => {
         <Container maxWidth="xl">
           <div className="banner-content">
             <Typography variant="h5" style={{ letterSpacing: "1px" }}>
-              {id}
+              {portfolio && portfolio.portfolioName}
             </Typography>
           </div>
         </Container>
@@ -110,10 +124,7 @@ const PortfolioDetailed = () => {
             <div className={style.portfolioDescriptionTitle}>Portfolio Description</div>
 
             <Typography variant="body1" className={style.portfolioDescription}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam voluptatum, quibusdam, voluptate, quia
-              voluptas quod quos voluptatibus quae doloribus quidem voluptatem. Quisquam voluptatum, quibusdam,
-              voluptate, quia voluptas quod quos voluptatibus quae doloribus quidem voluptatem. Quisquam voluptatum,
-              quibusdam, voluptate, quia voluptas quod quos voluptatibus quae doloribus
+              {portfolio && portfolio.description}
             </Typography>
           </div>
         </div>
@@ -138,7 +149,7 @@ const PortfolioDetailed = () => {
           <Grid item xs={12} md={6} lg={6}>
             <div className={style.firstContainer}>
               <StockCard name="Net Value" value="20% " />
-              <StockCard name="Capital" value="$20,000" />
+              <StockCard name="Capital" value={`$${portfolio && portfolio.capitalAmt}`} />
             </div>
 
             <Card className={style.cardCustom}>

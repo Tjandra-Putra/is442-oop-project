@@ -10,16 +10,21 @@ import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import toast from "react-hot-toast";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import style from "./CreatePortfolio.module.css";
 
 const CreatePortfolio = () => {
+  const navigate = useNavigate();
+
   const [selectedRows, setSelectedRows] = useState([]);
   const [portfolioName, setPortfolioName] = useState("");
   const [portfolioDescription, setPortfolioDescription] = useState("");
   const [portfolioCapital, setPortfolioCapital] = useState("");
 
   const notifyError = (message) => toast.error(message, { duration: 5000 });
+  const notifySuccess = (message) => toast.success(message, { duration: 5000 });
 
   // get total price of selected stocks
   const getTotalPrice = () => {
@@ -156,7 +161,37 @@ const CreatePortfolio = () => {
       selectedStocks: getSelectedRows(),
     };
 
-    console.log(formData);
+    const postData = {
+      data: [
+        {
+          fieldName: "capitalAmt",
+          value: portfolioCapital,
+        },
+        {
+          fieldName: "description",
+          value: portfolioDescription,
+        },
+        { fieldName: "portfolioName", value: portfolioName },
+      ],
+    };
+
+    const userId = 1;
+
+    axios
+      .post("http://localhost:8080/api/portfolio/addPortfolio/" + userId, postData)
+      .then((res) => {
+        console.log(res.data);
+
+        if (res.data && res.data.data === null) {
+          notifyError(res.data.message);
+        } else {
+          notifySuccess(res.data.message);
+          navigate("/dashboard");
+        }
+      })
+      .catch((err) => {
+        notifyError(err.response.data.message);
+      });
   };
 
   return (

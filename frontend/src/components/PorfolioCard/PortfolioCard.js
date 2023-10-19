@@ -11,7 +11,7 @@ import Avatar from "@mui/material/Avatar";
 import style from "./PortfolioCard.module.css";
 import stockImage from "../../assets/images/ethereum.png";
 
-const PortfolioCard = () => {
+const PortfolioCard = ({ portfolioId, portfolioName, capitalAmt, description }) => {
   return (
     <Card className={style.portfolioCardWrapper}>
       <CardContent>
@@ -19,10 +19,10 @@ const PortfolioCard = () => {
           <div className={style.stockType}>
             <Avatar src={stockImage}></Avatar>
             <div className={style.stockName} gutterBottom variant="h5" component="div">
-              Etherium
+              {portfolioName}
             </div>
           </div>
-          <div className={style.ticker}>ID: 123943</div>
+          <div className={style.ticker}>ID: {portfolioId}</div>
         </div>
 
         {/* <div className={style.stockMiddle}>
@@ -42,7 +42,7 @@ const PortfolioCard = () => {
 
           <div className={style.stockFooterRightItem}>
             <div className={style.stockFooterText}>Capital</div>
-            <div className={style.stockFooterFigure}>$128.00</div>
+            <div className={style.stockFooterFigure}>${capitalAmt.toFixed(2)}</div>
           </div>
         </div>
       </CardContent>

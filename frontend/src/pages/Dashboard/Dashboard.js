@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
@@ -17,16 +17,32 @@ import Menu from "../../components/Menu/Menu";
 import MarketExposureByGeographicalLocationChart from "../../components/Charts/MarketExposureByGeographicalLocationChart/MarketExposureByGeographicalLocationChart";
 import { TextField } from "@mui/material";
 import MarketExposureBySegment from "../../components/Charts/MarketExposureBySegment/MarketExposureBySegment";
+import axios from "axios";
 
 const Dashboard = () => {
   const navigate = useNavigate();
 
   const [portfolioName, setPortfolioName] = React.useState("");
+  const [portfolios, setPortfolios] = React.useState([]);
 
   const handleAddNewPortfolioButton = () => {
     // Replace '/target-page' with the path of the page you want to redirect to.
     navigate("/create-portfolio");
   };
+
+  useEffect(() => {
+    const userId = 1;
+
+    axios
+      .get("http://localhost:8080/api/portfolio/getPortfolio/" + userId)
+      .then((res) => {
+        console.log(res.data);
+        setPortfolios(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div className={style.dashboardWrapper}>
@@ -134,34 +150,18 @@ const Dashboard = () => {
                     My Portfolios
                   </Typography>
                 </Grid>
-                {/* <Grid item md={6} xs={12} style={{ textAlign: "right" }}>
-                  <Stack direction="row" spacing={1} justifyContent="flex-end" sx={{ mb: 3 }}>
-                    <Menu menuName="Sort by" />
-                    <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleAddNewPortfolioButton()}>
-                      Add
-                    </Button>
-                  </Stack>
-                </Grid> */}
               </Grid>
-
               <Grid container spacing={4}>
-                <Grid item md={4} xs={12} onClick={() => navigate("/portfolio/test")}>
-                  <PortfolioCard />
-                </Grid>
-                <Grid item md={4} xs={12} onClick={() => navigate("/portfolio/test")}>
-                  <PortfolioCard />
-                </Grid>
-                <Grid item md={4} xs={12} onClick={() => navigate("/portfolio/test")}>
-                  <PortfolioCard />
-                </Grid>
-
-                <Grid item md={4} xs={12} onClick={() => navigate("/portfolio/test")}>
-                  <PortfolioCard />
-                </Grid>
-
-                <Grid item md={4} xs={12} onClick={() => navigate("/portfolio/test")}>
-                  <PortfolioCard />
-                </Grid>
+                {portfolios?.map((portfolio, index) => (
+                  <Grid item md={4} xs={12} key={index} onClick={() => navigate(`/portfolio/${portfolio.portfolioId}`)}>
+                    <PortfolioCard
+                      portfolioName={portfolio.portfolioName}
+                      capitalAmt={portfolio.capitalAmt}
+                      description={portfolio.description}
+                      portfolioId={portfolio.portfolioId}
+                    />
+                  </Grid>
+                ))}
               </Grid>
             </div>
           </Grid>
