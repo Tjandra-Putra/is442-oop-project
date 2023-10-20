@@ -207,7 +207,7 @@ const PortfolioDetailed = () => {
             <Card className={style.cardCustom}>
               <CardContent>
                 <div className={style.cardTitle}>Stocks Allocation</div>
-                <PortfolioStocksAllocationChart />
+                <PortfolioStocksAllocationChart portfolioId={id} />
               </CardContent>
             </Card>
           </Grid>
