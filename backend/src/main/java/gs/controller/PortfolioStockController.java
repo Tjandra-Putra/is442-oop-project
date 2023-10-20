@@ -3,6 +3,7 @@ package gs.controller;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import gs.common.ApiModel;
 import gs.common.RequestModel;
 import gs.inputModel.PortfolioStockInputModel;
+import gs.inputModel.StockAllocationInputModel;
 import gs.service.portfolioStock.PortfolioStockService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,6 +38,13 @@ public class PortfolioStockController {
         return ApiModel.ok(portfolioStockService.getPortfolioStock(portfolioId));
     }
 
+    @GetMapping("/getPortfolioStockAllocation/{portfolioId}")
+    public ApiModel<ArrayList<StockAllocationInputModel>> getPortfolioStockAllocation(
+        @PathVariable("portfolioId") String portfolioId
+    ){
+        return ApiModel.ok(portfolioStockService.getPortfolioStockAllocation(portfolioId));
+    }
+
     
     @GetMapping("/getPortfolioStock/{portfolioId}/{ticker}")
     public ApiModel<ArrayList<PortfolioStockInputModel>> getPortfolioStockByTicker(
@@ -54,5 +63,16 @@ public class PortfolioStockController {
         portfolioStockService.addPortfolioStock(response, requestModel, myApiModel, portfolioId);
         
         return myApiModel;
+    }
+
+    @DeleteMapping("/deletePortfolioStock/{portfolioId}/{ticker}")
+    public ApiModel<ArrayList<PortfolioStockInputModel>> deletePortfolioStock(
+        @PathVariable("portfolioId") String portfolioId,
+        @PathVariable("ticker") String ticker
+    ) throws Exception{
+        ApiModel apiModel = new ApiModel();
+        portfolioStockService.deletePortfolioStock(response, apiModel, portfolioId, ticker);
+        
+        return apiModel;
     }
 }
