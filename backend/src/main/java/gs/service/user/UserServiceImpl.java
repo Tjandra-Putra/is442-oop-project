@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService{
 
                 inputModel.setId(newUser.getUserId());
                 inputModel.setEmail(newUser.getEmail());
-                inputModel.setEmail(newUser.getUsername());
+                inputModel.setUsername(newUser.getUsername());
 
                 apiModel.setMessage("Data saved successfully.");
                 apiModel.setData(inputModel);
