@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import gs.common.ApiModel;
@@ -22,6 +24,13 @@ public class UserServiceImpl implements UserService{
     
     @Resource
     protected UserRepo userRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public String getEncodedPassword(String password) {
+        return passwordEncoder.encode(password);
+    }
 
     public List<userInputModel> getUser(){
         List<Object[]> userQueryList = userRepo.getUser();

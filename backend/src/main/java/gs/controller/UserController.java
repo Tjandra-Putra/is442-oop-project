@@ -58,4 +58,16 @@ public class UserController {
         return myApiModel;
 
     }
+
+    // USER MANAGEMENT - START
+    @GetMapping("/forAdmin")
+    public String forAdmin() {
+        return "This URL is only accessible to admin personnel.";
+    }
+
+    @GetMapping("/forUser")
+    public String forUser() {
+        return "This URL is only accessible to user.";
+    }
+    // USER MANAGEMENT - END
 }
