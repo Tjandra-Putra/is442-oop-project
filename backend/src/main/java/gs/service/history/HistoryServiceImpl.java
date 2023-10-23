@@ -40,14 +40,15 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     public List<HistoryInputModel> getHistoryByTicker(String ticker){
-        History stockQueryList = historyRepo.getHistoryByTicker(ticker).get(0);
+        List<History> historyQueryList = historyRepo.getHistoryByTicker(ticker);
+        List<HistoryInputModel> historyList = new ArrayList<>();
+        
+        for (History history : historyQueryList){
+            HistoryInputModel inputModel = inputModel(history);
+            historyList.add(inputModel);
+        }
 
-        List<HistoryInputModel> tickerList = new ArrayList<>();
-
-        HistoryInputModel inputModel = inputModel(stockQueryList);
-        tickerList.add(inputModel);
-
-        return tickerList;
+        return historyList;
     }
     
 }
