@@ -50,20 +50,20 @@ public class StockInfo {
     private String country;
 
     @Column(
-        name = "todayPrice",
+        name = "today_price",
         nullable = false
         )
-    private double todayPrice;
+    private double today_price;
     
     public StockInfo() {};
 
-    // public String getTicker() {
-    //     return this.ticker;
-    // }
+    public String getTicker() {
+        return this.ticker;
+    }
 
-    // public void setTicker(String ticker) {
-    //     this.ticker = ticker;
-    // }
+    public void setTicker(String ticker) {
+        this.ticker = ticker;
+    }
 
     public void setCurrency(String currency) {
         this.currency = currency;
@@ -81,8 +81,8 @@ public class StockInfo {
         this.country = country;
     }
 
-    public void setTodayPrice(double todayPrice) {
-        this.todayPrice = todayPrice;
+    public void setTodayPrice(double today_price) {
+        this.today_price = today_price;
     }
 
     public String getCurrency() {
@@ -102,7 +102,7 @@ public class StockInfo {
     }
 
     public double getTodayPrice() {
-        return todayPrice;
+        return today_price;
     }
     
 }

@@ -9,6 +9,7 @@ public class StockInfoInputModel implements Serializable{
     private String sector;
     private String industry;
     private String country;
+    private double today_price;
 
     public String getTicker() {
         return this.ticker;
@@ -30,6 +31,10 @@ public class StockInfoInputModel implements Serializable{
         return this.country;
     }
 
+    public double getTodayPrice(){
+        return this.today_price;
+    }
+
     public void setTicker(String ticker) {
         this.ticker = ticker;
     }
@@ -48,6 +53,10 @@ public class StockInfoInputModel implements Serializable{
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public void setTodayPrice(double today_price) {
+        this.today_price = today_price;
     }
 
 

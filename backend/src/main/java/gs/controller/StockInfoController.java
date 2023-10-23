@@ -45,4 +45,9 @@ public class StockInfoController {
     public ApiModel<ArrayList<StockInfoInputModel>> getStockInfoByTicker(@PathVariable String ticker){
         return ApiModel.ok(StockInfoService.getStockInfoByTicker(ticker));
     }
+
+    @GetMapping("/getStockInfo/portfolio")
+    public ApiModel<ArrayList<StockInfoInputModel>> getStockInfoByPortfolio(){
+        return ApiModel.ok(StockInfoService.getStockInfoByPortfolio());
+    }
 }

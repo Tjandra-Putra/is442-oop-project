@@ -4,19 +4,35 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+ import java.util.Iterator;
+import java.util.Collections;
 
 import org.hibernate.annotations.SourceType;
 import org.springframework.stereotype.Service;
+import org.json.JSONObject;
+
+
+
 
 import gs.common.DataRequestModel;
 import gs.common.RequestModel;
 import gs.entity.Portfolio;
+import gs.entity.PortfolioStock;
 import gs.entity.StockInfo;
 import gs.inputModel.PortfolioInputModel;
 import gs.inputModel.StockInfoInputModel;
+import gs.repository.PortfolioStockRepo;
 import gs.repository.StockInfoRepo;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.net.URI;
+
 
 @Service
 public class StockInfoServiceImpl implements StockInfoService {
@@ -26,11 +42,12 @@ public class StockInfoServiceImpl implements StockInfoService {
 
     private StockInfoInputModel inputModel(StockInfo data){
         StockInfoInputModel inputModel = new StockInfoInputModel();
-        // inputModel.setTicker(String.valueOf(data.getTicker()));
+        inputModel.setTicker(String.valueOf(data.getTicker()));
         inputModel.setCountry(String.valueOf(data.getCountry()));
         inputModel.setCurrency(String.valueOf(data.getCurrency()));
         inputModel.setIndustry(String.valueOf(data.getIndustry()));
         inputModel.setSector(String.valueOf(data.getSector()));
+        inputModel.setTodayPrice(Double.valueOf(data.getTodayPrice()));
 
         return inputModel;
     }
@@ -59,6 +76,104 @@ public class StockInfoServiceImpl implements StockInfoService {
             StockInfoInputModel inputModel = inputModel(data);
             stockInfoList.add(inputModel);
         }
+
+        return stockInfoList;
+    }
+
+    @Resource
+    public PortfolioStockRepo portfolioStockRepo;
+
+    public List<StockInfoInputModel> getStockInfoByPortfolio() {
+        List<String> portfolioStocks = portfolioStockRepo.getTickerList();
+        List<StockInfoInputModel> stockInfoList = new ArrayList<>();
+        List<String> adjustedCloseList = new ArrayList<String>();
+        String apiKey = "demo";
+        // for (String ticker : portfolioStocks) {  -> COMMENT OUT THE FOR LOOP FOR TICKER DO NOT DELETE
+                 String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" + "IBM" + "&apikey=" + apiKey;
+
+                 try{
+                     HttpClient client = HttpClient.newHttpClient();
+                    HttpRequest request = HttpRequest.newBuilder()
+                     .uri(URI.create(url))
+                     .build();
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                    String responseBody = response.body();
+
+                    JSONObject obj = new JSONObject(responseBody);
+
+    
+                    Iterator<String> keys = obj.getJSONObject("Time Series (Daily)").keys();
+                    List<String> keyList = new ArrayList<String>();
+                    
+                    while (keys.hasNext()) {
+                        String key = keys.next();
+                        keyList.add(key);
+                    }
+
+                    // Sort dates in descending order
+                    Collections.sort(keyList, Collections.reverseOrder());
+                    boolean firstAdjustedCloseStored = false;
+
+
+                    // loop through the keylist and retrieve the values for each key
+                    for (String key : keyList) {
+                        System.out.println(key);
+                    
+                        JSONObject value = obj.getJSONObject("Time Series (Daily)").getJSONObject(key);
+                        String adjustedClose = value.getString("5. adjusted close");
+                    
+                        if (!firstAdjustedCloseStored) {
+                            adjustedCloseList.add(adjustedClose);
+                            firstAdjustedCloseStored = true;
+                            break;
+                        }
+                    }
+
+                 }
+                 catch (Exception e){
+                    e.printStackTrace();
+                 }
+        // } COMMENT OUT THE FOR LOOP FOR TICKER DO NOT DELETE
+         String url2 = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=IBM&apikey=demo";
+         try{
+            
+            // loop through adjustedlist and print out the values
+            for (String adjustedClose : adjustedCloseList) {
+                HttpClient client = HttpClient.newHttpClient();
+                HttpRequest Secondrequest = HttpRequest.newBuilder()
+                        .uri(URI.create(url2))
+                        .build();
+                HttpResponse<String> secondResponse = client.send(Secondrequest, HttpResponse.BodyHandlers.ofString());
+
+                String secondResponseBody = secondResponse.body();
+
+                JSONObject secondObj = new JSONObject(secondResponseBody);
+                System.out.println(secondObj);
+                System.out.println(secondObj.getString("Country"));
+                System.out.println(secondObj.getString("Currency"));
+                System.out.println(secondObj.getString("Industry"));
+                System.out.println(secondObj.getString("Sector"));
+                System.out.println(secondObj.getString("Symbol"));
+                System.out.println(adjustedClose);
+
+                // save to the db -> EDIT HERE TO ADD TO THE DB
+                
+                // stockInfo.setTicker(secondObj.getString("Symbol"));
+                // stockInfo.setCountry(secondObj.getString("Country"));
+                // stockInfo.setCurrency(secondObj.getString("Currency"));
+                // stockInfo.setIndustry(secondObj.getString("Industry"));
+                // stockInfo.setSector(secondObj.getString("Sector"));
+                // stockInfo.setTodayPrice(Double.parseDouble(adjustedClose));
+                // stockInfoRepo.save(stockInfo);
+              
+
+            }
+         }
+
+         catch (Exception e){
+            e.printStackTrace();
+         }
 
         return stockInfoList;
     }

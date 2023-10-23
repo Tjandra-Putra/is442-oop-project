@@ -11,4 +11,6 @@ public interface StockInfoService {
     List<StockInfoInputModel> getStockInfo();
 
     List<StockInfoInputModel> getStockInfoByTicker(String ticker);
+
+     List<StockInfoInputModel> getStockInfoByPortfolio();
 }
