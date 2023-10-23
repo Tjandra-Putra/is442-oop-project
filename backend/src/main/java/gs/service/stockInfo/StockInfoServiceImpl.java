@@ -93,9 +93,9 @@ public class StockInfoServiceImpl implements StockInfoService {
         List<String> portfolioStocks = portfolioStockRepo.getTickerList();
         List<StockInfoInputModel> stockInfoList = new ArrayList<>();
         List<String> adjustedCloseList = new ArrayList<String>();
-        String apiKey = "demo";
-        // for (String ticker : portfolioStocks) {  -> COMMENT OUT THE FOR LOOP FOR TICKER DO NOT DELETE
-                 String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" + "IBM" + "&apikey=" + apiKey;
+        String apiKey = "2Q8AT87UOUTGOPGY";
+        for (String ticker : portfolioStocks) {  
+                 String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" + ticker + "&apikey=" + apiKey;
 
                  try{
                      HttpClient client = HttpClient.newHttpClient();
@@ -140,12 +140,12 @@ public class StockInfoServiceImpl implements StockInfoService {
                  catch (Exception e){
                     e.printStackTrace();
                  }
-        // } COMMENT OUT THE FOR LOOP FOR TICKER DO NOT DELETE
-         String url2 = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=IBM&apikey=demo";
-         try{
-            
-            // loop through adjustedlist and print out the values
-            for (String adjustedClose : adjustedCloseList) {
+        }
+        int counter = 0;
+        for(String ticker : portfolioStocks){
+             String url2 = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + ticker  + "&apikey=" + apiKey;
+
+             try{
                 HttpClient client = HttpClient.newHttpClient();
                 HttpRequest Secondrequest = HttpRequest.newBuilder()
                         .uri(URI.create(url2))
@@ -155,22 +155,12 @@ public class StockInfoServiceImpl implements StockInfoService {
                 String secondResponseBody = secondResponse.body();
 
                 JSONObject secondObj = new JSONObject(secondResponseBody);
-                System.out.println(secondObj);
-                System.out.println(secondObj.getString("Country"));
-                System.out.println(secondObj.getString("Currency"));
-                System.out.println(secondObj.getString("Industry"));
-                System.out.println(secondObj.getString("Sector"));
-                System.out.println(secondObj.getString("Symbol"));
-                System.out.println(adjustedClose);
 
-                // save to the db -> EDIT HERE TO ADD TO THE DB
-                
+                String adjustedClose = adjustedCloseList.get(counter);
+                counter = counter + 1;
+
                 StockInfo newStockInfo = new StockInfo();
-
-                // CHANGE THIS TICKER VARIALBE!!!!!!!!!!!11
-                String ticker = "IBM";
                 Stock currentStock = stockRepo.getStockByTicker(ticker).get(0);
-
                 newStockInfo.setStock(currentStock);
                 newStockInfo.setCountry(secondObj.getString("Country"));
                 newStockInfo.setCurrency(secondObj.getString("Currency"));
@@ -178,19 +168,18 @@ public class StockInfoServiceImpl implements StockInfoService {
                 newStockInfo.setSector(secondObj.getString("Sector"));
                 newStockInfo.setTodayPrice(Double.parseDouble(adjustedClose));
                 stockInfoRepo.save(newStockInfo);
-              
 
-            }
-         }
-
-         catch (DataAccessException ex){
-            System.out.println(ex.getMessage());
-         }
-
-         catch (Exception e){
-            e.printStackTrace();
-         }
-
+             }
+             catch(DataAccessException ex){
+                System.out.println(ex.getMessage());
+             }
+                 
+        }
+        List<StockInfo> stockInfoQueryList = stockInfoRepo.getStockInfo();
+        for (StockInfo data : stockInfoQueryList) {
+            StockInfoInputModel inputModel = inputModel(data);
+            stockInfoList.add(inputModel);
+        }
         return stockInfoList;
     }
 }
