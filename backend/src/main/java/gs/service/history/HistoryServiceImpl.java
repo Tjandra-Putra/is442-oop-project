@@ -71,7 +71,7 @@ public class HistoryServiceImpl implements HistoryService {
     
     public void updateHistoryFromAPI(String ticker){
         try {
-            URL url = new URL("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" + ticker + "&apikey=E8LCWIHQ1EEYAU63");
+            URL url = new URL("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=IBM&apikey=demo");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
