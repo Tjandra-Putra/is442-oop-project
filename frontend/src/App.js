@@ -19,15 +19,16 @@ import { useEffect } from "react";
 
 function App() {
   const postData = {
-    filters: [
+    data: [
       {
         fieldName: "email",
-        value: "ryan.water@gmail.com",
+        value: "ryan.gugu@gmail.com",
       },
       {
-        fieldName: "username",
-        value: "ryan.water",
+        fieldName: "password",
+        value: "123456",
       },
+      { fieldName: "username", value: "Ryan bapok" },
     ],
   };
 
@@ -61,7 +62,7 @@ function App() {
 
       {/* Dynamic content goes here */}
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />

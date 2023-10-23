@@ -40,7 +40,7 @@ const StockCard = ({ name, value, percentage }) => {
         <CardContent>
           <div className={style.stockHeader}>
             <p>{name}</p>
-            {name == "Capital" ? (
+            {/* {name == "Capital" ? (
               <Button
                 variant="outlined"
                 onClick={handleOpenModal}
@@ -49,13 +49,13 @@ const StockCard = ({ name, value, percentage }) => {
               >
                 Top Up
               </Button>
-            ) : null}
+            ) : null} */}
           </div>
           <div className={style.value}>{value}</div>
         </CardContent>
       </Card>
 
-      <Modal open={modalOpen} onClose={handleCloseModal}>
+      {/* <Modal open={modalOpen} onClose={handleCloseModal}>
         <Box className={style.modal} style={{ width: "300px", height: "350px" }}>
           <Grid container spacing={2} style={{ marginTop: "10px" }}>
             <Grid item xs={6} md={6} lg={6}>
@@ -105,7 +105,7 @@ const StockCard = ({ name, value, percentage }) => {
             </Grid>
           </Grid>
         </Box>
-      </Modal>
+      </Modal> */}
     </>
   );
 };
