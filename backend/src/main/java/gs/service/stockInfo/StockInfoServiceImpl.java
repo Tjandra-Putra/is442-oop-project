@@ -93,7 +93,7 @@ public class StockInfoServiceImpl implements StockInfoService {
         List<String> portfolioStocks = portfolioStockRepo.getTickerList();
         List<StockInfoInputModel> stockInfoList = new ArrayList<>();
         List<String> adjustedCloseList = new ArrayList<String>();
-        String apiKey = "2Q8AT87UOUTGOPGY";
+        String apiKey = "demo";
         for (String ticker : portfolioStocks) {  
                  String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" + ticker + "&apikey=" + apiKey;
 
