@@ -47,7 +47,7 @@ public class StockInfoController {
     }
 
     @GetMapping("/getStockInfo/portfolio")
-    public ApiModel<ArrayList<StockInfoInputModel>> getStockInfoByPortfolio(){
+    public ApiModel<ArrayList<StockInfoInputModel>> getStockInfoByPortfolio() throws Exception{
         return ApiModel.ok(StockInfoService.getStockInfoByPortfolio());
     }
 }

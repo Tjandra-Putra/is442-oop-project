@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Collections;
 
 import org.hibernate.annotations.SourceType;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.json.JSONObject;
 
@@ -18,11 +19,13 @@ import gs.common.DataRequestModel;
 import gs.common.RequestModel;
 import gs.entity.Portfolio;
 import gs.entity.PortfolioStock;
+import gs.entity.Stock;
 import gs.entity.StockInfo;
 import gs.inputModel.PortfolioInputModel;
 import gs.inputModel.StockInfoInputModel;
 import gs.repository.PortfolioStockRepo;
 import gs.repository.StockInfoRepo;
+import gs.repository.StockRepo;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import java.net.http.HttpClient;
@@ -38,7 +41,10 @@ import java.net.URI;
 public class StockInfoServiceImpl implements StockInfoService {
 
     @Resource
-    public StockInfoRepo stockInfoRepo;
+    protected StockInfoRepo stockInfoRepo;
+
+    @Resource
+    protected StockRepo stockRepo;
 
     private StockInfoInputModel inputModel(StockInfo data){
         StockInfoInputModel inputModel = new StockInfoInputModel();
@@ -83,7 +89,7 @@ public class StockInfoServiceImpl implements StockInfoService {
     @Resource
     public PortfolioStockRepo portfolioStockRepo;
 
-    public List<StockInfoInputModel> getStockInfoByPortfolio() {
+    public List<StockInfoInputModel> getStockInfoByPortfolio() throws Exception {
         List<String> portfolioStocks = portfolioStockRepo.getTickerList();
         List<StockInfoInputModel> stockInfoList = new ArrayList<>();
         List<String> adjustedCloseList = new ArrayList<String>();
@@ -159,16 +165,26 @@ public class StockInfoServiceImpl implements StockInfoService {
 
                 // save to the db -> EDIT HERE TO ADD TO THE DB
                 
-                // stockInfo.setTicker(secondObj.getString("Symbol"));
-                // stockInfo.setCountry(secondObj.getString("Country"));
-                // stockInfo.setCurrency(secondObj.getString("Currency"));
-                // stockInfo.setIndustry(secondObj.getString("Industry"));
-                // stockInfo.setSector(secondObj.getString("Sector"));
-                // stockInfo.setTodayPrice(Double.parseDouble(adjustedClose));
-                // stockInfoRepo.save(stockInfo);
+                StockInfo newStockInfo = new StockInfo();
+
+                // CHANGE THIS TICKER VARIALBE!!!!!!!!!!!11
+                String ticker = "IBM";
+                Stock currentStock = stockRepo.getStockByTicker(ticker).get(0);
+
+                newStockInfo.setStock(currentStock);
+                newStockInfo.setCountry(secondObj.getString("Country"));
+                newStockInfo.setCurrency(secondObj.getString("Currency"));
+                newStockInfo.setIndustry(secondObj.getString("Industry"));
+                newStockInfo.setSector(secondObj.getString("Sector"));
+                newStockInfo.setTodayPrice(Double.parseDouble(adjustedClose));
+                stockInfoRepo.save(newStockInfo);
               
 
             }
+         }
+
+         catch (DataAccessException ex){
+            System.out.println(ex.getMessage());
          }
 
          catch (Exception e){

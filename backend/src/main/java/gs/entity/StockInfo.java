@@ -105,6 +105,13 @@ public class StockInfo {
         return today_price;
     }
     
+    public Stock getStock() {
+        return stock;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
+    }
 }
 
 
