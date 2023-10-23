@@ -11,11 +11,11 @@ import gs.entity.Stock;
 public interface StockRepo extends JpaRepository<Stock, String>{
 
     @Query(value = "select * from stock;", nativeQuery = true)
-    List<Object[]> getStock();
+    List<Stock> getStock();
     
     @Query(value = "select * from stock where ticker = ?;", nativeQuery = true)
-    List<Object[]> getStockByTicker(String ticker);
+    List<Stock> getStockByTicker(String ticker);
 
     @Query(value = "select * from stock where stock_name = ?;", nativeQuery = true)
-    List<Object[]> getStockByName(String name);
+    List<Stock> getStockByName(String name);
 }

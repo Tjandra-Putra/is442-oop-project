@@ -25,14 +25,14 @@ public class StockServiceImpl implements StockService {
     public StockRepo stockRepo;
 
     public List<StockInputModel> getStock(){
-        List<Object[]> stockQueryList = stockRepo.getStock();
+        List<Stock> stockQueryList = stockRepo.getStock();
         List<StockInputModel> stockList = new ArrayList<>();
         
-        for (Object[] data : stockQueryList){
+        for (Stock data : stockQueryList){
             StockInputModel inputModel = new StockInputModel();
 
-            inputModel.setTicker(String.valueOf(data[0]));
-            inputModel.setName(String.valueOf(data[1]));
+            inputModel.setTicker(String.valueOf(data.getTicker()));
+            inputModel.setName(String.valueOf(data.getStockName()));
             
             stockList.add(inputModel);
         }
@@ -40,14 +40,14 @@ public class StockServiceImpl implements StockService {
     }
 
     public List<StockInputModel> getStockByTicker(String ticker){
-        List<Object[]> stockQueryList = stockRepo.getStockByTicker(ticker);
+        List<Stock> stockQueryList = stockRepo.getStockByTicker(ticker);
         List<StockInputModel> stockList = new ArrayList<>();
         
-        for (Object[] data : stockQueryList){
+        for (Stock data : stockQueryList){
             StockInputModel inputModel = new StockInputModel();
 
-            inputModel.setTicker(String.valueOf(data[0]));
-            inputModel.setName(String.valueOf(data[1]));
+            inputModel.setTicker(String.valueOf(data.getTicker()));
+            inputModel.setName(String.valueOf(data.getStockName()));
             
             stockList.add(inputModel);
         }
@@ -55,14 +55,14 @@ public class StockServiceImpl implements StockService {
     }
 
     public List<StockInputModel> getStockByName(String name){
-        List<Object[]> stockQueryList = stockRepo.getStockByName(name);
+        List<Stock> stockQueryList = stockRepo.getStockByName(name);
         List<StockInputModel> stockList = new ArrayList<>();
         
-        for (Object[] data : stockQueryList){
+        for (Stock data : stockQueryList){
             StockInputModel inputModel = new StockInputModel();
 
-            inputModel.setTicker(String.valueOf(data[0]));
-            inputModel.setName(String.valueOf(data[1]));
+            inputModel.setTicker(String.valueOf(data.getTicker()));
+            inputModel.setName(String.valueOf(data.getStockName()));
             
             stockList.add(inputModel);
         }

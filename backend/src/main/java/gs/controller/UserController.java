@@ -51,9 +51,7 @@ public class UserController {
         @RequestBody RequestModel requestModel
     ) throws Exception{
         ApiModel myApiModel = new ApiModel();
-        
         userService.addUser(response, requestModel, myApiModel);
-
 
         return myApiModel;
 

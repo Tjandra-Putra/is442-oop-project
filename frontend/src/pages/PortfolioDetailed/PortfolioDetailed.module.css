@@ -38,6 +38,32 @@
   font-weight: 500;
 }
 
+.buttonGroups {
+  margin-top: 1rem;
+}
+
+.portfolioDescriptionTitle {
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+}
+
 .portfolioDescription {
-  margin: 1rem 0;
+  font-weight: 400;
+  font-size: 0.9rem;
+}
+
+.portfolioDescriptionWrapper {
+  margin-bottom: 1rem;
+}
+
+.updatePortfolioModal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  background-color: white; /* Use the appropriate background color */
+  box-shadow: 24px;
+  padding: 16px; /* p: 4 is equivalent to padding: 16px; in pixels */
+  border-radius: 5px;
 }

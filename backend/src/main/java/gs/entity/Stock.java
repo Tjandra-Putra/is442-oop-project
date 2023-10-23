@@ -1,5 +1,7 @@
 package gs.entity;
 
+import java.util.List;
+
 import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,8 +32,8 @@ public class Stock {
         )
     private String stockName;
 
-    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<History> historyList;
+    @OneToMany(mappedBy = "stock")
+    private List<PortfolioStock> PortfolioStock;
 
     public Stock(String ticker, String stockName) {
         this.ticker = ticker;

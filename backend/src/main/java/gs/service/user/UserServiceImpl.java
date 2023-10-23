@@ -23,33 +23,35 @@ public class UserServiceImpl implements UserService{
     @Resource
     protected UserRepo userRepo;
 
+    // inputModel fitting methood
+    private UserInputModel inputModel(User data){
+        UserInputModel inputModel = new UserInputModel();
+        inputModel.setId((Long) (data.getUserId()));
+        inputModel.setEmail(String.valueOf(data.getEmail()));
+        inputModel.setUsername(String.valueOf(data.getUsername()));
+
+        return inputModel;
+    }
+
     public List<UserInputModel> getUser(){
-        List<Object[]> userQueryList = userRepo.getUser();
+        List<User> userQueryList = userRepo.getUser();
         List<UserInputModel> userList = new ArrayList<>();
         
-        for (Object[] data : userQueryList){
-            UserInputModel inputModel = new UserInputModel();
+        for (User data : userQueryList){
+            UserInputModel inputModel = inputModel(data);
 
-            inputModel.setId((Integer) (data[0]));
-            inputModel.setEmail(String.valueOf(data[1]));
-            
             userList.add(inputModel);
         }
         return userList;
     }
 
     public List<UserInputModel> getUserById(String id){
-        List<Object[]> userQueryList = userRepo.getUserById(id);
+        User userQueryList = userRepo.getUserById(id).get(0);
         List<UserInputModel> userList = new ArrayList<>();
-        
-        for (Object[] data : userQueryList){
-            UserInputModel inputModel = new UserInputModel();
 
-            inputModel.setId((Integer) (data[0]));
-            inputModel.setEmail(String.valueOf(data[1]));
-            
-            userList.add(inputModel);
-        }
+        UserInputModel inputModel = inputModel(userQueryList);
+        userList.add(inputModel);
+        
         return userList;
     }
     
@@ -98,7 +100,7 @@ public class UserServiceImpl implements UserService{
 
                 inputModel.setId(newUser.getUserId());
                 inputModel.setEmail(newUser.getEmail());
-                inputModel.setEmail(newUser.getUsername());
+                inputModel.setUsername(newUser.getUsername());
 
                 apiModel.setMessage("Data saved successfully.");
                 apiModel.setData(inputModel);
