@@ -2,9 +2,11 @@ package gs.service.history;
 
 import java.util.List;
 
-import gs.inputModel.historyInputModel;
+import gs.inputModel.HistoryInputModel;
 
 public interface HistoryService {
-    List<historyInputModel> getAllHistory();
-    List<historyInputModel> getHistoryByTicker(String ticker);
+    
+    List<HistoryInputModel> getAllHistory();
+
+    List<HistoryInputModel> getHistoryByTicker(String ticker);
 }

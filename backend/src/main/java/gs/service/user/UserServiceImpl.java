@@ -12,7 +12,7 @@ import gs.common.ApiModel;
 import gs.common.DataRequestModel;
 import gs.common.RequestModel;
 import gs.entity.User;
-import gs.inputModel.userInputModel;
+import gs.inputModel.UserInputModel;
 import gs.repository.UserRepo;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,12 +23,12 @@ public class UserServiceImpl implements UserService{
     @Resource
     protected UserRepo userRepo;
 
-    public List<userInputModel> getUser(){
+    public List<UserInputModel> getUser(){
         List<Object[]> userQueryList = userRepo.getUser();
-        List<userInputModel> userList = new ArrayList<>();
+        List<UserInputModel> userList = new ArrayList<>();
         
         for (Object[] data : userQueryList){
-            userInputModel inputModel = new userInputModel();
+            UserInputModel inputModel = new UserInputModel();
 
             inputModel.setId((Integer) (data[0]));
             inputModel.setEmail(String.valueOf(data[1]));
@@ -38,12 +38,12 @@ public class UserServiceImpl implements UserService{
         return userList;
     }
 
-    public List<userInputModel> getUserById(String id){
+    public List<UserInputModel> getUserById(String id){
         List<Object[]> userQueryList = userRepo.getUserById(id);
-        List<userInputModel> userList = new ArrayList<>();
+        List<UserInputModel> userList = new ArrayList<>();
         
         for (Object[] data : userQueryList){
-            userInputModel inputModel = new userInputModel();
+            UserInputModel inputModel = new UserInputModel();
 
             inputModel.setId((Integer) (data[0]));
             inputModel.setEmail(String.valueOf(data[1]));
@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService{
                 userRepo.save(newUser);
                 System.out.println("=======FAILED=========");
                 // get ID
-                userInputModel inputModel = new userInputModel();
+                UserInputModel inputModel = new UserInputModel();
 
                 inputModel.setId(newUser.getUserId());
                 inputModel.setEmail(newUser.getEmail());

@@ -4,27 +4,34 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Resource;
-
-
-import gs.inputModel.historyInputModel;
+import gs.entity.History;
+import gs.inputModel.HistoryInputModel;
 import gs.repository.HistoryRepo;
 
 @Service
 public class HistoryServiceImpl implements HistoryService {
     @Resource
     public HistoryRepo historyRepo;
+
+    // Input into inputModel
+    private HistoryInputModel inputModel(History data){
+        HistoryInputModel inputModel = new HistoryInputModel();
+        inputModel.setTicker(data.getStock().getTicker());
+        inputModel.setDate(String.valueOf(data.getDate()));
+        inputModel.setOpenPrice(data.getOpenPrice());
+        inputModel.setHighPrice(data.getHighPrice());
+        inputModel.setLowPrice(data.getLowPrice());
+        inputModel.setAdjClosePrice(data.getAdjClosePrice());
+
+        return inputModel;
+    }
     
-    public List<historyInputModel> getAllHistory(){
-        List<Object[]> stockQueryList = historyRepo.getAllHistory();
-        List<historyInputModel> stockList = new ArrayList<>();
+    public List<HistoryInputModel> getAllHistory(){
+        List<History> stockQueryList = historyRepo.getAllHistory();
+        List<HistoryInputModel> stockList = new ArrayList<>();
 
-        for (Object[] data : stockQueryList){
-            historyInputModel inputModel = new historyInputModel();
-            
-            inputModel.setTicker(String.valueOf(data[2]));
-            inputModel.setDate(String.valueOf(data[1]));
-            inputModel.setAdjClosePrice((double) (data[0]));
-
+        for (History data : stockQueryList){
+            HistoryInputModel inputModel = inputModel(data);
             stockList.add(inputModel);
         }
 
@@ -32,20 +39,15 @@ public class HistoryServiceImpl implements HistoryService {
 
     }
 
-    public List<historyInputModel> getHistoryByTicker(String ticker){
-        List<Object[]> stockQueryList = historyRepo.getHistoryByTicker(ticker);
-        List<historyInputModel> stockList = new ArrayList<>();
-        
-        for (Object[] data : stockQueryList){
-            historyInputModel inputModel = new historyInputModel();
+    public List<HistoryInputModel> getHistoryByTicker(String ticker){
+        History stockQueryList = historyRepo.getHistoryByTicker(ticker).get(0);
 
-            inputModel.setTicker(String.valueOf(data[0]));
-            inputModel.setDate(String.valueOf(data[1]));
-            inputModel.setAdjClosePrice(Integer.parseInt(String.valueOf(data[2])));
+        List<HistoryInputModel> tickerList = new ArrayList<>();
 
-            stockList.add(inputModel);
-        }
-        return stockList;
+        HistoryInputModel inputModel = inputModel(stockQueryList);
+        tickerList.add(inputModel);
+
+        return tickerList;
     }
     
 }

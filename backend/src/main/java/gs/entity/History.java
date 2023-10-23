@@ -1,6 +1,8 @@
 package gs.entity;
 
 import java.util.Date;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
@@ -14,19 +16,53 @@ import jakarta.persistence.Table;
 
 public class History{
     @Id
+    @Column(
+        name = "ticker",
+        nullable = false
+    )
     private String ticker;
 
     @Id
+    @Column(
+        name = "date",
+        nullable = false,
+        updatable = false
+    )
     private Date date;
-    private double adjClosePrice;
     
     @ManyToOne
     @JoinColumn(name = "ticker", insertable = false, updatable = false)
     private Stock stock;
 
-    public History(String ticker, Date date, double adjClosePrice) {
+    @Column(
+        name = "open_price"
+    )
+    private double openPrice;
+
+    @Column(
+        name = "high_price"
+    )
+    private double highPrice;
+
+    @Column(
+        name = "low_price"
+    )
+    private double lowPrice;
+
+    @Column(
+        name = "adj_close_price"
+    )
+    private double adjClosePrice;
+
+
+    public History() {};
+
+    public History(String ticker, Date date, double openPrice, double highPrice, double lowPrice, double adjClosePrice) {
         this.ticker = ticker;
         this.date = date;
+        this.openPrice = openPrice;
+        this.highPrice = highPrice;
+        this.lowPrice = lowPrice;
         this.adjClosePrice = adjClosePrice;
     }   
     
@@ -46,11 +82,43 @@ public class History{
         this.date = date;
     }
 
+    public Stock getStock() {
+        return stock;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
+    }
+
+    public double getOpenPrice() {
+        return openPrice;
+    }
+
+    public double getHighPrice() {
+        return highPrice;
+    }
+
+    public double getLowPrice() {
+        return lowPrice;
+    }
+
     public double getAdjClosePrice() {
         return adjClosePrice;
     }
 
-    public void setAdjClosePrice(double adjClosePrice){
+    public void setOpenPrice(double openPrice) {
+        this.openPrice = openPrice;
+    }
+
+    public void setHighPrice(double highPrice) {
+        this.highPrice = highPrice;
+    }
+
+    public void setLowPrice(double lowPrice) {
+        this.lowPrice = lowPrice;
+    }
+
+    public void setAdjClosePrice(double adjClosePrice) {
         this.adjClosePrice = adjClosePrice;
     }
 

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import gs.common.DataRequestModel;
 import gs.common.RequestModel;
 import gs.entity.Stock;
-import gs.inputModel.stockInputModel;
+import gs.inputModel.StockInputModel;
 import gs.repository.StockRepo;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,12 +24,12 @@ public class StockServiceImpl implements StockService {
     @Resource
     public StockRepo stockRepo;
 
-    public List<stockInputModel> getStock(){
+    public List<StockInputModel> getStock(){
         List<Object[]> stockQueryList = stockRepo.getStock();
-        List<stockInputModel> stockList = new ArrayList<>();
+        List<StockInputModel> stockList = new ArrayList<>();
         
         for (Object[] data : stockQueryList){
-            stockInputModel inputModel = new stockInputModel();
+            StockInputModel inputModel = new StockInputModel();
 
             inputModel.setTicker(String.valueOf(data[0]));
             inputModel.setName(String.valueOf(data[1]));
@@ -39,12 +39,12 @@ public class StockServiceImpl implements StockService {
         return stockList;
     }
 
-    public List<stockInputModel> getStockByTicker(String ticker){
+    public List<StockInputModel> getStockByTicker(String ticker){
         List<Object[]> stockQueryList = stockRepo.getStockByTicker(ticker);
-        List<stockInputModel> stockList = new ArrayList<>();
+        List<StockInputModel> stockList = new ArrayList<>();
         
         for (Object[] data : stockQueryList){
-            stockInputModel inputModel = new stockInputModel();
+            StockInputModel inputModel = new StockInputModel();
 
             inputModel.setTicker(String.valueOf(data[0]));
             inputModel.setName(String.valueOf(data[1]));
@@ -54,12 +54,12 @@ public class StockServiceImpl implements StockService {
         return stockList;
     }
 
-    public List<stockInputModel> getStockByName(String name){
+    public List<StockInputModel> getStockByName(String name){
         List<Object[]> stockQueryList = stockRepo.getStockByName(name);
-        List<stockInputModel> stockList = new ArrayList<>();
+        List<StockInputModel> stockList = new ArrayList<>();
         
         for (Object[] data : stockQueryList){
-            stockInputModel inputModel = new stockInputModel();
+            StockInputModel inputModel = new StockInputModel();
 
             inputModel.setTicker(String.valueOf(data[0]));
             inputModel.setName(String.valueOf(data[1]));

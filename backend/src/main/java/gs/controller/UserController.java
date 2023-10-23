@@ -15,7 +15,7 @@ import gs.common.ApiModel;
 import gs.common.NullError;
 import gs.common.RequestModel;
 import gs.entity.User;
-import gs.inputModel.userInputModel;
+import gs.inputModel.UserInputModel;
 import gs.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,12 +35,12 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/getUser")
-    public ApiModel<ArrayList<userInputModel>> getUser(){
+    public ApiModel<ArrayList<UserInputModel>> getUser(){
         return ApiModel.ok(userService.getUser());
     }
 
     @GetMapping("/getUser/{id}")
-    public ApiModel<ArrayList<userInputModel>> getUserById(
+    public ApiModel<ArrayList<UserInputModel>> getUserById(
         @PathVariable("id") String id
     ){
         return ApiModel.ok(userService.getUserById(id));

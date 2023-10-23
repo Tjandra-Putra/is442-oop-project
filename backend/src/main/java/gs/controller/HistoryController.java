@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import gs.common.ApiModel;
 import gs.common.NullError;
 import gs.common.RequestModel;
-import gs.inputModel.historyInputModel;
+import gs.inputModel.HistoryInputModel;
 import gs.service.history.HistoryService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,12 +28,12 @@ public class HistoryController {
     private HistoryService HistoryService;
 
     @GetMapping("/getAllHistory")
-    public ApiModel<ArrayList<historyInputModel>> getAllHistory(){
+    public ApiModel<ArrayList<HistoryInputModel>> getAllHistory(){
         return ApiModel.ok(HistoryService.getAllHistory());
     }
 
     @GetMapping("/getHistoryByTicker/{ticker}")
-    public ApiModel<ArrayList<historyInputModel>> getHistoryByTicker(
+    public ApiModel<ArrayList<HistoryInputModel>> getHistoryByTicker(
         @PathVariable("ticker") String ticker
     ){
         return ApiModel.ok(HistoryService.getHistoryByTicker(ticker));
