@@ -1,4 +1,8 @@
 package gs.service.history;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -40,9 +44,10 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     public List<HistoryInputModel> getHistoryByTicker(String ticker){
+        updateHistoryFromAPI(ticker); // Get data from API (if not exist in database
         List<History> historyQueryList = historyRepo.getHistoryByTicker(ticker);
         List<HistoryInputModel> historyList = new ArrayList<>();
-        
+
         for (History history : historyQueryList){
             HistoryInputModel inputModel = inputModel(history);
             historyList.add(inputModel);
@@ -51,4 +56,28 @@ public class HistoryServiceImpl implements HistoryService {
         return historyList;
     }
     
+    public void updateHistoryFromAPI(String ticker){
+        try {
+            URL url = new URL("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=IBM&apikey=demo");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line;
+                StringBuilder response = new StringBuilder();
+
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+
+                reader.close();
+
+                // Print the response data
+                System.out.println(response.toString());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+    }
+
 }
