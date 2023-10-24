@@ -9,7 +9,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.CascadeType;
 import java.util.List;
@@ -35,6 +37,9 @@ public class Stock {
     @OneToMany(mappedBy = "stock")
     private List<PortfolioStock> PortfolioStock;
 
+    @OneToOne(mappedBy = "stock") // Refers to the 'stock' property in StockInfo class
+    private StockInfo stockInfo;
+    
     public Stock(String ticker, String stockName) {
         this.ticker = ticker;
         this.stockName = stockName;

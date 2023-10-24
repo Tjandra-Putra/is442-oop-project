@@ -1,21 +1,19 @@
 import React, { useEffect } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
 import Chip from "@mui/material/Chip";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import style from "./Dashboard.module.css";
-import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
-
 import PortfolioReturnsChart from "../../components/Charts/PortfolioReturnsChart/PortfolioReturnsChart";
 import PortfolioCard from "../../components/PorfolioCard/PortfolioCard";
 import Menu from "../../components/Menu/Menu";
 import MarketExposureByGeographicalLocationChart from "../../components/Charts/MarketExposureByGeographicalLocationChart/MarketExposureByGeographicalLocationChart";
 import { TextField } from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
 import MarketExposureBySegment from "../../components/Charts/MarketExposureBySegment/MarketExposureBySegment";
 import axios from "axios";
 
@@ -24,6 +22,21 @@ const Dashboard = () => {
 
   const [portfolioName, setPortfolioName] = React.useState("");
   const [portfolios, setPortfolios] = React.useState([]);
+  const [searchListOfPortfolios, setSearchListOfPortfolios] = React.useState([]);
+  const [selectedPortfolio, setSelectedPortfolio] = React.useState(null);
+
+  const handlePortfolioSelection = (event, selectedOption) => {
+    if (selectedOption) {
+      setSelectedPortfolio(selectedOption);
+    }
+  };
+
+  useEffect(() => {
+    // Use selectedPortfolio.id for navigation if it exists
+    if (selectedPortfolio) {
+      navigate(`/portfolio/${selectedPortfolio.id}`);
+    }
+  }, [selectedPortfolio]);
 
   const handleAddNewPortfolioButton = () => {
     // Replace '/target-page' with the path of the page you want to redirect to.
@@ -38,6 +51,15 @@ const Dashboard = () => {
       .then((res) => {
         console.log(res.data);
         setPortfolios(res.data.data);
+
+        let tempPortfolios = [];
+
+        for (let i = 0; i < res.data.data.length; i++) {
+          tempPortfolios.push({ label: res.data.data[i].portfolioName, id: res.data.data[i].portfolioId });
+          setSearchListOfPortfolios(tempPortfolios);
+        }
+
+        console.log(searchListOfPortfolios);
       })
       .catch((err) => {
         console.log(err);
@@ -173,7 +195,7 @@ const Dashboard = () => {
                   Create New Portfolio
                 </Typography>
                 <Button
-                  variant="outlined"
+                  variant="contained"
                   size="large"
                   className={style.addNewPortfolioButton}
                   onClick={() => handleAddNewPortfolioButton()}
@@ -188,7 +210,16 @@ const Dashboard = () => {
                 <Typography variant="h6" className={style.portfolioWorthText}>
                   Navigate to Portfolio
                 </Typography>
-                <TextField
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={searchListOfPortfolios}
+                  getOptionLabel={(option) => option.label} // Assuming 'label' is the property containing the portfolio name in your data
+                  onChange={handlePortfolioSelection}
+                  sx={{ width: 300, mt: 1 }}
+                  renderInput={(params) => <TextField {...params} label="My Portfolios" />}
+                />
+                {/* <TextField
                   id="outlined-basic"
                   label="Name of Portfolio"
                   variant="standard"
@@ -200,16 +231,7 @@ const Dashboard = () => {
                   value={portfolioName}
                   onChange={(e) => setPortfolioName(e.target.value)}
                   helperText="Enter the name of the portfolio you want to navigate to."
-                />
-
-                <Button
-                  size="large"
-                  variant="contained"
-                  className={style.addNewPortfolioButton}
-                  onClick={() => (portfolioName ? navigate(`/portfolio/${portfolioName}`) : null)}
-                >
-                  Go
-                </Button>
+                /> */}
               </CardContent>
 
               <hr className={style.horizontalLine} />

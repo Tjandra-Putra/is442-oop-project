@@ -7,30 +7,29 @@ function PortfolioStocksAllocationChart({ portfolioId }) {
   const [data, setData] = useState([["Task", "Hours per Day"]]);
 
   useEffect(() => {
-    // get
-    axios
-      .get(`http://localhost:8080/api/portfolioStock/getPortfolioStockAllocation/${portfolioId}`)
-      .then((res) => {
-        console.log(res.data);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/portfolioStock/getPortfolioStockAllocation/${portfolioId}`
+        );
+        const responseData = response.data;
 
-        // iterate and push to data
-        res.data.data.forEach((stock) => {
-          setData((prev) => [...prev, [stock.allocationName, stock.percentage]]);
-        });
-      })
-      .then((err) => {
-        console.log(err);
-      });
-  }, []);
+        if (responseData && responseData.data) {
+          responseData.data.forEach((stock) => {
+            setData((prev) => [...prev, [stock.allocationName, stock.percentage]]);
+          });
+        } else {
+          // Handle the case where no data is available
+          console.log("No data available");
+        }
+      } catch (error) {
+        // Handle the error, e.g., show an error message
+        console.error("Error fetching data:", error);
+      }
+    };
 
-  // const data = [
-  //   ["Task", "Hours per Day"],
-  //   ["Work", 11],
-  //   ["Eat", 2],
-  //   ["Commute", 2],
-  //   ["Watch TV", 2],
-  //   ["Sleep", 7],
-  // ];
+    fetchData();
+  }, [portfolioId]);
 
   const options = {
     // title: "Stocks allocation %",

@@ -29,24 +29,28 @@ const PortfolioDetailed = () => {
     axios
       .get(`http://localhost:8080/api/portfolio/getPortfolio/${userId}/${id}`)
       .then((res) => {
-        console.log(res.data.data[0]);
-        setPortfolio(res.data.data[0]);
+        let portfolioRes = res.data.data[0];
+        setPortfolio(portfolioRes);
+        console.log(portfolioRes);
+        setPortfolioTitle(portfolioRes.portfolioName);
+        setPortfolioDescription(portfolioRes.description);
+        setPortfolioCapital(portfolioRes.capitalAmt);
       })
       .catch((err) => {
         console.log(err);
       });
 
     setLoading(false);
-  }, []);
+  }, [id]);
 
   // modal update portfolio
   const [updatePortfolioModalOpen, setUpdatePortfolioModalOpen] = React.useState(false);
   const handleUpdatePortfolioModalOpen = () => setUpdatePortfolioModalOpen(true);
   const handleUpdatePortfolioModalClose = () => setUpdatePortfolioModalOpen(false);
 
-  const [portfolioTitle, setPortfolioTitle] = React.useState(portfolio ? portfolio.portfolioName : "");
-  const [portfolioDescription, setPortfolioDescription] = React.useState(portfolio ? portfolio.description : "");
-  const [portfolioCapital, setPortfolioCapital] = React.useState(portfolio ? portfolio.capitalAmt : "");
+  const [portfolioTitle, setPortfolioTitle] = React.useState("");
+  const [portfolioDescription, setPortfolioDescription] = React.useState("");
+  const [portfolioCapital, setPortfolioCapital] = React.useState("");
 
   const onSubmitUpdatePortfolioUpdate = () => {
     // update portfolio
@@ -69,20 +73,26 @@ const PortfolioDetailed = () => {
     axios
       .put(`http://localhost:8080/api/portfolio/editPortfolio/${userId}/${id}`, postData)
       .then((res) => {
+        console.log("updateeeeeee");
         console.log(res.data);
 
         if (res.data && res.data.data === null) {
           notifyError(res.data.message);
         } else {
           notifySuccess(res.data.message);
+
+          // Update the state with the new portfolio data
+          setPortfolio((prevPortfolio) => ({
+            ...prevPortfolio,
+            capitalAmt: portfolioCapital,
+            description: portfolioDescription,
+            portfolioName: portfolioTitle,
+          }));
         }
       })
       .catch((err) => {
         notifyError("Error updating portfolio");
       });
-
-    console.log("portfolioTitle=========");
-    console.log(portfolioTitle);
   };
 
   const onDeletePortfolio = () => {
@@ -120,71 +130,82 @@ const PortfolioDetailed = () => {
       {/* Second Container */}
       <Container>
         <div className={style.buttonGroups}>
-          <Stack direction="row" spacing={1} justifyContent={"end"}>
-            <Button
-              variant="outlined"
-              style={{ borderColor: "#12294d", color: "#12294d" }}
-              onClick={handleUpdatePortfolioModalOpen}
-            >
-              <i class="fa-regular fa-pen-to-square" style={{ marginRight: "7px" }}></i> Edit
-            </Button>
-            <Modal
-              open={updatePortfolioModalOpen}
-              onClose={handleUpdatePortfolioModalClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              {!loading && (
-                <Box className={style.updatePortfolioModal}>
-                  <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Edit Portfolio
-                  </Typography>
-                  <TextField
-                    id="outlined-basic"
-                    label="Portfolio title"
-                    variant="outlined"
-                    style={{ width: "100%", marginBottom: "1rem", marginTop: "1rem" }}
-                    value={portfolioTitle}
-                    onChange={(e) => setPortfolioTitle(e.target.value)}
-                  />
-                  <br />
-                  <TextField
-                    id="outlined-basic"
-                    label="Portfolio Description"
-                    variant="outlined"
-                    style={{ width: "100%", marginBottom: "1rem" }}
-                    value={portfolioDescription}
-                    onChange={(e) => setPortfolioDescription(e.target.value)}
-                  />
-                  <br />
-                  <TextField
-                    id="outlined-basic"
-                    label="Portfolio Capital"
-                    variant="outlined"
-                    style={{ width: "100%", marginBottom: "1rem" }}
-                    type="number"
-                    value={portfolioCapital}
-                    onChange={(e) => setPortfolioCapital(e.target.value)}
-                  />
+          <Stack direction="row" spacing={1} justifyContent={"space-between"}>
+            <div>
+              <Button
+                variant="outlined"
+                style={{ borderColor: "black", color: "black", marginBottom: "1rem" }}
+                onClick={() => navigate("/dashboard")}
+              >
+                <i class="fa-solid fa-arrow-left" style={{ marginRight: "7px" }}></i> Back
+              </Button>
+            </div>
+            <div>
+              <Button
+                variant="contained"
+                style={{ backgroundColor: "#12294d" }}
+                onClick={handleUpdatePortfolioModalOpen}
+              >
+                <i class="fa-regular fa-pen-to-square" style={{ marginRight: "7px" }}></i> Edit
+              </Button>
+              <Modal
+                open={updatePortfolioModalOpen}
+                onClose={handleUpdatePortfolioModalClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                {!loading && (
+                  <Box className={style.updatePortfolioModal}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                      Edit Portfolio
+                    </Typography>
+                    <TextField
+                      id="outlined-basic"
+                      label="Portfolio title"
+                      variant="outlined"
+                      style={{ width: "100%", marginBottom: "1rem", marginTop: "1rem" }}
+                      value={portfolioTitle}
+                      onChange={(e) => setPortfolioTitle(e.target.value)}
+                    />
+                    <br />
+                    <TextField
+                      id="outlined-basic"
+                      label="Portfolio Description"
+                      variant="outlined"
+                      style={{ width: "100%", marginBottom: "1rem" }}
+                      value={portfolioDescription}
+                      onChange={(e) => setPortfolioDescription(e.target.value)}
+                    />
+                    <br />
+                    <TextField
+                      id="outlined-basic"
+                      label="Portfolio Capital"
+                      variant="outlined"
+                      style={{ width: "100%", marginBottom: "1rem" }}
+                      type="number"
+                      value={portfolioCapital}
+                      onChange={(e) => setPortfolioCapital(e.target.value)}
+                    />
 
-                  <Button
-                    variant="contained"
-                    style={{ float: "right" }}
-                    onClick={() => onSubmitUpdatePortfolioUpdate()}
-                  >
-                    Save Changes
-                  </Button>
-                </Box>
-              )}
-            </Modal>
+                    <Button
+                      variant="contained"
+                      style={{ float: "right" }}
+                      onClick={() => onSubmitUpdatePortfolioUpdate()}
+                    >
+                      Save Changes
+                    </Button>
+                  </Box>
+                )}
+              </Modal>
 
-            <Button
-              variant="outlined"
-              style={{ borderColor: "darkred", color: "darkred" }}
-              onClick={() => onDeletePortfolio()}
-            >
-              <i class="fa-solid fa-trash" style={{ marginRight: "7px" }}></i> Delete
-            </Button>
+              <Button
+                variant="outlined"
+                style={{ backgroundColor: "darkred", color: "white", marginLeft: "10px", borderColor: "darkred" }}
+                onClick={() => onDeletePortfolio()}
+              >
+                <i class="fa-solid fa-trash" style={{ marginRight: "7px" }}></i> Delete
+              </Button>
+            </div>
           </Stack>
 
           <div className={style.portfolioDescriptionWrapper}>
@@ -242,7 +263,7 @@ const PortfolioDetailed = () => {
         <Grid item xs={12} md={12} lg={12}>
           <Card className={style.cardCustom}>
             <CardContent>
-              <StockGrid />
+              <StockGrid portfolioId={id} />
             </CardContent>
           </Card>
         </Grid>

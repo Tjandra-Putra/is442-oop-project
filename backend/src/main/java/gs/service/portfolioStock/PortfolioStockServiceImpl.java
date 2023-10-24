@@ -71,13 +71,13 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
     public List<StockAllocationInputModel> getPortfolioStockAllocation(String portfolioId){
         List<PortfolioStock> portfolioStockQueryList = portfolioStockRepo.getPortfolioStockByPortfolioId(portfolioId);
 
-        List<StockAllocationInputModel> stockAllocationList = new ArrayList<>();
-        
+        double capitalAmt = portfolioStockQueryList.get(0).getPortfolio().getPortfolioCapitalAmt();
+
         double totalStockPercentage = 0;
 
-        if (portfolioStockQueryList.size() > 0){
-            double capitalAmt = portfolioStockQueryList.get(0).getPortfolio().getPortfolioCapitalAmt();
+        List<StockAllocationInputModel> stockAllocationList = new ArrayList<>();
 
+        if (portfolioStockQueryList.size() > 0){
             for (PortfolioStock portfolioStock : portfolioStockQueryList){
                 StockAllocationInputModel inputModel = new StockAllocationInputModel();
                 inputModel.setAllocationName(portfolioStock.getStock().getTicker());
