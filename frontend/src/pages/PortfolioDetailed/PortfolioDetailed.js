@@ -73,6 +73,7 @@ const PortfolioDetailed = () => {
     axios
       .put(`http://localhost:8080/api/portfolio/editPortfolio/${userId}/${id}`, postData)
       .then((res) => {
+        console.log("updateeeeeee");
         console.log(res.data);
 
         if (res.data && res.data.data === null) {
@@ -80,6 +81,14 @@ const PortfolioDetailed = () => {
         } else {
           notifySuccess(res.data.message);
         }
+
+        // Update the state with the new portfolio data
+        setPortfolio((prevPortfolio) => ({
+          ...prevPortfolio,
+          capitalAmt: portfolioCapital,
+          description: portfolioDescription,
+          portfolioName: portfolioTitle,
+        }));
       })
       .catch((err) => {
         notifyError("Error updating portfolio");
