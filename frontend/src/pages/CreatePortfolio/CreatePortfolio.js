@@ -25,6 +25,7 @@ const CreatePortfolio = () => {
   const [stockMarket, setStockMarket] = useState([]);
   const [stockColumns, setStockColumns] = useState([]);
   const [stockRows, setStockRows] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const notifyError = (message) => toast.error(message, { duration: 5000 });
   const notifySuccess = (message) => toast.success(message, { duration: 5000 });
@@ -40,7 +41,7 @@ const CreatePortfolio = () => {
 
   const [quantityValues, setQuantityValues] = useState(Object.fromEntries(stockRows.map((row) => [row.id, 1])));
 
-  const handleQuantityChange = (id, newValue) => {
+  const handleQuantityChange = async (id, newValue) => {
     newValue = parseInt(newValue, 10);
 
     if (!isNaN(newValue) && newValue >= 1) {
@@ -67,17 +68,22 @@ const CreatePortfolio = () => {
 
   // Material UI DataGrid
   const selectedStockColumns = [
-    { field: "id", headerName: "Ticker", width: 80 },
+    { field: "id", headerName: "No.", width: 80 },
     {
-      field: "Name",
-      headerName: "Name",
+      field: "Ticker",
+      headerName: "Ticker",
       width: 90,
     },
+    // {
+    //   field: "Name",
+    //   headerName: "Name",
+    //   width: 90,
+    // },
     {
       field: "Price",
       headerName: "Price",
       type: "number",
-      width: 60,
+      width: 100,
     },
     {
       field: "Quantity",
@@ -178,13 +184,14 @@ const CreatePortfolio = () => {
   };
 
   useEffect(() => {
+    // http://localhost:8080/api/stockInfo/getStockInfo/ticker/{ticker}
     // get current stock market
     axios
       .get("http://localhost:8080/api/stock/getStock")
       .then((res) => {
         let stockData = res.data.data;
         setStockMarket(stockData);
-        console.log(res.data.data);
+        // console.log(res.data.data);
 
         const generatedStockRows = stockData.map((stock, index) => ({
           id: index + 1, // Start from 1
@@ -194,15 +201,59 @@ const CreatePortfolio = () => {
 
         setStockRows(generatedStockRows);
         setStockColumns([
-          { field: "id", headerName: "Ticker", width: 100 },
+          { field: "id", headerName: "No.", width: 100 },
           { field: "Ticker", headerName: "Ticker", width: 100 },
-          { field: "Name", headerName: "Name", width: 130 },
+          { field: "Name", headerName: "Name", width: 230 },
         ]);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+
+  const filteredStockRows = stockRows.filter((row) => {
+    const searchString = searchQuery.toLowerCase();
+    return row.Ticker.toLowerCase().includes(searchString) || row.Name.toLowerCase().includes(searchString);
+  });
+
+  const getStockPrice = (ticker) => {
+    return axios
+      .get("http://localhost:8080/api/StockInfo/getStockInfo/ticker/" + ticker)
+      .then((res) => {
+        console.log("== getStockPrice ==");
+        const todayPrice = res.data.data[0]?.todayPrice || 0;
+        console.log(todayPrice); // Logging for verification
+        return todayPrice;
+      })
+      .catch((error) => {
+        console.error("Error fetching stock price:", error);
+        return 0; // Return 0 in case of an error
+      });
+  };
+
+  const handleRowSelectionModelChange = async (newSelection) => {
+    const getPricePromises = newSelection.map((id) => {
+      const row = filteredStockRows.find((row) => row.id === id);
+      return getStockPrice(row.Ticker);
+    });
+
+    try {
+      const prices = await Promise.all(getPricePromises);
+      const selectedRows = newSelection.map((id, index) => {
+        const row = filteredStockRows.find((row) => row.id === id);
+        return {
+          id: row.id,
+          Ticker: row.Ticker,
+          Name: row.Name,
+          Price: prices[index],
+          Total: row.Total ? row.Total : row.Price,
+        };
+      });
+      setSelectedRows(selectedRows);
+    } catch (error) {
+      console.error("Error fetching stock prices:", error);
+    }
+  };
 
   return (
     <div className={style.createPortfolioWrapper}>
@@ -279,43 +330,63 @@ const CreatePortfolio = () => {
                   <div className={style.cardTitle}>Current Stock Market</div>
 
                   <Grid container mt={2} spacing={1}>
-                    <Grid item md={9} xs={12}>
+                    <Grid item md={12} xs={12}>
                       <TextField
                         id="outlined-basic"
                         label="Search by ticker or name"
                         multiline
                         maxRows={4}
                         variant="outlined"
-                        sx={{ width: "100%", mr: "2rem" }}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        sx={{ width: "100%", mr: "2rem", mb: "1rem" }}
                       />
                     </Grid>
-                    <Grid item md={3} sx={12}>
+                    {/* <Grid item md={3} sx={12}>
                       <Button variant="outlined" size="large" sx={{ height: "3.5rem", width: "100%", mb: "1rem" }}>
                         Seach
                       </Button>
-                    </Grid>
+                    </Grid> */}
                   </Grid>
 
                   <div style={{ height: 400, width: "100%" }}>
                     <DataGrid
-                      rows={stockRows}
+                      rows={filteredStockRows}
                       columns={stockColumns}
                       checkboxSelection
-                      // onchange
-                      onRowSelectionModelChange={(newSelection) => {
-                        const selectedRows = newSelection.map((id) => {
-                          const row = stockRows.find((row) => row.id === id);
-                          // Extracting only the desired properties
-                          return {
-                            id: row.id,
-                            Name: row.Name,
-                            // add dollar sign but make it an integer
-                            Price: row.Price,
-                            Total: row.Total ? row.Total : row.Price,
-                          };
-                        });
-                        setSelectedRows(selectedRows);
-                      }}
+                      onRowSelectionModelChange={handleRowSelectionModelChange}
+                      // onRowSelectionModelChange={(newSelection) => {
+                      //   {
+                      //     /* GET STOCK PRICE */
+                      //   }
+
+                      //   const getStockPrice = (ticker) => {
+                      //     return axios
+                      //       .get("http://localhost:8080/api/StockInfo/getStockInfo/ticker/" + ticker)
+                      //       .then((res) => {
+                      //         console.log("== getStockPrice ==");
+                      //         const todayPrice = res.data.data[0]?.todayPrice || 0;
+                      //         console.log(todayPrice); // Logging for verification
+                      //         return todayPrice;
+                      //       })
+                      //       .catch((error) => {
+                      //         console.error("Error fetching stock price:", error);
+                      //         return 0; // Return 0 in case of an error
+                      //       });
+                      //   };
+
+                      //   const selectedRows = newSelection.map((id) => {
+                      //     const row = filteredStockRows.find((row) => row.id === id);
+                      //     return {
+                      //       id: row.id,
+                      //       Ticker: row.Ticker,
+                      //       Name: row.Name,
+                      //       Price: getStockPrice(row.Ticker),
+                      //       Total: row.Total ? row.Total : row.Price,
+                      //     };
+                      //   });
+                      //   setSelectedRows(selectedRows);
+                      // }}
                     />
                   </div>
                 </CardContent>
