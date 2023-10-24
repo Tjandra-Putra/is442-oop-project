@@ -93,12 +93,12 @@ public class StockInfoServiceImpl implements StockInfoService {
         List<String> portfolioStocks = portfolioStockRepo.getTickerList();
         List<StockInfoInputModel> stockInfoList = new ArrayList<>();
         List<String> adjustedCloseList = new ArrayList<String>();
-        String apiKey = "demo";
+        String apiKey = "";
         for (String ticker : portfolioStocks) {  
                  String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" + ticker + "&apikey=" + apiKey;
 
                  try{
-                     HttpClient client = HttpClient.newHttpClient();
+                    HttpClient client = HttpClient.newHttpClient();
                     HttpRequest request = HttpRequest.newBuilder()
                      .uri(URI.create(url))
                      .build();
@@ -182,4 +182,71 @@ public class StockInfoServiceImpl implements StockInfoService {
         }
         return stockInfoList;
     }
+
+
+    
+    public List<StockInfoInputModel> updateStockInfoByPortfolio() throws Exception{
+        List<String> portfolioStocks = portfolioStockRepo.getTickerList();
+        List<StockInfoInputModel> stockInfoList = new ArrayList<>();
+        List<String> adjustedCloseList = new ArrayList<String>();
+        String apiKey = "";
+        for (String ticker : portfolioStocks) {  
+                 String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" + ticker + "&apikey=" + apiKey;
+
+                 try{
+                    HttpClient client = HttpClient.newHttpClient();
+                    HttpRequest request = HttpRequest.newBuilder()
+                     .uri(URI.create(url))
+                     .build();
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                    String responseBody = response.body();
+
+                    JSONObject obj = new JSONObject(responseBody);
+
+    
+                    Iterator<String> keys = obj.getJSONObject("Time Series (Daily)").keys();
+                    List<String> keyList = new ArrayList<String>();
+                    
+                    while (keys.hasNext()) {
+                        String key = keys.next();
+                        keyList.add(key);
+                    }
+
+                    // Sort dates in descending order
+                    Collections.sort(keyList, Collections.reverseOrder());
+                    boolean firstAdjustedCloseStored = false;
+
+
+                    // loop through the keylist and retrieve the values for each key
+                    for (String key : keyList) {
+                        System.out.println(key);
+                    
+                        JSONObject value = obj.getJSONObject("Time Series (Daily)").getJSONObject(key);
+                        String adjustedClose = value.getString("5. adjusted close");
+                    
+                        if (!firstAdjustedCloseStored) {
+                            adjustedCloseList.add(adjustedClose);
+                           
+                            // StockInfo newStockInfo = new StockInfo();
+                            StockInfo currentStock = stockInfoRepo.getStockInfoByTicker(ticker).get(0);
+                            currentStock.setTodayPrice(Double.parseDouble(adjustedClose));
+                            stockInfoRepo.save(currentStock);
+                            break;
+                        }
+                    }
+
+                 }
+                 catch (Exception e){
+                    e.printStackTrace();
+                 }
+        }
+
+        List<StockInfo> stockInfoQueryList = stockInfoRepo.getStockInfo();
+        for (StockInfo data : stockInfoQueryList) {
+            StockInfoInputModel inputModel = inputModel(data);
+            stockInfoList.add(inputModel);
+        }
+        return stockInfoList;
+    };
 }
