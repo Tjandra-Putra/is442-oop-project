@@ -45,7 +45,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpHeaders.ALLOW).permitAll()
                     .anyRequest().authenticated() // Authenticate all other endpoints 
                     .and()
-                    .exceptionHandling().AuthenticationEntryPoint(jwtAuthenticationEntryPoint)
+                    .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                     .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Stateless Session - to not store any username or password
 
