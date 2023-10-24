@@ -80,15 +80,15 @@ const PortfolioDetailed = () => {
           notifyError(res.data.message);
         } else {
           notifySuccess(res.data.message);
-        }
 
-        // Update the state with the new portfolio data
-        setPortfolio((prevPortfolio) => ({
-          ...prevPortfolio,
-          capitalAmt: portfolioCapital,
-          description: portfolioDescription,
-          portfolioName: portfolioTitle,
-        }));
+          // Update the state with the new portfolio data
+          setPortfolio((prevPortfolio) => ({
+            ...prevPortfolio,
+            capitalAmt: portfolioCapital,
+            description: portfolioDescription,
+            portfolioName: portfolioTitle,
+          }));
+        }
       })
       .catch((err) => {
         notifyError("Error updating portfolio");
