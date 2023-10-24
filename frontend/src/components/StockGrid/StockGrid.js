@@ -35,7 +35,8 @@ export default function StockGrid({ portfolioId }) {
 
   const addUniqueIds = (data) => {
     return data.map((item, index) => {
-      return { id: index + 1, ...item };
+      const total = item.quantity * item.price; // Calculate total value
+      return { id: index + 1, ...item, total }; // Include total value in the object
     });
   };
 
