@@ -56,16 +56,20 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     public List<HistoryInputModel> getHistoryByTicker(String ticker){
-        updateHistoryFromAPI(ticker); // Get data from API (if not exist in database
-        List<History> historyQueryList = historyRepo.getHistoryByTicker(ticker);
         List<HistoryInputModel> historyList = new ArrayList<>();
-        System.out.println("ticker: " + ticker);
-        System.out.println("historyQueryList: " + historyQueryList);
-        for (History history : historyQueryList){
-            HistoryInputModel inputModel = inputModel(history);
-            historyList.add(inputModel);
-        }
 
+        try {
+            updateHistoryFromAPI(ticker); // Get data from API (if not exist in database
+            List<History> historyQueryList = historyRepo.getHistoryByTicker(ticker);
+            System.out.println("ticker: " + ticker);
+            System.out.println("historyQueryList: " + historyQueryList);
+            for (History history : historyQueryList){
+                HistoryInputModel inputModel = inputModel(history);
+                historyList.add(inputModel);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return historyList;
     }
     
