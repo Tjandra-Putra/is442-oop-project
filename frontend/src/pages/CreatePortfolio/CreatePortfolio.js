@@ -26,6 +26,11 @@ const CreatePortfolio = () => {
   const [stockColumns, setStockColumns] = useState([]);
   const [stockRows, setStockRows] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [portfolioId, setPortfolioId] = useState(null);
+
+  useEffect(() => {
+    console.log("Selected Rows Updated:", selectedRows);
+  }, [selectedRows]);
 
   const notifyError = (message) => toast.error(message, { duration: 5000 });
   const notifySuccess = (message) => toast.success(message, { duration: 5000 });
@@ -119,15 +124,12 @@ const CreatePortfolio = () => {
         Quantity: quantityValues[row.id],
       };
     });
+
     return {
-      selectedRowsWithQuantity,
-      portfolioName,
-      portfolioDescription,
-      // cast to int
-      portfolioCapital: +portfolioCapital
-        .split("")
-        .filter((char) => char !== "$")
-        .join(""),
+      selectedRows: selectedRowsWithQuantity,
+      // portfolioName: portfolioName,
+      // portfolioDescription: portfolioDescription,
+      // portfolioCapital: portfolioCapital,
     };
   };
 
@@ -143,14 +145,9 @@ const CreatePortfolio = () => {
       notifyError("Please enter a description");
     }
 
-    let formData = {
-      portfolioName,
-      portfolioDescription,
-      portfolioCapital,
-      selectedStocks: getSelectedRows(),
-    };
+    const userId = 1;
 
-    const postData = {
+    const postData1 = {
       data: [
         {
           fieldName: "capitalAmt",
@@ -164,10 +161,9 @@ const CreatePortfolio = () => {
       ],
     };
 
-    const userId = 1;
-
+    // send the portfolio name, description, capital
     axios
-      .post("http://localhost:8080/api/portfolio/addPortfolio/" + userId, postData)
+      .post("http://localhost:8080/api/portfolio/addPortfolio/" + userId, postData1)
       .then((res) => {
         console.log(res.data);
 
@@ -175,7 +171,21 @@ const CreatePortfolio = () => {
           notifyError(res.data.message);
         } else {
           notifySuccess(res.data.message);
-          navigate("/dashboard");
+
+          // ================ send selected stock data to backend =================
+          const postData2 = getSelectedRows().selectedRows;
+
+          const portfolioId = res.data.data.portfolioId;
+
+          // Send the selected stocks
+          axios
+            .post("http://localhost:8080/api/portfolioStock/addPortfolioStock/" + portfolioId, postData2)
+            .then((res) => {
+              console.log(res.data);
+            })
+            .catch((err) => console.log(err));
+
+          // navigate("/dashboard");
         }
       })
       .catch((err) => {
