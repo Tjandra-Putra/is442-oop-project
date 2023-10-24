@@ -91,20 +91,30 @@ export default function StockGrid({ portfolioId }) {
       "This action is irreversible. Are you absolutely sure you want to delete this item?"
     );
 
-    console.log(portfolioId, ticker);
-
     // If the user confirms the first dialog, ask for confirmation again
     if (firstConfirmation) {
-      axios
-        .delete(`http://localhost:8080/api/portfolioStock/deletePortfolioStock/${portfolioId}/${ticker}`)
-        .then(() => {
-          // Update state by removing the row with the specified ID
-          setRows(rows.filter((row) => row.id !== id));
-        })
-        .catch((error) => {
-          // Handle any error that may occur during the API call
-          console.error("Error deleting portfolio stock:", error);
-        });
+      // Filter the stock with the specific id
+      const stockToDelete = apiMyStocks.find((stock) => stock.id === id);
+
+      if (stockToDelete) {
+        axios
+          .delete(
+            `http://localhost:8080/api/portfolioStock/deletePortfolioStock/${stockToDelete.portfolioId}/${stockToDelete.ticker}`
+          )
+          .then(() => {
+            // Update state by removing the row with the specified ID
+            setRows(rows.filter((row) => row.id !== id));
+
+            // Update apiMyStocks state after successful deletion
+            setApiMyStocks((prevStocks) => prevStocks.filter((stock) => stock.id !== id));
+          })
+          .catch((error) => {
+            // Handle any error that may occur during the API call
+            console.error("Error deleting portfolio stock:", error);
+          });
+      } else {
+        console.error(`Stock with id ${id} not found.`);
+      }
     }
   };
 
@@ -152,7 +162,7 @@ export default function StockGrid({ portfolioId }) {
       headerName: "Actions",
       width: 100,
       cellClassName: "actions",
-      getActions: ({ id, ticker }) => {
+      getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
@@ -186,7 +196,7 @@ export default function StockGrid({ portfolioId }) {
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={handleDeleteClick(id, ticker)} // Pass the 'ticker' here
+            onClick={handleDeleteClick(id)} // Pass the 'ticker' here
             color="inherit"
           />,
           <GridActionsCellItem icon={<FullscreenIcon />} label="View" onClick={handleViewClick(id)} color="inherit" />,
@@ -433,7 +443,6 @@ export default function StockGrid({ portfolioId }) {
                         return {
                           id: row.id,
                           Name: row.Name,
-                          // add dollar sign but make it an integer
                           Price: row.Price,
                           Total: row.Total ? row.Total : row.Price,
                         };
@@ -494,6 +503,8 @@ export default function StockGrid({ portfolioId }) {
           </Box>
         </Modal>
       </Stack>
+
+      {/* MY STOCKS TABLE */}
 
       <Box
         sx={{
