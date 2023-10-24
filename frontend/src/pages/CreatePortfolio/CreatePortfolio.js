@@ -68,11 +68,11 @@ const CreatePortfolio = () => {
 
   // Material UI DataGrid
   const selectedStockColumns = [
-    { field: "id", headerName: "No.", width: 80 },
+    { field: "id", headerName: "No.", width: 50 },
     {
       field: "Ticker",
       headerName: "Ticker",
-      width: 90,
+      width: 80,
     },
     // {
     //   field: "Name",
@@ -83,7 +83,7 @@ const CreatePortfolio = () => {
       field: "Price",
       headerName: "Price",
       type: "number",
-      width: 100,
+      width: 80,
     },
     {
       field: "Quantity",
@@ -239,17 +239,20 @@ const CreatePortfolio = () => {
 
     try {
       const prices = await Promise.all(getPricePromises);
-      const selectedRows = newSelection.map((id, index) => {
+      const updatedRows = newSelection.map((id, index) => {
         const row = filteredStockRows.find((row) => row.id === id);
+        const total = prices[index] * (row.Quantity || 1);
         return {
-          id: row.id,
+          ...row,
+          id: row.id, // ensure you keep the ID
           Ticker: row.Ticker,
           Name: row.Name,
           Price: prices[index],
-          Total: row.Total ? row.Total : row.Price,
+          Quantity: row.Quantity || 1, // default to 1 if Quantity is not set
+          Total: total,
         };
       });
-      setSelectedRows(selectedRows);
+      setSelectedRows(updatedRows);
     } catch (error) {
       console.error("Error fetching stock prices:", error);
     }
@@ -342,11 +345,6 @@ const CreatePortfolio = () => {
                         sx={{ width: "100%", mr: "2rem", mb: "1rem" }}
                       />
                     </Grid>
-                    {/* <Grid item md={3} sx={12}>
-                      <Button variant="outlined" size="large" sx={{ height: "3.5rem", width: "100%", mb: "1rem" }}>
-                        Seach
-                      </Button>
-                    </Grid> */}
                   </Grid>
 
                   <div style={{ height: 400, width: "100%" }}>
@@ -355,38 +353,6 @@ const CreatePortfolio = () => {
                       columns={stockColumns}
                       checkboxSelection
                       onRowSelectionModelChange={handleRowSelectionModelChange}
-                      // onRowSelectionModelChange={(newSelection) => {
-                      //   {
-                      //     /* GET STOCK PRICE */
-                      //   }
-
-                      //   const getStockPrice = (ticker) => {
-                      //     return axios
-                      //       .get("http://localhost:8080/api/StockInfo/getStockInfo/ticker/" + ticker)
-                      //       .then((res) => {
-                      //         console.log("== getStockPrice ==");
-                      //         const todayPrice = res.data.data[0]?.todayPrice || 0;
-                      //         console.log(todayPrice); // Logging for verification
-                      //         return todayPrice;
-                      //       })
-                      //       .catch((error) => {
-                      //         console.error("Error fetching stock price:", error);
-                      //         return 0; // Return 0 in case of an error
-                      //       });
-                      //   };
-
-                      //   const selectedRows = newSelection.map((id) => {
-                      //     const row = filteredStockRows.find((row) => row.id === id);
-                      //     return {
-                      //       id: row.id,
-                      //       Ticker: row.Ticker,
-                      //       Name: row.Name,
-                      //       Price: getStockPrice(row.Ticker),
-                      //       Total: row.Total ? row.Total : row.Price,
-                      //     };
-                      //   });
-                      //   setSelectedRows(selectedRows);
-                      // }}
                     />
                   </div>
                 </CardContent>
