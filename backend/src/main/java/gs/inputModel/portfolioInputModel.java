@@ -8,6 +8,7 @@ public class PortfolioInputModel implements Serializable{
     private double capitalAmt;
     private String description;
     private long userId;
+    private double portfolioValue;
 
     public long getPortfolioId() {
         return portfolioId;
@@ -49,5 +50,12 @@ public class PortfolioInputModel implements Serializable{
         this.userId = userId;
     }
 
-    
+    public double getPortfolioValue() {
+        return portfolioValue;
+    }
+
+    public void setPortfolioValue(double portfolioValue) {
+        this.portfolioValue = portfolioValue;
+    }
+
 }
