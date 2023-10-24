@@ -2,6 +2,7 @@ package gs.service;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,9 +40,15 @@ public class JwtService implements UserDetailsService {
         authenicate(userName, userPassword);
 
         final UserDetails userDetails = loadUserByUsername(userName);
-
-        String newGeneratedToken = jwtUtil.generateToken(userDetails); // Token 
-        User user = userRepo.findById(userName).get(0);
+        List<User> userList = userRepo.getUserByUserName(userName);
+        User user = userList.get(0);
+        String newGeneratedToken = "" ; 
+        if (!userList.isEmpty()) {
+             user = userList.get(0);
+             newGeneratedToken = jwtUtil.generateToken(userDetails);
+        } else {
+            throw new Exception("User is not found");
+        }
 
         return new JwtResponse(user, newGeneratedToken);
     }
@@ -49,21 +56,23 @@ public class JwtService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {        
         // Return token and user details
-        User user = userRepo.findById(userName).get();
+        List<User> userList = userRepo.getUserByUserName(userName);
+        User user = userList.get(0);
 
         if (user != null) {
+            Set<SimpleGrantedAuthority> authorities = getAuthorities(user);
             return new org.springframework.security.core.userdetails.User(
                 user.getUsername(), 
                 user.getPassword(),
-                getAuthorities(user)
-                );
+                authorities
+            );
         } else {
             throw new UsernameNotFoundException("Username is not valid");
         }
     }
     
-    private Set getAuthorities(User user) {
-        Set authorities = new HashSet<>();
+    private Set<SimpleGrantedAuthority> getAuthorities(User user) {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         user.getRole().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleName()));
         });

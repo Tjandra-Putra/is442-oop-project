@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import gs.entity.User;
 import gs.service.JwtService;
 
 @Configuration
@@ -48,6 +49,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                     .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Stateless Session - to not store any username or password
+
+       
 
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
