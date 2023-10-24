@@ -29,24 +29,28 @@ const PortfolioDetailed = () => {
     axios
       .get(`http://localhost:8080/api/portfolio/getPortfolio/${userId}/${id}`)
       .then((res) => {
-        console.log(res.data.data[0]);
-        setPortfolio(res.data.data[0]);
+        let portfolioRes = res.data.data[0];
+        setPortfolio(portfolioRes);
+        console.log(portfolioRes);
+        setPortfolioTitle(portfolioRes.portfolioName);
+        setPortfolioDescription(portfolioRes.description);
+        setPortfolioCapital(portfolioRes.capitalAmt);
       })
       .catch((err) => {
         console.log(err);
       });
 
     setLoading(false);
-  }, []);
+  }, [id]);
 
   // modal update portfolio
   const [updatePortfolioModalOpen, setUpdatePortfolioModalOpen] = React.useState(false);
   const handleUpdatePortfolioModalOpen = () => setUpdatePortfolioModalOpen(true);
   const handleUpdatePortfolioModalClose = () => setUpdatePortfolioModalOpen(false);
 
-  const [portfolioTitle, setPortfolioTitle] = React.useState(portfolio ? portfolio.portfolioName : "");
-  const [portfolioDescription, setPortfolioDescription] = React.useState(portfolio ? portfolio.description : "");
-  const [portfolioCapital, setPortfolioCapital] = React.useState(portfolio ? portfolio.capitalAmt : "");
+  const [portfolioTitle, setPortfolioTitle] = React.useState("");
+  const [portfolioDescription, setPortfolioDescription] = React.useState("");
+  const [portfolioCapital, setPortfolioCapital] = React.useState("");
 
   const onSubmitUpdatePortfolioUpdate = () => {
     // update portfolio
@@ -80,9 +84,6 @@ const PortfolioDetailed = () => {
       .catch((err) => {
         notifyError("Error updating portfolio");
       });
-
-    console.log("portfolioTitle=========");
-    console.log(portfolioTitle);
   };
 
   const onDeletePortfolio = () => {
@@ -242,7 +243,7 @@ const PortfolioDetailed = () => {
         <Grid item xs={12} md={12} lg={12}>
           <Card className={style.cardCustom}>
             <CardContent>
-              <StockGrid />
+              <StockGrid portfolioId={id} />
             </CardContent>
           </Card>
         </Grid>
