@@ -13,5 +13,7 @@ public interface UserService {
 
     List<UserInputModel> getUserById(String id);
 
+    User getUserByEmail(String email);
+
     ApiModel addUser(HttpServletResponse response, RequestModel requestModel, ApiModel apiModel) throws Exception;
 }

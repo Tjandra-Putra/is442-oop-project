@@ -3,6 +3,7 @@ package gs.entity;
 
 import java.util.List;
 
+import gs.entity.User;
 import javax.validation.constraints.NotNull;
 
 import jakarta.persistence.CascadeType;
@@ -66,6 +67,11 @@ public class User {
     private List<Portfolio> portfolio;  
 
     public User(){
+    };
+
+    public User(String email , String password) {
+        this.email = email;
+        this.password = password;
     };
 
     public User(long userId, String email, String username, String password) {

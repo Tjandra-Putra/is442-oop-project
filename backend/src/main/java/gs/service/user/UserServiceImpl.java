@@ -126,4 +126,9 @@ public class UserServiceImpl implements UserService{
         return apiModel;
     }
 
+    public User getUserByEmail(String email) {
+        User userQueryList = userRepo.getUserByEmail(email);
+        return userQueryList;
+    }
+
 }
