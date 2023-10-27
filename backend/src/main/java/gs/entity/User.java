@@ -1,10 +1,6 @@
 package gs.entity;
 
-
 import java.util.List;
-
-import javax.validation.constraints.NotNull;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -67,6 +63,11 @@ public class User {
 
     public User(){
     };
+
+    public User(String email, String password){
+        this.email = email;
+        this.password = password;
+    }
 
     public User(long userId, String email, String username, String password) {
         this.userId = userId;
