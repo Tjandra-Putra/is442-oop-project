@@ -39,17 +39,10 @@ public class HistoryController {
         return ApiModel.ok(HistoryService.getHistoryByTicker(ticker));
     }
 
-    @GetMapping("/getHistoryByWeekTicker/{ticker}")
+     @GetMapping("/getHistoryByWeekTicker/{ticker}")
     public ApiModel<ArrayList<HistoryInputModel>> getWeeklyHistoryByTicker (
         @PathVariable("ticker") String ticker
     ){
         return ApiModel.ok(HistoryService.getWeeklyHistoryByTicker(ticker));
-    }
-
-    @GetMapping("getYearlyClosingByTicker/{ticker}")
-    public ApiModel<ArrayList<HistoryInputModel>> getYearlyClosingByTicker (
-        @PathVariable("ticker") String ticker
-    ){
-        return ApiModel.ok(HistoryService.getYearlyClosingByTicker(ticker));
     }
 }

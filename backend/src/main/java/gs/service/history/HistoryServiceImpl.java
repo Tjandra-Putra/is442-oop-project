@@ -143,8 +143,8 @@ public class HistoryServiceImpl implements HistoryService {
 
     }
 
-    public void updateWeeklyHistory(String ticker){
-        String apiKey = "94ANM37S7U3Z5NHS";
+     public void updateWeeklyHistory(String ticker){
+        String apiKey = "";
         try{
               String url = "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=" + ticker + "&apikey=" + apiKey;
               HttpClient client = HttpClient.newHttpClient();
@@ -185,18 +185,6 @@ public class HistoryServiceImpl implements HistoryService {
             System.out.println(e.getMessage());
         }
 
-    }
-
-    public List<HistoryInputModel> getYearlyClosingByTicker(String ticker) {
-        List<History> historyQueryList = historyRepo.getYearlyClosingByTicker(ticker);
-        List<HistoryInputModel> historyList = new ArrayList<>();
-
-        for (History data : historyQueryList){
-            HistoryInputModel inputModel = inputModel(data);
-            historyList.add(inputModel);
         }
-    
-        return historyList;
-    }
 
 }
