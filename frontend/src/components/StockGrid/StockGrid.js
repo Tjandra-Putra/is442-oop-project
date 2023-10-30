@@ -438,24 +438,24 @@ export default function StockGrid({ portfolioId }) {
               <Grid item md={6} xs={12}>
                 {/* Search  */}
                 <Grid container mt={2} spacing={1}>
-                  <Grid item md={9} xs={12}>
+                  <Grid item md={12} xs={12}>
                     <TextField
                       id="outlined-basic"
                       label="Search for stocks by ticker or name"
                       multiline
                       maxRows={4}
                       variant="outlined"
-                      sx={{ width: "100%", mr: "2rem" }}
+                      sx={{ width: "100%", mr: "2rem", mb: "1rem" }}
                       size="small"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
                   </Grid>
-                  <Grid item md={3} sx={12}>
+                  {/* <Grid item md={3} sx={12}>
                     <Button variant="outlined" sx={{ height: "2.5rem", width: "100%", mb: "1rem" }}>
                       Seach
                     </Button>
-                  </Grid>
+                  </Grid> */}
                 </Grid>
 
                 <div style={{ height: 400, width: "100%" }}>
