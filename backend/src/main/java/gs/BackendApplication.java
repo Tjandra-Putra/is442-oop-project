@@ -19,7 +19,8 @@ import gs.repository.StockRepo;
 @SpringBootApplication
 @ComponentScan(basePackages = {"gs.controller", "gs.entity", "gs.repository", "gs.service", "gs.config"})
 @RestController
-public class BackendApplication {
+public class BackendApplication implements CommandLineRunner {
+// public class BackendApplication {
 
 	@Autowired
 	protected StockService stockService;
@@ -28,11 +29,11 @@ public class BackendApplication {
 		SpringApplication.run(BackendApplication.class, args);
 	}
 
-	// @Override
-	// public void run(String... args) {
-	// 	stockAPI stocks = new stockAPI();
-	// 	Map<String,String> allStocks = stocks.getAllStocks();
-	// 	allStocks.forEach((ticker, name) -> stockService.addStock(ticker, name));
-	// }
+	@Override
+	public void run(String... args) {
+		stockAPI stocks = new stockAPI();
+		Map<String,String> allStocks = stocks.getAllStocks();
+		allStocks.forEach((ticker, name) -> stockService.addStock(ticker, name));
+	}
 
 }
