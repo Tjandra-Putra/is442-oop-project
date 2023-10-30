@@ -4,15 +4,18 @@ import java.util.List;
 
 import gs.common.ApiModel;
 import gs.common.RequestModel;
+import gs.inputModel.AllocationInputModel;
 import gs.inputModel.PortfolioStockInputModel;
-import gs.inputModel.StockAllocationInputModel;
+import gs.inputModel.AllocationInputModel;
 import jakarta.servlet.http.HttpServletResponse;
 
 public interface PortfolioStockService {
     
     List<PortfolioStockInputModel> getPortfolioStock(String portfolioId);
 
-    List<StockAllocationInputModel> getPortfolioStockAllocation(String portfolioId);
+    List<AllocationInputModel> getPortfolioStockAllocation(String portfolioId);
+
+    List<AllocationInputModel> getPortfolioStockIndustryAllocation(String portfolioId);
 
     List<PortfolioStockInputModel> getPortfolioStockByTicker(String portfolioId, String ticker);
 

@@ -4,7 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -15,12 +18,15 @@ import gs.common.RequestModel;
 import gs.entity.Portfolio;
 import gs.entity.PortfolioStock;
 import gs.entity.Stock;
+import gs.entity.StockInfo;
 import gs.entity.User;
+import gs.inputModel.AllocationInputModel;
 import gs.inputModel.PortfolioInputModel;
 import gs.inputModel.PortfolioStockInputModel;
-import gs.inputModel.StockAllocationInputModel;
+import gs.inputModel.AllocationInputModel;
 import gs.repository.PortfolioRepo;
 import gs.repository.PortfolioStockRepo;
+import gs.repository.StockInfoRepo;
 import gs.repository.StockRepo;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,6 +41,9 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
 
     @Resource
     protected StockRepo stockRepo;
+
+    @Resource
+    protected StockInfoRepo stockInfoRepo;
 
     // inputModel fitting methood
     private PortfolioStockInputModel inputModel(PortfolioStock data){
@@ -68,18 +77,18 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
         return portfolioStockList;
     }
 
-    public List<StockAllocationInputModel> getPortfolioStockAllocation(String portfolioId){
+    public List<AllocationInputModel> getPortfolioStockAllocation(String portfolioId){
         List<PortfolioStock> portfolioStockQueryList = portfolioStockRepo.getPortfolioStockByPortfolioId(portfolioId);
 
         double capitalAmt = portfolioStockQueryList.get(0).getPortfolio().getPortfolioCapitalAmt();
 
         double totalStockPercentage = 0;
 
-        List<StockAllocationInputModel> stockAllocationList = new ArrayList<>();
+        List<AllocationInputModel> stockAllocationList = new ArrayList<>();
 
         if (portfolioStockQueryList.size() > 0){
             for (PortfolioStock portfolioStock : portfolioStockQueryList){
-                StockAllocationInputModel inputModel = new StockAllocationInputModel();
+                AllocationInputModel inputModel = new AllocationInputModel();
                 inputModel.setAllocationName(portfolioStock.getStock().getTicker());
 
                 double allocationPercentage = ((portfolioStock.getQuantity() * portfolioStock.getPrice()) / capitalAmt) * 100;
@@ -90,13 +99,51 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
             }
         }
 
-        StockAllocationInputModel cashInputModel = new StockAllocationInputModel();
+        AllocationInputModel cashInputModel = new AllocationInputModel();
         cashInputModel.setAllocationName("Cash");
         cashInputModel.setPercentage(100 - totalStockPercentage);
         stockAllocationList.add(cashInputModel);
     
         return stockAllocationList;
     }
+
+
+
+    public List<AllocationInputModel> getPortfolioStockIndustryAllocation(String portfolioId){
+        List<PortfolioStock> portfolioStocksQueryList = portfolioStockRepo.getPortfolioStockByPortfolioId(portfolioId);
+
+        int totalStock = portfolioStocksQueryList.size();
+
+        List<AllocationInputModel> StockIndustryAllocation = new ArrayList<>();
+
+        Map<String, Integer> industryCount = new HashMap<>();
+        
+        for (PortfolioStock portfolioStock : portfolioStocksQueryList) {
+            StockInfo currentStock = stockInfoRepo.getStockInfoByTicker(portfolioStock.getStock().getTicker());
+
+            String stockIndustry = currentStock.getIndustry();
+
+            if (industryCount.get(stockIndustry) == null){
+                industryCount.put(stockIndustry, 1);
+            }
+
+            else {
+                industryCount.put(stockIndustry, industryCount.get(stockIndustry) + 1);
+            }
+        }
+
+        for (Entry<String, Integer> industry : industryCount.entrySet()) {
+            AllocationInputModel currentIndustry = new AllocationInputModel();
+
+            currentIndustry.setAllocationName(industry.getKey());
+            double allocationPercentage = (double) industry.getValue() / totalStock * 100;
+            currentIndustry.setPercentage(allocationPercentage);
+
+            StockIndustryAllocation.add(currentIndustry);
+        }
+
+        return StockIndustryAllocation;
+    };
 
     public List<PortfolioStockInputModel> getPortfolioStockByTicker(String portfolioId, String ticker){
         PortfolioStock individualStockQuery = portfolioStockRepo.getIndividualStock(portfolioId, ticker).get(0);

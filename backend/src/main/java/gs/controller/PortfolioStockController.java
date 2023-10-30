@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import gs.common.ApiModel;
 import gs.common.RequestModel;
 import gs.inputModel.PortfolioStockInputModel;
-import gs.inputModel.StockAllocationInputModel;
+import gs.inputModel.AllocationInputModel;
 import gs.service.portfolioStock.PortfolioStockService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -39,10 +39,17 @@ public class PortfolioStockController {
     }
 
     @GetMapping("/getPortfolioStockAllocation/{portfolioId}")
-    public ApiModel<ArrayList<StockAllocationInputModel>> getPortfolioStockAllocation(
+    public ApiModel<ArrayList<AllocationInputModel>> getPortfolioStockAllocation(
         @PathVariable("portfolioId") String portfolioId
     ){
         return ApiModel.ok(portfolioStockService.getPortfolioStockAllocation(portfolioId));
+    }
+
+    @GetMapping("/getPortfolioStockIndustryAllocation/{portfolioId}")
+    public ApiModel<ArrayList<AllocationInputModel>> getPortfolioStockIndustryAllocation(
+        @PathVariable("portfolioId") String portfolioId
+    ){
+        return ApiModel.ok(portfolioStockService.getPortfolioStockIndustryAllocation(portfolioId));
     }
 
     
