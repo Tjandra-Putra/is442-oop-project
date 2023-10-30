@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
-import TextField from "@mui/material/TextField";
-import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
+import { Box, Stack, TextField, Button, Grid, CardContent, Card, Typography, Container } from "@mui/material";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -210,7 +202,6 @@ const CreatePortfolio = () => {
           notifySuccess(res.data.message);
 
           // ================ send selected stock data to backend =================
-
           const postData2 = {
             data: [],
           };
@@ -249,7 +240,7 @@ const CreatePortfolio = () => {
             })
             .catch((err) => console.log(err));
 
-          // navigate("/dashboard");
+          navigate(`/portfolio/${portfolioId}`);
         }
       })
       .catch((err) => {

@@ -16,11 +16,20 @@ import Grid from "@mui/material/Grid";
 import PortfolioStockCandleStickChart from "../Charts/PortfolioStockCandleStickChart/PortfolioStockCandleStickChart";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 import style from "./StockGrid.module.css";
 
 export default function StockGrid({ portfolioId }) {
+  const notifyError = (message) => toast.error(message, { duration: 5000 });
+  const notifySuccess = (message) => toast.success(message, { duration: 5000 });
+
   const [apiMyStocks, setApiMyStocks] = React.useState([]);
+  const [stockMarket, setStockMarket] = useState([]);
+  const [stockRows, setStockRows] = useState([]);
+  const [stockColumns, setStockColumns] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   React.useEffect(() => {
     axios
@@ -87,12 +96,7 @@ export default function StockGrid({ portfolioId }) {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id, ticker) => () => {
-    // First, ask the user for confirmation using a native browser confirm dialog
-    // const firstConfirmation = window.confirm(
-    //   "This action is irreversible. Are you absolutely sure you want to delete this item?"
-    // );
-
+  const handleDeleteClick = (id) => () => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -220,79 +224,6 @@ export default function StockGrid({ portfolioId }) {
     },
   ];
 
-  // const columns = [
-  //   { field: "id", headerName: "ID", width: 150 },
-  //   { field: "name", headerName: "Name", width: 200 },
-  //   {
-  //     field: "description",
-  //     headerName: "Description",
-  //     width: 300,
-  //     // type: "singleSelect",
-  //     // valueOptions: ["Market", "Finance", "Development"],
-  //   },
-  //   {
-  //     field: "price",
-  //     headerName: "Price",
-  //     type: "number",
-  //     width: 110,
-  //   },
-  //   {
-  //     field: "quantity",
-  //     headerName: "Quantity",
-  //     type: "number",
-  //     width: 110,
-  //     editable: true,
-  //   },
-  //   {
-  //     field: "total",
-  //     headerName: "Total",
-  //     type: "number",
-  //     width: 110,
-  //   },
-  //   {
-  //     field: "actions",
-  //     type: "actions",
-  //     headerName: "Actions",
-  //     width: 100,
-  //     cellClassName: "actions",
-  //     getActions: ({ id }) => {
-  //       const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
-  //       if (isInEditMode) {
-  //         return [
-  //           <GridActionsCellItem
-  //             icon={<SaveIcon />}
-  //             label="Save"
-  //             sx={{
-  //               color: "primary.main",
-  //             }}
-  //             onClick={handleSaveClick(id)}
-  //           />,
-  //           <GridActionsCellItem
-  //             icon={<CancelIcon />}
-  //             label="Cancel"
-  //             className="textPrimary"
-  //             onClick={handleCancelClick(id)}
-  //             color="inherit"
-  //           />,
-  //         ];
-  //       }
-
-  //       return [
-  //         <GridActionsCellItem
-  //           icon={<EditIcon />}
-  //           label="Edit"
-  //           className="textPrimary"
-  //           onClick={handleEditClick(id)}
-  //           color="inherit"
-  //         />,
-  //         <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={handleDeleteClick(id)} color="inherit" />,
-  //         <GridActionsCellItem icon={<FullscreenIcon />} label="View" onClick={handleViewClick(id)} color="inherit" />,
-  //       ];
-  //     },
-  //   },
-  // ];
-
   // ============================== Add new stocks section ==============================
   const getTotalPrice = () => {
     let totalPrice = 0;
@@ -304,25 +235,33 @@ export default function StockGrid({ portfolioId }) {
 
   const [selectedRows, setSelectedRows] = React.useState([]);
 
-  const stockColumns = [
-    { field: "id", headerName: "Ticker", width: 100 },
-    { field: "Name", headerName: "Name", width: 130 },
-    {
-      field: "Price",
-      headerName: "Price",
-      type: "number",
-      width: 90,
-    },
-  ];
+  React.useEffect(() => {
+    // http://localhost:8080/api/stockInfo/getStockInfo/ticker/{ticker}
+    // get current stock market
+    axios
+      .get("http://localhost:8080/api/stock/getStock")
+      .then((res) => {
+        let stockData = res.data.data;
+        setStockMarket(stockData);
+        // console.log(res.data.data);
 
-  const stockRows = [
-    { id: 1, Name: "Snow", Price: 105 },
-    { id: 2, Name: "Snow", Price: 35 },
-    { id: 3, Name: "Snow", Price: 10 },
-    { id: 4, Name: "Snow", Price: 35 },
-    { id: 5, Name: "Snow", Price: 35 },
-    { id: 6, Name: "Snow", Price: 35 },
-  ];
+        const generatedStockRows = stockData.map((stock, index) => ({
+          id: index + 1, // Start from 1
+          Ticker: stock.ticker,
+          Name: stock.name,
+        }));
+
+        setStockRows(generatedStockRows);
+        setStockColumns([
+          { field: "id", headerName: "No.", width: 100 },
+          { field: "Ticker", headerName: "Ticker", width: 100 },
+          { field: "Name", headerName: "Name", width: 230 },
+        ]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const [quantityValues, setQuantityValues] = React.useState(Object.fromEntries(stockRows.map((row) => [row.id, 1])));
 
@@ -351,19 +290,32 @@ export default function StockGrid({ portfolioId }) {
     }
   };
 
+  const handleBuyDateChange = (id, newValue) => {
+    const newSelectedRows = selectedRows.map((row) => {
+      if (row.id === id) {
+        return {
+          ...row,
+          BuyDate: newValue,
+        };
+      }
+      return row;
+    });
+    setSelectedRows(newSelectedRows);
+  };
+
   // Material UI DataGrid
   const selectedStockColumns = [
-    { field: "id", headerName: "Ticker", width: 120 },
+    { field: "id", headerName: "No.", width: 50 },
     {
-      field: "Name",
-      headerName: "Name",
-      width: 130,
+      field: "Ticker",
+      headerName: "Ticker",
+      width: 100,
     },
     {
       field: "Price",
       headerName: "Price",
       type: "number",
-      width: 100,
+      width: 80,
     },
     {
       field: "Quantity",
@@ -377,38 +329,97 @@ export default function StockGrid({ portfolioId }) {
         />
       ),
       width: 150,
-      // editable
+    },
+    {
+      field: "BuyDate",
+      headerName: "Buy Date",
+      renderCell: (params) => {
+        const today = new Date();
+        const formattedToday = today.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+
+        return (
+          <input
+            type="date"
+            value={params.row.BuyDate ? params.row.BuyDate : formattedToday}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            onChange={(e) => handleBuyDateChange(params.row.id, e.target.value)}
+            className={style.buyDateInput}
+            fullWidth
+          />
+        );
+      },
+      width: 150, // Adjust the width as needed
     },
     {
       field: "Total",
       headerName: "Total",
       type: "number",
-      width: 100,
+      width: 70,
     },
   ];
 
-  // return state as one object including quantity, portfolio name, description, capital
-  const getSelectedRows = () => {
-    const selectedRowsWithQuantity = selectedRows.map((row) => {
-      return {
-        ...row,
-        Quantity: quantityValues[row.id],
-      };
+  const filteredStockRows = stockRows.filter((row) => {
+    const searchString = searchQuery.toLowerCase();
+    return row.Ticker.toLowerCase().includes(searchString) || row.Name.toLowerCase().includes(searchString);
+  });
+
+  const getStockPrice = (ticker) => {
+    return axios
+      .get("http://localhost:8080/api/StockInfo/getStockInfo/ticker/" + ticker)
+      .then((res) => {
+        console.log("== getStockPrice ==");
+        const todayPrice = res.data.data[0]?.todayPrice || 0;
+        console.log(todayPrice); // Logging for verification
+        return todayPrice;
+      })
+      .catch((error) => {
+        console.error("Error fetching stock price:", error);
+        return 0; // Return 0 in case of an error
+      });
+  };
+
+  const handleRowSelectionModelChange = async (newSelection) => {
+    const getPricePromises = newSelection.map((id) => {
+      const row = filteredStockRows.find((row) => row.id === id);
+      return getStockPrice(row.Ticker);
     });
+
+    try {
+      const prices = await Promise.all(getPricePromises);
+      const updatedRows = newSelection.map((id, index) => {
+        const row = filteredStockRows.find((row) => row.id === id);
+        const total = prices[index] * (row.Quantity || 1);
+        return {
+          ...row,
+          id: row.id, // ensure you keep the ID
+          Ticker: row.Ticker,
+          Name: row.Name,
+          Price: prices[index],
+          Quantity: row.Quantity || 1, // default to 1 if Quantity is not set
+          Total: total,
+        };
+      });
+      setSelectedRows(updatedRows);
+    } catch (error) {
+      console.error("Error fetching stock prices:", error);
+    }
   };
 
   // submit form with validation
   const submitFormHandler = () => {
-    let formData = {
-      portfolioId: portfolioId,
-      selectedStocks: getSelectedRows(),
-    };
+    if (selectedRows.length === 0) {
+      notifyError("Please select at least one stock");
+      return;
+    }
 
-    console.log(formData);
+    const userId = 1;
   };
 
   return (
     <>
+      {/* ============================ ADD STOCKS MODAL ============================ */}
       <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} mb={1}>
         <div class={style.cardTitle}>My Stocks</div>
         <Button onClick={handleAddStocksModalOpen}>Add Stocks</Button>
@@ -436,6 +447,8 @@ export default function StockGrid({ portfolioId }) {
                       variant="outlined"
                       sx={{ width: "100%", mr: "2rem" }}
                       size="small"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
                     />
                   </Grid>
                   <Grid item md={3} sx={12}>
@@ -447,23 +460,10 @@ export default function StockGrid({ portfolioId }) {
 
                 <div style={{ height: 400, width: "100%" }}>
                   <DataGrid
-                    rows={stockRows}
+                    rows={filteredStockRows}
                     columns={stockColumns}
                     checkboxSelection
-                    // onchange
-                    onRowSelectionModelChange={(newSelection) => {
-                      const selectedRows = newSelection.map((id) => {
-                        const row = stockRows.find((row) => row.id === id);
-                        // Extracting only the desired properties
-                        return {
-                          id: row.id,
-                          Name: row.Name,
-                          Price: row.Price,
-                          Total: row.Total ? row.Total : row.Price,
-                        };
-                      });
-                      setSelectedRows(selectedRows);
-                    }}
+                    onRowSelectionModelChange={handleRowSelectionModelChange}
                   />
                 </div>
               </Grid>
@@ -518,9 +518,7 @@ export default function StockGrid({ portfolioId }) {
           </Box>
         </Modal>
       </Stack>
-
       {/* MY STOCKS TABLE */}
-
       <Box
         sx={{
           height: 350,
@@ -549,7 +547,6 @@ export default function StockGrid({ portfolioId }) {
           }}
         />
       </Box>
-
       {/* View Stock Modal */}
       <Modal
         open={viewStockModalOpen}
