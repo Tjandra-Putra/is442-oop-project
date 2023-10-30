@@ -49,7 +49,21 @@ public class PortfolioStockController {
     public ApiModel<ArrayList<AllocationInputModel>> getPortfolioStockIndustryAllocation(
         @PathVariable("portfolioId") String portfolioId
     ){
-        return ApiModel.ok(portfolioStockService.getPortfolioStockIndustryAllocation(portfolioId));
+        return ApiModel.ok(portfolioStockService.getPortfolioStockTypeAllocation(portfolioId, "Industry"));
+    }
+
+    @GetMapping("/getPortfolioStockCountryAllocation/{portfolioId}")
+    public ApiModel<ArrayList<AllocationInputModel>> getPortfolioStockCountryAllocation(
+        @PathVariable("portfolioId") String portfolioId
+    ){
+        return ApiModel.ok(portfolioStockService.getPortfolioStockTypeAllocation(portfolioId, "Country"));
+    }
+
+    @GetMapping("/getPortfolioStockCurrencyAllocation/{portfolioId}")
+    public ApiModel<ArrayList<AllocationInputModel>> getPortfolioStockCurrencyAllocation(
+        @PathVariable("portfolioId") String portfolioId
+    ){
+        return ApiModel.ok(portfolioStockService.getPortfolioStockTypeAllocation(portfolioId, "Currency"));
     }
 
     

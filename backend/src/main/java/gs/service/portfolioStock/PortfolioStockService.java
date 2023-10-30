@@ -15,7 +15,7 @@ public interface PortfolioStockService {
 
     List<AllocationInputModel> getPortfolioStockAllocation(String portfolioId);
 
-    List<AllocationInputModel> getPortfolioStockIndustryAllocation(String portfolioId);
+    List<AllocationInputModel> getPortfolioStockTypeAllocation(String portfolioId, String allocationCategory);
 
     List<PortfolioStockInputModel> getPortfolioStockByTicker(String portfolioId, String ticker);
 
