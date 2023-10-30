@@ -10,5 +10,5 @@ public interface HistoryService {
 
     List<HistoryInputModel> getHistoryByTicker(String ticker);
 
-    List<HistoryInputModel> updateWeeklyHistory(String ticker);
+    List<HistoryInputModel> getWeeklyHistoryByTicker(String ticker);
 }

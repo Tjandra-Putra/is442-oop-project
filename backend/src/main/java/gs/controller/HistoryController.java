@@ -40,9 +40,9 @@ public class HistoryController {
     }
 
      @GetMapping("/getHistoryByWeekTicker/{ticker}")
-    public ApiModel<ArrayList<HistoryInputModel>> updateWeeklyHistory (
+    public ApiModel<ArrayList<HistoryInputModel>> getWeeklyHistoryByTicker (
         @PathVariable("ticker") String ticker
     ){
-        return ApiModel.ok(HistoryService.updateWeeklyHistory(ticker));
+        return ApiModel.ok(HistoryService.getWeeklyHistoryByTicker(ticker));
     }
 }

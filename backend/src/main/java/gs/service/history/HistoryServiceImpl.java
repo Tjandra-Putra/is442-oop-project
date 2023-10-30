@@ -57,6 +57,7 @@ public class HistoryServiceImpl implements HistoryService {
             HistoryInputModel inputModel = inputModel(data);
             stockList.add(inputModel);
         }
+        
 
         return stockList;
 
@@ -129,7 +130,20 @@ public class HistoryServiceImpl implements HistoryService {
 
     }
 
-     public List<HistoryInputModel> updateWeeklyHistory(String ticker){
+    public List<HistoryInputModel> getWeeklyHistoryByTicker(String ticker){
+        updateWeeklyHistory(ticker);
+        List<History> historyQueryList = historyRepo.getHistoryByTicker(ticker);
+        List<HistoryInputModel> historyList = new ArrayList<>();
+        for (History history : historyQueryList){
+            HistoryInputModel inputModel = inputModel(history);
+            historyList.add(inputModel);
+        }
+
+        return historyList;
+
+    }
+
+     public void updateWeeklyHistory(String ticker){
         String apiKey = "";
         try{
               String url = "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=" + ticker + "&apikey=" + apiKey;
@@ -165,18 +179,12 @@ public class HistoryServiceImpl implements HistoryService {
                         historyRepo.save(history);
 
                     }
-                    
-                    
-                    
-
-
 
         }
         catch(Exception e){
             System.out.println(e.getMessage());
         }
 
-        return null;
         }
 
 }
