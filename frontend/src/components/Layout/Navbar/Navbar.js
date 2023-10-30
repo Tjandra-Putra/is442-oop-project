@@ -54,6 +54,7 @@ const Navbar = () => {
     // backgroundColor: "#12294d", // Set the background color to your desired color
     backgroundColor: "#ffffff",
     boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
+    zIndex: 1000,
   };
 
   // Drawer Styling

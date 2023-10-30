@@ -15,6 +15,7 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import PortfolioStockCandleStickChart from "../Charts/PortfolioStockCandleStickChart/PortfolioStockCandleStickChart";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 import style from "./StockGrid.module.css";
 
@@ -88,35 +89,48 @@ export default function StockGrid({ portfolioId }) {
 
   const handleDeleteClick = (id, ticker) => () => {
     // First, ask the user for confirmation using a native browser confirm dialog
-    const firstConfirmation = window.confirm(
-      "This action is irreversible. Are you absolutely sure you want to delete this item?"
-    );
+    // const firstConfirmation = window.confirm(
+    //   "This action is irreversible. Are you absolutely sure you want to delete this item?"
+    // );
 
-    // If the user confirms the first dialog, ask for confirmation again
-    if (firstConfirmation) {
-      // Filter the stock with the specific id
-      const stockToDelete = apiMyStocks.find((stock) => stock.id === id);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d23457",
+      cancelButtonColor: "#7a6b78",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Filter the stock with the specific id
+        const stockToDelete = apiMyStocks.find((stock) => stock.id === id);
 
-      if (stockToDelete) {
-        axios
-          .delete(
-            `http://localhost:8080/api/portfolioStock/deletePortfolioStock/${stockToDelete.portfolioId}/${stockToDelete.ticker}`
-          )
-          .then(() => {
-            // Update state by removing the row with the specified ID
-            setRows(rows.filter((row) => row.id !== id));
+        if (stockToDelete) {
+          axios
+            .delete(
+              `http://localhost:8080/api/portfolioStock/deletePortfolioStock/${stockToDelete.portfolioId}/${stockToDelete.ticker}`
+            )
+            .then(() => {
+              // Update state by removing the row with the specified ID
+              setRows(rows.filter((row) => row.id !== id));
 
-            // Update apiMyStocks state after successful deletion
-            setApiMyStocks((prevStocks) => prevStocks.filter((stock) => stock.id !== id));
-          })
-          .catch((error) => {
-            // Handle any error that may occur during the API call
-            console.error("Error deleting portfolio stock:", error);
-          });
+              // Update apiMyStocks state after successful deletion
+              setApiMyStocks((prevStocks) => prevStocks.filter((stock) => stock.id !== id));
+            })
+            .catch((error) => {
+              // Handle any error that may occur during the API call
+              console.error("Error deleting portfolio stock:", error);
+            });
+        } else {
+          console.error(`Stock with id ${id} not found.`);
+        }
+
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
       } else {
-        console.error(`Stock with id ${id} not found.`);
+        Swal.fire("Cancelled", "Your stock is safe :)", "error");
       }
-    }
+    });
   };
 
   const handleCancelClick = (id) => () => {

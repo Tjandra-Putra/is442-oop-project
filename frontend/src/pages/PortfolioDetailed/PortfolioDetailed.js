@@ -2,17 +2,30 @@ import React, { useEffect } from "react";
 import style from "./PortfolioDetailed.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 import StockCard from "../../components/StockCard/StockCard";
+import StockGrid from "../../components/StockGrid/StockGrid";
+import toast from "react-hot-toast";
+import axios from "axios";
+
 import PortfolioStocksAllocationChart from "../../components/Charts/PortfolioStocksAllocationChart/PortfolioStocksAllocationChart";
 import PortfolioStocksBySegmentChart from "../../components/Charts/PortfolioStocksBySegmentChart/PortfolioStocksBySegmentChart";
 import MarketExposureByGeographicalLocationChart from "../../components/Charts/MarketExposureByGeographicalLocationChart/MarketExposureByGeographicalLocationChart";
 import MarketExposureBySegment from "../../components/Charts/MarketExposureBySegment/MarketExposureBySegment";
 import PortfolioReturnsChart from "../../components/Charts/PortfolioReturnsChart/PortfolioReturnsChart";
 import PortfolioAnnualReturnsPercentage from "../../components/Charts/PortfolioAnnualReturnsPercentage/PortfolioAnnualReturnsPercentage";
-import StockGrid from "../../components/StockGrid/StockGrid";
-import toast from "react-hot-toast";
-import axios from "axios";
 
-import { Card, Grid, CardContent, Stack, Button, Typography, Box, Modal, Container, TextField } from "@mui/material";
+import {
+  Card,
+  Grid,
+  CardContent,
+  Button,
+  Typography,
+  Box,
+  Modal,
+  Container,
+  TextField,
+  Alert,
+  Stack,
+} from "@mui/material";
 
 const PortfolioDetailed = () => {
   const navigate = useNavigate();
@@ -21,6 +34,7 @@ const PortfolioDetailed = () => {
   const { id } = useParams();
   const [portfolio, setPortfolio] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
+  const [deleteMessage, setDeleteMessage] = React.useState("");
 
   const notifyError = (message) => toast.error(message, { duration: 5000 });
   const notifySuccess = (message) => toast.success(message, { duration: 5000 });
@@ -48,8 +62,11 @@ const PortfolioDetailed = () => {
 
   // modal update portfolio
   const [updatePortfolioModalOpen, setUpdatePortfolioModalOpen] = React.useState(false);
+  const [deletePortfolioModalOpen, setDeletePortfolioModalOpen] = React.useState(false);
   const handleUpdatePortfolioModalOpen = () => setUpdatePortfolioModalOpen(true);
   const handleUpdatePortfolioModalClose = () => setUpdatePortfolioModalOpen(false);
+  const handleDeletePortfolioModalOpen = () => setDeletePortfolioModalOpen(true);
+  const handleDeletePortfolioModalClose = () => setDeletePortfolioModalOpen(false);
 
   const [portfolioTitle, setPortfolioTitle] = React.useState("");
   const [portfolioDescription, setPortfolioDescription] = React.useState("");
@@ -99,6 +116,11 @@ const PortfolioDetailed = () => {
   };
 
   const onDeletePortfolio = () => {
+    if (deleteMessage !== "delete/portfolio/" + portfolio?.portfolioName) {
+      notifyError("Please type the correct message");
+      return;
+    }
+
     const userId = 1;
 
     axios
@@ -204,10 +226,54 @@ const PortfolioDetailed = () => {
               <Button
                 variant="outlined"
                 style={{ backgroundColor: "darkred", color: "white", marginLeft: "10px", borderColor: "darkred" }}
-                onClick={() => onDeletePortfolio()}
+                // onClick={() => onDeletePortfolio()}
+                onClick={handleDeletePortfolioModalOpen}
               >
                 <i class="fa-solid fa-trash" style={{ marginRight: "7px" }}></i> Delete
               </Button>
+
+              <Modal
+                open={deletePortfolioModalOpen}
+                onClose={handleDeletePortfolioModalClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box className={style.updatePortfolioModal}>
+                  <h3 className={style.deleteTitle}>Are you absolutely sure?</h3>
+
+                  <Stack sx={{ width: "100%" }} spacing={2}>
+                    <Alert severity="warning">Unexpected bad things will happen if you don’t read this!</Alert>
+                  </Stack>
+
+                  <p className={style.deleteMessage}>
+                    This <strong>action</strong> cannot be undone. This will permanently delete the portfolio (
+                    {portfolio?.portfolioName}) and all its contents.
+                  </p>
+
+                  <p className={style.deleteMessage}>
+                    Please type <strong>delete/portfolio/{portfolio?.portfolioName}</strong> to confirm.
+                  </p>
+
+                  <TextField
+                    id="outlined-basic"
+                    // label="Outlined"
+                    variant="outlined"
+                    style={{ width: "100%" }}
+                    placeholder={"delete/portfolio/" + portfolio?.portfolioName}
+                    value={deleteMessage}
+                    onChange={(e) => setDeleteMessage(e.target.value)}
+                  />
+
+                  <Button
+                    variant="outlined"
+                    style={{ float: "right", marginTop: "1rem", width: "100%" }}
+                    onClick={() => onDeletePortfolio()}
+                    color="error"
+                  >
+                    I understand, delete this portfolio
+                  </Button>
+                </Box>
+              </Modal>
             </div>
           </Stack>
 
