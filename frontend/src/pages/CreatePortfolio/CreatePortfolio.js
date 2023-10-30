@@ -27,6 +27,7 @@ const CreatePortfolio = () => {
   const [stockRows, setStockRows] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [portfolioId, setPortfolioId] = useState(null);
+  const [buyDate, setBuyDate] = useState("");
 
   useEffect(() => {
     console.log("Selected Rows Updated:", selectedRows);
@@ -71,6 +72,19 @@ const CreatePortfolio = () => {
     }
   };
 
+  const handleBuyDateChange = (id, newValue) => {
+    const newSelectedRows = selectedRows.map((row) => {
+      if (row.id === id) {
+        return {
+          ...row,
+          BuyDate: newValue,
+        };
+      }
+      return row;
+    });
+    setSelectedRows(newSelectedRows);
+  };
+
   // Material UI DataGrid
   const selectedStockColumns = [
     { field: "id", headerName: "No.", width: 50 },
@@ -102,6 +116,23 @@ const CreatePortfolio = () => {
         />
       ),
       width: 80,
+    },
+    {
+      field: "BuyDate",
+      headerName: "Buy Date",
+      renderCell: (params) => (
+        <input
+          type="date"
+          value={params.row.BuyDate || ""}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          onChange={(e) => handleBuyDateChange(params.row.id, e.target.value)}
+          className={style.quantityInput}
+          fullWidth
+        />
+      ),
+      width: 120, // Adjust the width as needed
     },
     {
       field: "Total",
@@ -282,7 +313,7 @@ const CreatePortfolio = () => {
       <Container maxWidth="xl">
         <Box component="form" noValidate autoComplete="off">
           <Grid container spacing={4} mt={0}>
-            <Grid item md={3} xs={12}>
+            <Grid item md={2} xs={12}>
               <Card className={style.inputWrapper}>
                 <CardContent>
                   <div className={style.cardTitle}>Portfolio Name</div>
@@ -369,7 +400,7 @@ const CreatePortfolio = () => {
               </Card>
             </Grid>
 
-            <Grid item md={4} xs={12}>
+            <Grid item md={5} xs={12}>
               <Card className={style.selectedStocksWrapper}>
                 <CardContent>
                   {/* space between */}

@@ -1,0 +1,13 @@
+.inputGroups {
+  display: flex;
+  justify-content: space-between;
+}
+
+.selectInputsDisplay {
+  display: flex;
+  gap: 0.8rem;
+}
+
+label {
+  margin-left: 5px;
+}
