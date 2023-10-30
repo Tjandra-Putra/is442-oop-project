@@ -59,5 +59,7 @@ public class HistoryInputModel implements Serializable {
         this.lowPrice = lowPrice;
     }
 
+  
+
     
 }
