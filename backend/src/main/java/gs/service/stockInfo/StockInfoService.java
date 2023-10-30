@@ -12,5 +12,7 @@ public interface StockInfoService {
 
     List<StockInfoInputModel> getStockInfoByTicker(String ticker);
 
-     List<StockInfoInputModel> getStockInfoByPortfolio() throws Exception;
+    List<StockInfoInputModel> getStockInfoByPortfolio() throws Exception;
+
+     List<StockInfoInputModel> updateStockInfoByPortfolio() throws Exception;
 }

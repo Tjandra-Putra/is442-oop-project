@@ -50,4 +50,9 @@ public class StockInfoController {
     public ApiModel<ArrayList<StockInfoInputModel>> getStockInfoByPortfolio() throws Exception{
         return ApiModel.ok(StockInfoService.getStockInfoByPortfolio());
     }
+
+    @GetMapping("/updateStockInfo/portfolio")
+    public ApiModel<ArrayList<StockInfoInputModel>> updateStockInfoByPortfolio() throws Exception{
+        return ApiModel.ok(StockInfoService.updateStockInfoByPortfolio());
+    }
 }

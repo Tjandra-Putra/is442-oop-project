@@ -22,7 +22,7 @@ function MarketExposureByGeographicalLocationChart() {
   ];
 
   const options = {
-    title: "Market Exposure by Geographical Location: " + selectedCountry,
+    // title: "Market Exposure by Location: " + selectedCountry,
 
     legend: { position: "bottom" },
   };

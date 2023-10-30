@@ -14,10 +14,33 @@ import { randomTraderName, randomId } from "@mui/x-data-grid-generator";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import PortfolioStockCandleStickChart from "../Charts/PortfolioStockCandleStickChart/PortfolioStockCandleStickChart";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 import style from "./StockGrid.module.css";
 
 export default function StockGrid({ portfolioId }) {
+  const [apiMyStocks, setApiMyStocks] = React.useState([]);
+
+  React.useEffect(() => {
+    axios
+      .get(`http://localhost:8080/api/portfolioStock/getPortfolioStock/${portfolioId}`)
+      .then((res) => {
+        const dataWithUniqueIds = addUniqueIds(res.data.data);
+        setApiMyStocks(dataWithUniqueIds);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [portfolioId]);
+
+  const addUniqueIds = (data) => {
+    return data.map((item, index) => {
+      const total = item.quantity * item.price; // Calculate total value
+      return { id: index + 1, ...item, total }; // Include total value in the object
+    });
+  };
+
   const initialRows = [
     {
       id: randomId(),
@@ -64,17 +87,50 @@ export default function StockGrid({ portfolioId }) {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id) => () => {
+  const handleDeleteClick = (id, ticker) => () => {
     // First, ask the user for confirmation using a native browser confirm dialog
-    const firstConfirmation = window.confirm(
-      "This action is irreversible. Are you absolutely sure you want to delete this item?"
-    );
+    // const firstConfirmation = window.confirm(
+    //   "This action is irreversible. Are you absolutely sure you want to delete this item?"
+    // );
 
-    // If the user confirms the first dialog, ask for confirmation again
-    if (firstConfirmation) {
-      console.log("Deleted: ", id);
-      setRows(rows.filter((row) => row.id !== id));
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d23457",
+      cancelButtonColor: "#7a6b78",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Filter the stock with the specific id
+        const stockToDelete = apiMyStocks.find((stock) => stock.id === id);
+
+        if (stockToDelete) {
+          axios
+            .delete(
+              `http://localhost:8080/api/portfolioStock/deletePortfolioStock/${stockToDelete.portfolioId}/${stockToDelete.ticker}`
+            )
+            .then(() => {
+              // Update state by removing the row with the specified ID
+              setRows(rows.filter((row) => row.id !== id));
+
+              // Update apiMyStocks state after successful deletion
+              setApiMyStocks((prevStocks) => prevStocks.filter((stock) => stock.id !== id));
+            })
+            .catch((error) => {
+              // Handle any error that may occur during the API call
+              console.error("Error deleting portfolio stock:", error);
+            });
+        } else {
+          console.error(`Stock with id ${id} not found.`);
+        }
+
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      } else {
+        Swal.fire("Cancelled", "Your stock is safe :)", "error");
+      }
+    });
   };
 
   const handleCancelClick = (id) => () => {
@@ -84,7 +140,8 @@ export default function StockGrid({ portfolioId }) {
     });
 
     const editedRow = rows.find((row) => row.id === id);
-    if (editedRow.isNew) {
+
+    if (editedRow && editedRow.isNew) {
       setRows(rows.filter((row) => row.id !== id));
     }
   };
@@ -104,28 +161,10 @@ export default function StockGrid({ portfolioId }) {
   };
 
   const columns = [
-    { field: "id", headerName: "ID", width: 150 },
-    { field: "name", headerName: "Name", width: 200 },
-    {
-      field: "description",
-      headerName: "Description",
-      width: 300,
-      // type: "singleSelect",
-      // valueOptions: ["Market", "Finance", "Development"],
-    },
-    {
-      field: "price",
-      headerName: "Price",
-      type: "number",
-      width: 110,
-    },
-    {
-      field: "quantity",
-      headerName: "Quantity",
-      type: "number",
-      width: 110,
-      editable: true,
-    },
+    { field: "ticker", headerName: "Ticker", width: 150 },
+    { field: "quantity", headerName: "Quantity", width: 150 },
+    { field: "buyDate", headerName: "Buy Date", width: 150 },
+    { field: "price", headerName: "Price", width: 150 },
     {
       field: "total",
       headerName: "Total",
@@ -169,12 +208,90 @@ export default function StockGrid({ portfolioId }) {
             onClick={handleEditClick(id)}
             color="inherit"
           />,
-          <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={handleDeleteClick(id)} color="inherit" />,
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Delete"
+            onClick={handleDeleteClick(id)} // Pass the 'ticker' here
+            color="inherit"
+          />,
           <GridActionsCellItem icon={<FullscreenIcon />} label="View" onClick={handleViewClick(id)} color="inherit" />,
         ];
       },
     },
   ];
+
+  // const columns = [
+  //   { field: "id", headerName: "ID", width: 150 },
+  //   { field: "name", headerName: "Name", width: 200 },
+  //   {
+  //     field: "description",
+  //     headerName: "Description",
+  //     width: 300,
+  //     // type: "singleSelect",
+  //     // valueOptions: ["Market", "Finance", "Development"],
+  //   },
+  //   {
+  //     field: "price",
+  //     headerName: "Price",
+  //     type: "number",
+  //     width: 110,
+  //   },
+  //   {
+  //     field: "quantity",
+  //     headerName: "Quantity",
+  //     type: "number",
+  //     width: 110,
+  //     editable: true,
+  //   },
+  //   {
+  //     field: "total",
+  //     headerName: "Total",
+  //     type: "number",
+  //     width: 110,
+  //   },
+  //   {
+  //     field: "actions",
+  //     type: "actions",
+  //     headerName: "Actions",
+  //     width: 100,
+  //     cellClassName: "actions",
+  //     getActions: ({ id }) => {
+  //       const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+
+  //       if (isInEditMode) {
+  //         return [
+  //           <GridActionsCellItem
+  //             icon={<SaveIcon />}
+  //             label="Save"
+  //             sx={{
+  //               color: "primary.main",
+  //             }}
+  //             onClick={handleSaveClick(id)}
+  //           />,
+  //           <GridActionsCellItem
+  //             icon={<CancelIcon />}
+  //             label="Cancel"
+  //             className="textPrimary"
+  //             onClick={handleCancelClick(id)}
+  //             color="inherit"
+  //           />,
+  //         ];
+  //       }
+
+  //       return [
+  //         <GridActionsCellItem
+  //           icon={<EditIcon />}
+  //           label="Edit"
+  //           className="textPrimary"
+  //           onClick={handleEditClick(id)}
+  //           color="inherit"
+  //         />,
+  //         <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={handleDeleteClick(id)} color="inherit" />,
+  //         <GridActionsCellItem icon={<FullscreenIcon />} label="View" onClick={handleViewClick(id)} color="inherit" />,
+  //       ];
+  //     },
+  //   },
+  // ];
 
   // ============================== Add new stocks section ==============================
   const getTotalPrice = () => {
@@ -260,6 +377,7 @@ export default function StockGrid({ portfolioId }) {
         />
       ),
       width: 150,
+      // editable
     },
     {
       field: "Total",
@@ -340,7 +458,6 @@ export default function StockGrid({ portfolioId }) {
                         return {
                           id: row.id,
                           Name: row.Name,
-                          // add dollar sign but make it an integer
                           Price: row.Price,
                           Total: row.Total ? row.Total : row.Price,
                         };
@@ -402,6 +519,8 @@ export default function StockGrid({ portfolioId }) {
         </Modal>
       </Stack>
 
+      {/* MY STOCKS TABLE */}
+
       <Box
         sx={{
           height: 350,
@@ -415,7 +534,7 @@ export default function StockGrid({ portfolioId }) {
         }}
       >
         <DataGrid
-          rows={rows}
+          rows={apiMyStocks}
           columns={columns}
           editMode="row"
           rowModesModel={rowModesModel}

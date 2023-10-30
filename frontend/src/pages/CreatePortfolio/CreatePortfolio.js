@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
@@ -10,16 +10,32 @@ import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import toast from "react-hot-toast";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import style from "./CreatePortfolio.module.css";
 
 const CreatePortfolio = () => {
+  const navigate = useNavigate();
+
   const [selectedRows, setSelectedRows] = useState([]);
   const [portfolioName, setPortfolioName] = useState("");
   const [portfolioDescription, setPortfolioDescription] = useState("");
   const [portfolioCapital, setPortfolioCapital] = useState("");
+  const [stockMarket, setStockMarket] = useState([]);
+  const [stockColumns, setStockColumns] = useState([]);
+  const [stockRows, setStockRows] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [portfolioId, setPortfolioId] = useState(null);
+  const [buyDate, setBuyDate] = useState("");
+  const [quantityValues, setQuantityValues] = useState(Object.fromEntries(stockRows.map((row) => [row.id, 1])));
+
+  useEffect(() => {
+    console.log("Selected Rows Updated:", selectedRows);
+  }, [selectedRows]);
 
   const notifyError = (message) => toast.error(message, { duration: 5000 });
+  const notifySuccess = (message) => toast.success(message, { duration: 5000 });
 
   // get total price of selected stocks
   const getTotalPrice = () => {
@@ -30,29 +46,7 @@ const CreatePortfolio = () => {
     return totalPrice;
   };
 
-  const stockColumns = [
-    { field: "id", headerName: "Ticker", width: 100 },
-    { field: "Name", headerName: "Name", width: 130 },
-    {
-      field: "Price",
-      headerName: "Price",
-      type: "number",
-      width: 90,
-    },
-  ];
-
-  const stockRows = [
-    { id: 1, Name: "Snow", Price: 105 },
-    { id: 2, Name: "Snow", Price: 35 },
-    { id: 3, Name: "Snow", Price: 10 },
-    { id: 4, Name: "Snow", Price: 35 },
-    { id: 5, Name: "Snow", Price: 35 },
-    { id: 6, Name: "Snow", Price: 35 },
-  ];
-
-  const [quantityValues, setQuantityValues] = useState(Object.fromEntries(stockRows.map((row) => [row.id, 1])));
-
-  const handleQuantityChange = (id, newValue) => {
+  const handleQuantityChange = async (id, newValue) => {
     newValue = parseInt(newValue, 10);
 
     if (!isNaN(newValue) && newValue >= 1) {
@@ -77,19 +71,32 @@ const CreatePortfolio = () => {
     }
   };
 
+  const handleBuyDateChange = (id, newValue) => {
+    const newSelectedRows = selectedRows.map((row) => {
+      if (row.id === id) {
+        return {
+          ...row,
+          BuyDate: newValue,
+        };
+      }
+      return row;
+    });
+    setSelectedRows(newSelectedRows);
+  };
+
   // Material UI DataGrid
   const selectedStockColumns = [
-    { field: "id", headerName: "Ticker", width: 80 },
+    { field: "id", headerName: "No.", width: 50 },
     {
-      field: "Name",
-      headerName: "Name",
-      width: 90,
+      field: "Ticker",
+      headerName: "Ticker",
+      width: 80,
     },
     {
       field: "Price",
       headerName: "Price",
       type: "number",
-      width: 60,
+      width: 80,
     },
     {
       field: "Quantity",
@@ -103,6 +110,28 @@ const CreatePortfolio = () => {
         />
       ),
       width: 80,
+    },
+    {
+      field: "BuyDate",
+      headerName: "Buy Date",
+      renderCell: (params) => {
+        const today = new Date();
+        const formattedToday = today.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+
+        return (
+          <input
+            type="date"
+            value={params.row.BuyDate ? params.row.BuyDate : formattedToday}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            onChange={(e) => handleBuyDateChange(params.row.id, e.target.value)}
+            className={style.quantityInput}
+            fullWidth
+          />
+        );
+      },
+      width: 120, // Adjust the width as needed
     },
     {
       field: "Total",
@@ -125,15 +154,12 @@ const CreatePortfolio = () => {
         Quantity: quantityValues[row.id],
       };
     });
+
     return {
-      selectedRowsWithQuantity,
-      portfolioName,
-      portfolioDescription,
-      // cast to int
-      portfolioCapital: +portfolioCapital
-        .split("")
-        .filter((char) => char !== "$")
-        .join(""),
+      selectedRows: selectedRowsWithQuantity,
+      // portfolioName: portfolioName,
+      // portfolioDescription: portfolioDescription,
+      // portfolioCapital: portfolioCapital,
     };
   };
 
@@ -141,22 +167,169 @@ const CreatePortfolio = () => {
   const submitFormHandler = () => {
     if (portfolioCapital.length === 0) {
       notifyError("Please enter a valid amount of capital");
+      return;
     } else if (portfolioCapital < 0) {
       notifyError("Please enter a valid amount of capital");
+      return;
     } else if (portfolioName.length === 0) {
       notifyError("Please enter a portfolio name");
+      return;
     } else if (portfolioDescription.length === 0) {
       notifyError("Please enter a description");
+      return;
+    } else if (selectedRows.length === 0) {
+      notifyError("Please select at least one stock");
+      return;
     }
 
-    let formData = {
-      portfolioName,
-      portfolioDescription,
-      portfolioCapital,
-      selectedStocks: getSelectedRows(),
+    const userId = 1;
+
+    const postData1 = {
+      data: [
+        {
+          fieldName: "capitalAmt",
+          value: portfolioCapital,
+        },
+        {
+          fieldName: "description",
+          value: portfolioDescription,
+        },
+        { fieldName: "portfolioName", value: portfolioName },
+      ],
     };
 
-    console.log(formData);
+    // send the portfolio name, description, capital
+    axios
+      .post("http://localhost:8080/api/portfolio/addPortfolio/" + userId, postData1)
+      .then((res) => {
+        console.log(res.data);
+
+        if (res.data && res.data.data === null) {
+          notifyError(res.data.message);
+        } else {
+          notifySuccess(res.data.message);
+
+          // ================ send selected stock data to backend =================
+
+          const postData2 = {
+            data: [],
+          };
+
+          console.log("SUBMIT === selectedRows ===");
+          selectedRows.forEach((row) => {
+            console.log(row);
+
+            const formattedData = [
+              {
+                fieldname: "ticker",
+                value: row.Ticker,
+              },
+              {
+                fieldname: "price",
+                value: row.Price,
+              },
+              {
+                fieldname: "buyDate",
+                value: row.BuyDate, // You can set the buyDate to a specific value or get it dynamically
+              },
+            ];
+
+            postData2.data.push(formattedData);
+          });
+
+          console.log("POSTDATA2 === postData2 ===" + postData2);
+
+          const portfolioId = res.data.data.portfolioId;
+
+          // Send the selected stocks
+          axios
+            .post("http://localhost:8080/api/portfolioStock/addPortfolioStock/" + portfolioId, postData2)
+            .then((res) => {
+              console.log(res.data);
+            })
+            .catch((err) => console.log(err));
+
+          // navigate("/dashboard");
+        }
+      })
+      .catch((err) => {
+        notifyError(err.response.data.message);
+      });
+  };
+
+  useEffect(() => {
+    // http://localhost:8080/api/stockInfo/getStockInfo/ticker/{ticker}
+    // get current stock market
+    axios
+      .get("http://localhost:8080/api/stock/getStock")
+      .then((res) => {
+        let stockData = res.data.data;
+        setStockMarket(stockData);
+        // console.log(res.data.data);
+
+        const generatedStockRows = stockData.map((stock, index) => ({
+          id: index + 1, // Start from 1
+          Ticker: stock.ticker,
+          Name: stock.name,
+        }));
+
+        setStockRows(generatedStockRows);
+        setStockColumns([
+          { field: "id", headerName: "No.", width: 100 },
+          { field: "Ticker", headerName: "Ticker", width: 100 },
+          { field: "Name", headerName: "Name", width: 230 },
+        ]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const filteredStockRows = stockRows.filter((row) => {
+    const searchString = searchQuery.toLowerCase();
+    return row.Ticker.toLowerCase().includes(searchString) || row.Name.toLowerCase().includes(searchString);
+  });
+
+  const getStockPrice = (ticker) => {
+    return axios
+      .get("http://localhost:8080/api/StockInfo/getStockInfo/ticker/" + ticker)
+      .then((res) => {
+        console.log("== getStockPrice ==");
+        const todayPrice = res.data.data[0]?.todayPrice || 0;
+        console.log(todayPrice); // Logging for verification
+        return todayPrice;
+      })
+      .catch((error) => {
+        console.error("Error fetching stock price:", error);
+        return 0; // Return 0 in case of an error
+      });
+  };
+
+  const handleRowSelectionModelChange = async (newSelection) => {
+    const getPricePromises = newSelection.map((id) => {
+      const row = filteredStockRows.find((row) => row.id === id);
+      return getStockPrice(row.Ticker);
+    });
+
+    try {
+      const prices = await Promise.all(getPricePromises);
+      const updatedRows = newSelection.map((id, index) => {
+        const row = filteredStockRows.find((row) => row.id === id);
+        const total = prices[index] * (row.Quantity || 1);
+        return {
+          ...row,
+          id: row.id, // ensure you keep the ID
+          Ticker: row.Ticker,
+          Name: row.Name,
+          Price: prices[index],
+          Quantity: row.Quantity || 1, // default to 1 if Quantity is not set
+          Total: total,
+        };
+      });
+      setSelectedRows(updatedRows);
+    } catch (error) {
+      console.error("Error fetching stock prices:", error);
+    }
   };
 
   return (
@@ -173,7 +346,7 @@ const CreatePortfolio = () => {
       <Container maxWidth="xl">
         <Box component="form" noValidate autoComplete="off">
           <Grid container spacing={4} mt={0}>
-            <Grid item md={3} xs={12}>
+            <Grid item md={2} xs={12}>
               <Card className={style.inputWrapper}>
                 <CardContent>
                   <div className={style.cardTitle}>Portfolio Name</div>
@@ -187,9 +360,7 @@ const CreatePortfolio = () => {
                     label="Portfolio Name"
                     defaultValue=""
                     onChange={(e) => setPortfolioName(e.target.value)}
-                    sx={{ mt: 3 }}
-                    error={portfolioName.length === 0}
-                    helperText="Please enter a portfolio name"
+                    sx={{ mt: 2 }}
                   />
                 </CardContent>
 
@@ -205,9 +376,7 @@ const CreatePortfolio = () => {
                     label="Description"
                     defaultValue=""
                     onChange={(e) => setPortfolioDescription(e.target.value)}
-                    sx={{ mt: 2 }}
-                    error={portfolioDescription.length === 0}
-                    helperText="Please enter a description"
+                    sx={{ mt: 1 }}
                   />
                 </CardContent>
 
@@ -221,9 +390,7 @@ const CreatePortfolio = () => {
                     label="Amount of Capital"
                     type="number"
                     onChange={(e) => setPortfolioCapital(e.target.value)}
-                    sx={{ mt: 2 }}
-                    error={portfolioCapital.length === 0}
-                    helperText="Please enter an amount of capital"
+                    sx={{ mt: 1 }}
                   />
                 </CardContent>
               </Card>
@@ -233,51 +400,34 @@ const CreatePortfolio = () => {
                 <CardContent className={style.currentStockMarket}>
                   <div className={style.cardTitle}>Current Stock Market</div>
 
-                  <Grid container mt={2} spacing={1}>
-                    <Grid item md={9} xs={12}>
+                  <Grid container mt={1} spacing={1}>
+                    <Grid item md={12} xs={12}>
                       <TextField
                         id="outlined-basic"
                         label="Search by ticker or name"
                         multiline
                         maxRows={4}
                         variant="outlined"
-                        sx={{ width: "100%", mr: "2rem" }}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        sx={{ width: "100%", mr: "2rem", mb: "1rem" }}
                       />
-                    </Grid>
-                    <Grid item md={3} sx={12}>
-                      <Button variant="outlined" size="large" sx={{ height: "3.5rem", width: "100%", mb: "1rem" }}>
-                        Seach
-                      </Button>
                     </Grid>
                   </Grid>
 
                   <div style={{ height: 400, width: "100%" }}>
                     <DataGrid
-                      rows={stockRows}
+                      rows={filteredStockRows}
                       columns={stockColumns}
                       checkboxSelection
-                      // onchange
-                      onRowSelectionModelChange={(newSelection) => {
-                        const selectedRows = newSelection.map((id) => {
-                          const row = stockRows.find((row) => row.id === id);
-                          // Extracting only the desired properties
-                          return {
-                            id: row.id,
-                            Name: row.Name,
-                            // add dollar sign but make it an integer
-                            Price: row.Price,
-                            Total: row.Total ? row.Total : row.Price,
-                          };
-                        });
-                        setSelectedRows(selectedRows);
-                      }}
+                      onRowSelectionModelChange={handleRowSelectionModelChange}
                     />
                   </div>
                 </CardContent>
               </Card>
             </Grid>
 
-            <Grid item md={4} xs={12}>
+            <Grid item md={5} xs={12}>
               <Card className={style.selectedStocksWrapper}>
                 <CardContent>
                   {/* space between */}
