@@ -147,7 +147,7 @@ const Dashboard = () => {
 
         <Grid container spacing={2} sx={{ mt: 1 }}>
           <Grid item md={9} xs={12}>
-            <Card className={style.chart} sx={{ minHeight: 540 }}>
+            {/* <Card className={style.chart} sx={{ minHeight: 540 }}>
               <CardContent>
                 <PortfolioReturnsChart />
               </CardContent>
@@ -163,14 +163,14 @@ const Dashboard = () => {
               <CardContent>
                 <MarketExposureBySegment />
               </CardContent>
-            </Card>
+            </Card> */}
 
-            <div className="portfolios" style={{ marginTop: "2rem" }}>
+            <div className="portfolios" style={{ marginTop: "0rem" }}>
               <Grid container spacing={4}>
                 <Grid item md={6} xs={12}>
-                  <Typography variant="h6" className={style.portfoliosText}>
+                  {/* <Typography variant="h6" className={style.portfoliosText}>
                     My Portfolios
-                  </Typography>
+                  </Typography> */}
                 </Grid>
               </Grid>
               <Grid container spacing={4}>

@@ -28,6 +28,7 @@ const CreatePortfolio = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [portfolioId, setPortfolioId] = useState(null);
   const [buyDate, setBuyDate] = useState("");
+  const [quantityValues, setQuantityValues] = useState(Object.fromEntries(stockRows.map((row) => [row.id, 1])));
 
   useEffect(() => {
     console.log("Selected Rows Updated:", selectedRows);
@@ -44,8 +45,6 @@ const CreatePortfolio = () => {
     });
     return totalPrice;
   };
-
-  const [quantityValues, setQuantityValues] = useState(Object.fromEntries(stockRows.map((row) => [row.id, 1])));
 
   const handleQuantityChange = async (id, newValue) => {
     newValue = parseInt(newValue, 10);
@@ -93,11 +92,6 @@ const CreatePortfolio = () => {
       headerName: "Ticker",
       width: 80,
     },
-    // {
-    //   field: "Name",
-    //   headerName: "Name",
-    //   width: 90,
-    // },
     {
       field: "Price",
       headerName: "Price",
@@ -120,18 +114,23 @@ const CreatePortfolio = () => {
     {
       field: "BuyDate",
       headerName: "Buy Date",
-      renderCell: (params) => (
-        <input
-          type="date"
-          value={params.row.BuyDate || ""}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          onChange={(e) => handleBuyDateChange(params.row.id, e.target.value)}
-          className={style.quantityInput}
-          fullWidth
-        />
-      ),
+      renderCell: (params) => {
+        const today = new Date();
+        const formattedToday = today.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+
+        return (
+          <input
+            type="date"
+            value={params.row.BuyDate ? params.row.BuyDate : formattedToday}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            onChange={(e) => handleBuyDateChange(params.row.id, e.target.value)}
+            className={style.quantityInput}
+            fullWidth
+          />
+        );
+      },
       width: 120, // Adjust the width as needed
     },
     {
@@ -168,12 +167,16 @@ const CreatePortfolio = () => {
   const submitFormHandler = () => {
     if (portfolioCapital.length === 0) {
       notifyError("Please enter a valid amount of capital");
+      return;
     } else if (portfolioCapital < 0) {
       notifyError("Please enter a valid amount of capital");
+      return;
     } else if (portfolioName.length === 0) {
       notifyError("Please enter a portfolio name");
+      return;
     } else if (portfolioDescription.length === 0) {
       notifyError("Please enter a description");
+      return;
     }
 
     const userId = 1;
@@ -327,9 +330,7 @@ const CreatePortfolio = () => {
                     label="Portfolio Name"
                     defaultValue=""
                     onChange={(e) => setPortfolioName(e.target.value)}
-                    sx={{ mt: 3 }}
-                    error={portfolioName.length === 0}
-                    helperText="Please enter a portfolio name"
+                    sx={{ mt: 2 }}
                   />
                 </CardContent>
 
@@ -345,9 +346,7 @@ const CreatePortfolio = () => {
                     label="Description"
                     defaultValue=""
                     onChange={(e) => setPortfolioDescription(e.target.value)}
-                    sx={{ mt: 2 }}
-                    error={portfolioDescription.length === 0}
-                    helperText="Please enter a description"
+                    sx={{ mt: 1 }}
                   />
                 </CardContent>
 
@@ -361,9 +360,7 @@ const CreatePortfolio = () => {
                     label="Amount of Capital"
                     type="number"
                     onChange={(e) => setPortfolioCapital(e.target.value)}
-                    sx={{ mt: 2 }}
-                    error={portfolioCapital.length === 0}
-                    helperText="Please enter an amount of capital"
+                    sx={{ mt: 1 }}
                   />
                 </CardContent>
               </Card>
@@ -373,7 +370,7 @@ const CreatePortfolio = () => {
                 <CardContent className={style.currentStockMarket}>
                   <div className={style.cardTitle}>Current Stock Market</div>
 
-                  <Grid container mt={2} spacing={1}>
+                  <Grid container mt={1} spacing={1}>
                     <Grid item md={12} xs={12}>
                       <TextField
                         id="outlined-basic"

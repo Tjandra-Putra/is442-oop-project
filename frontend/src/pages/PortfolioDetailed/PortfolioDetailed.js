@@ -4,7 +4,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import StockCard from "../../components/StockCard/StockCard";
 import PortfolioStocksAllocationChart from "../../components/Charts/PortfolioStocksAllocationChart/PortfolioStocksAllocationChart";
 import PortfolioStocksBySegmentChart from "../../components/Charts/PortfolioStocksBySegmentChart/PortfolioStocksBySegmentChart";
-import PortfolioStocksChart from "../../components/Charts/PortfolioStocksChart/PortfolioStocksChart";
+import MarketExposureByGeographicalLocationChart from "../../components/Charts/MarketExposureByGeographicalLocationChart/MarketExposureByGeographicalLocationChart";
+import MarketExposureBySegment from "../../components/Charts/MarketExposureBySegment/MarketExposureBySegment";
+import PortfolioReturnsChart from "../../components/Charts/PortfolioReturnsChart/PortfolioReturnsChart";
+import PortfolioAnnualReturnsPercentage from "../../components/Charts/PortfolioAnnualReturnsPercentage/PortfolioAnnualReturnsPercentage";
 import StockGrid from "../../components/StockGrid/StockGrid";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -252,10 +255,39 @@ const PortfolioDetailed = () => {
         <Grid item xs={12} md={12} lg={12}>
           <Card className={style.cardCustom}>
             <CardContent>
-              <div className={style.cardTitle}>Stocks Performance</div>
+              <div className={style.cardTitle}>Portfolio Returns</div>
               <br />
+              <PortfolioReturnsChart />
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} md={12} lg={12}>
+          <Card className={style.cardCustom}>
+            <CardContent>
+              <div className={style.cardTitle}>Portfolio Annual Returns (%)</div>
               <br />
-              <PortfolioStocksChart />
+              <PortfolioAnnualReturnsPercentage />
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} md={12} lg={12}>
+          <Card className={style.cardCustom}>
+            <CardContent>
+              <div className={style.cardTitle}>Market Exposure by Location</div>
+              <br />
+              <MarketExposureByGeographicalLocationChart />
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} md={12} lg={12}>
+          <Card className={style.cardCustom}>
+            <CardContent>
+              <div className={style.cardTitle}>Market Exposure by Country</div>
+              <br />
+              <MarketExposureBySegment />
             </CardContent>
           </Card>
         </Grid>

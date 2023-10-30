@@ -43,7 +43,7 @@ function LineChart() {
   ];
 
   const options = {
-    title: `Portfolio Returns`,
+    // title: `Portfolio Returns`,
     curveType: "function",
     legend: { position: "bottom" },
     hAxis: {
