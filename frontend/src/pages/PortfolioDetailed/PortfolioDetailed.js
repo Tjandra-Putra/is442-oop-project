@@ -246,7 +246,7 @@ const PortfolioDetailed = () => {
                   </Stack>
 
                   <p className={style.deleteMessage}>
-                    This action <strong>action</strong> cannot be undone. This will permanently delete the portfolio (
+                    This <strong>action</strong> cannot be undone. This will permanently delete the portfolio (
                     {portfolio?.portfolioName}) and all its contents.
                   </p>
 
