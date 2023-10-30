@@ -177,6 +177,9 @@ const CreatePortfolio = () => {
     } else if (portfolioDescription.length === 0) {
       notifyError("Please enter a description");
       return;
+    } else if (selectedRows.length === 0) {
+      notifyError("Please select at least one stock");
+      return;
     }
 
     const userId = 1;
@@ -207,7 +210,34 @@ const CreatePortfolio = () => {
           notifySuccess(res.data.message);
 
           // ================ send selected stock data to backend =================
-          const postData2 = getSelectedRows().selectedRows;
+
+          const postData2 = {
+            data: [],
+          };
+
+          console.log("SUBMIT === selectedRows ===");
+          selectedRows.forEach((row) => {
+            console.log(row);
+
+            const formattedData = [
+              {
+                fieldname: "ticker",
+                value: row.Ticker,
+              },
+              {
+                fieldname: "price",
+                value: row.Price,
+              },
+              {
+                fieldname: "buyDate",
+                value: row.BuyDate, // You can set the buyDate to a specific value or get it dynamically
+              },
+            ];
+
+            postData2.data.push(formattedData);
+          });
+
+          console.log("POSTDATA2 === postData2 ===" + postData2);
 
           const portfolioId = res.data.data.portfolioId;
 
