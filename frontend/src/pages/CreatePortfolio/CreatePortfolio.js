@@ -208,8 +208,6 @@ const CreatePortfolio = () => {
 
           console.log("SUBMIT === selectedRows ===");
           selectedRows.forEach((row) => {
-            console.log(row);
-
             const formattedData = [
               {
                 fieldName: "ticker",
@@ -221,13 +219,16 @@ const CreatePortfolio = () => {
               },
               {
                 fieldName: "buyDate",
-                value: row.BuyDate, // You can set the buyDate to a specific value or get it dynamically
+                value: "2000-04-20", // You can set the buyDate to a specific value or get it dynamically
               },
               {
                 fieldName: "quantity",
                 value: row.Quantity,
               },
             ];
+
+            console.log("FOR EACHHHHHHHHH ~~~~~~~~~~~~");
+            console.log(formattedData);
 
             postData2.data.push(formattedData);
           });

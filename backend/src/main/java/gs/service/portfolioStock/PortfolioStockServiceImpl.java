@@ -226,6 +226,8 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
     
     public ApiModel addPortfolioStock(HttpServletResponse response, RequestModel2 requestModel2, ApiModel apiModel, String portfolioId) throws DataAccessException, ParseException{
         try {
+            System.out.println("===========HERE=========");
+            System.out.println(requestModel2.getData());
             for (List<DataRequestModel> obj : requestModel2.getData()){   
 
                 PortfolioStock newPortfolioStock = new PortfolioStock();
