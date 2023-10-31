@@ -10,9 +10,13 @@ import gs.common.ApiModel;
 import gs.common.DataRequestModel;
 import gs.common.RequestModel;
 import gs.entity.Portfolio;
+import gs.entity.PortfolioStock;
+import gs.entity.StockInfo;
 import gs.entity.User;
 import gs.inputModel.PortfolioInputModel;
 import gs.repository.PortfolioRepo;
+import gs.repository.PortfolioStockRepo;
+import gs.repository.StockInfoRepo;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -21,16 +25,39 @@ public class PortfolioServiceImpl implements PortfolioService{
     @Resource
     protected PortfolioRepo portfolioRepo;
 
+    @Resource
+    protected PortfolioStockRepo portfolioStockRepo;
+
+    @Resource
+    protected StockInfoRepo stockInfoRepo;
+
     // inputModel fitting methood
     private PortfolioInputModel inputModel(Portfolio data){
         PortfolioInputModel inputModel = new PortfolioInputModel();
-        inputModel.setPortfolioId((Long) data.getPortfolioId());
+        long portfolioId = data.getPortfolioId();
+
+        inputModel.setPortfolioId(portfolioId);
         inputModel.setCapitalAmt((double) data.getPortfolioCapitalAmt());
         inputModel.setDescription(String.valueOf(data.getPortfolioDescription()));
         inputModel.setPortfolioName(String.valueOf(data.getPortfolioName()));
         inputModel.setUserId((Long) data.getUser().getUserId());
 
+        double portfolioValue = 0.0;
+        
+        List<PortfolioStock> portofolioStockQueryList = portfolioStockRepo.getPortfolioStockByPortfolioId(String.valueOf(portfolioId));
+
+        for (PortfolioStock portfolioStock : portofolioStockQueryList) {
+            portfolioValue += portfolioValueCalculation(portfolioStock.getQuantity(), stockInfoRepo.getStockInfoByTicker(portfolioStock.getStock().getTicker()).get(0).getTodayPrice());
+        }
+
+        inputModel.setPortfolioValue(portfolioValue);
+
         return inputModel;
+    }
+
+    // caluclate porfolio value
+    private double portfolioValueCalculation(int quantity, double todayPrice){
+        return quantity * todayPrice;
     }
 
     public List<PortfolioInputModel> getPortfolio(String userId){
@@ -39,6 +66,7 @@ public class PortfolioServiceImpl implements PortfolioService{
 
         for (Portfolio data : portfolioQueryList) {
             PortfolioInputModel inputModel = inputModel(data);
+
             portfolioList.add(inputModel);
             
         }

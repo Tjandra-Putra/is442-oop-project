@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import gs.common.ApiModel;
 import gs.common.RequestModel;
+import gs.common.RequestModel2;
 import gs.inputModel.PortfolioStockInputModel;
 import gs.inputModel.StockAllocationInputModel;
 import gs.service.portfolioStock.PortfolioStockService;
@@ -57,10 +58,10 @@ public class PortfolioStockController {
     @PostMapping("/addPortfolioStock/{portfolioId}")
     public ApiModel<ArrayList<PortfolioStockInputModel>> getPortfolioStockByTicker(
         @PathVariable("portfolioId") String portfolioId,
-        @RequestBody RequestModel requestModel
+        @RequestBody RequestModel2 requestModel2
     ) throws Exception {
         ApiModel myApiModel = new ApiModel();
-        portfolioStockService.addPortfolioStock(response, requestModel, myApiModel, portfolioId);
+        portfolioStockService.addPortfolioStock(response, requestModel2, myApiModel, portfolioId);
         
         return myApiModel;
     }
