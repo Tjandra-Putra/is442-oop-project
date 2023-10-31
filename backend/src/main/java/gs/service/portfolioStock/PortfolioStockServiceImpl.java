@@ -4,7 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -16,12 +19,15 @@ import gs.common.RequestModel2;
 import gs.entity.Portfolio;
 import gs.entity.PortfolioStock;
 import gs.entity.Stock;
+import gs.entity.StockInfo;
 import gs.entity.User;
+import gs.inputModel.AllocationInputModel;
 import gs.inputModel.PortfolioInputModel;
 import gs.inputModel.PortfolioStockInputModel;
-import gs.inputModel.StockAllocationInputModel;
+import gs.inputModel.AllocationInputModel;
 import gs.repository.PortfolioRepo;
 import gs.repository.PortfolioStockRepo;
+import gs.repository.StockInfoRepo;
 import gs.repository.StockRepo;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,10 +39,13 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
     
     @Resource
     protected PortfolioRepo portfolioRepo;
-
+    
     @Resource
     protected StockRepo stockRepo;
-
+    
+    @Resource
+    protected StockInfoRepo stockInfoRepo;
+    
     // inputModel fitting methood
     private PortfolioStockInputModel inputModel(PortfolioStock data){
         PortfolioStockInputModel inputModel = new PortfolioStockInputModel();
@@ -45,9 +54,20 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
         inputModel.setQuantity(data.getQuantity());
         inputModel.setBuyDate(dateFormatter(data.getBuyDate(), data));
         inputModel.setPrice(data.getPrice());
-
+        
         return inputModel;
     }
+    
+    // inputModel fitting method for AllocationInputModel
+    private AllocationInputModel allocationInputModel(String fieldKey, Integer fieldValue, int totalStockCount){
+        AllocationInputModel inputModel = new AllocationInputModel();
+    
+        inputModel.setAllocationName(fieldKey);
+        double allocationPercentage = (double) fieldValue / totalStockCount * 100;
+        inputModel.setPercentage(allocationPercentage);
+    
+        return inputModel;
+    } 
 
     private String dateFormatter(Date buyDate, PortfolioStock individualStockQuery){
         SimpleDateFormat dateFormatter = new SimpleDateFormat("YYYY-MM-dd");
@@ -69,18 +89,18 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
         return portfolioStockList;
     }
 
-    public List<StockAllocationInputModel> getPortfolioStockAllocation(String portfolioId){
+    public List<AllocationInputModel> getPortfolioStockAllocation(String portfolioId){
         List<PortfolioStock> portfolioStockQueryList = portfolioStockRepo.getPortfolioStockByPortfolioId(portfolioId);
 
         double capitalAmt = portfolioStockQueryList.get(0).getPortfolio().getPortfolioCapitalAmt();
 
         double totalStockPercentage = 0;
 
-        List<StockAllocationInputModel> stockAllocationList = new ArrayList<>();
+        List<AllocationInputModel> stockAllocationList = new ArrayList<>();
 
         if (portfolioStockQueryList.size() > 0){
             for (PortfolioStock portfolioStock : portfolioStockQueryList){
-                StockAllocationInputModel inputModel = new StockAllocationInputModel();
+                AllocationInputModel inputModel = new AllocationInputModel();
                 inputModel.setAllocationName(portfolioStock.getStock().getTicker());
 
                 double allocationPercentage = ((portfolioStock.getQuantity() * portfolioStock.getPrice()) / capitalAmt) * 100;
@@ -91,13 +111,107 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
             }
         }
 
-        StockAllocationInputModel cashInputModel = new StockAllocationInputModel();
+        AllocationInputModel cashInputModel = new AllocationInputModel();
         cashInputModel.setAllocationName("Cash");
         cashInputModel.setPercentage(100 - totalStockPercentage);
         stockAllocationList.add(cashInputModel);
     
         return stockAllocationList;
     }
+
+    // industry allocation
+    private Map<String, Integer> industryAllocation(Map<String, Integer> allocationMap, List<PortfolioStock> portfolioStocksQueryList){
+
+        for (PortfolioStock portfolioStock : portfolioStocksQueryList) {
+            StockInfo currentStock = stockInfoRepo.getStockInfoByTicker(portfolioStock.getStock().getTicker());
+
+            String stockIndustry = currentStock.getIndustry();
+
+            if (allocationMap.get(stockIndustry) == null){
+                allocationMap.put(stockIndustry, 1);
+            }
+
+            else {
+                allocationMap.put(stockIndustry, allocationMap.get(stockIndustry) + 1);
+            }
+        }
+
+        return allocationMap;
+    }
+
+    // country allocation
+    private Map<String, Integer> countryAllocation(Map<String, Integer> allocationMap, List<PortfolioStock> portfolioStocksQueryList){
+
+        for (PortfolioStock portfolioStock : portfolioStocksQueryList) {
+            StockInfo currentStock = stockInfoRepo.getStockInfoByTicker(portfolioStock.getStock().getTicker());
+
+            String stockIndustry = currentStock.getCountry();
+
+            if (allocationMap.get(stockIndustry) == null){
+                allocationMap.put(stockIndustry, 1);
+            }
+
+            else {
+                allocationMap.put(stockIndustry, allocationMap.get(stockIndustry) + 1);
+            }
+        }
+
+        return allocationMap;
+    }
+
+    // currency allocation
+    private Map<String, Integer> currencyAllocation(Map<String, Integer> allocationMap, List<PortfolioStock> portfolioStocksQueryList){
+
+        for (PortfolioStock portfolioStock : portfolioStocksQueryList) {
+            StockInfo currentStock = stockInfoRepo.getStockInfoByTicker(portfolioStock.getStock().getTicker());
+
+            String stockIndustry = currentStock.getCurrency();
+
+            if (allocationMap.get(stockIndustry) == null){
+                allocationMap.put(stockIndustry, 1);
+            }
+
+            else {
+                allocationMap.put(stockIndustry, allocationMap.get(stockIndustry) + 1);
+            }
+        }
+
+        return allocationMap;
+    }
+    
+
+
+    public List<AllocationInputModel> getPortfolioStockTypeAllocation(String portfolioId, String allocationName){
+        List<PortfolioStock> portfolioStocksQueryList = portfolioStockRepo.getPortfolioStockByPortfolioId(portfolioId);
+
+        int totalStockCount = portfolioStocksQueryList.size();
+
+        List<AllocationInputModel> displayAllocation = new ArrayList<>();
+
+        Map<String, Integer> allocationCount = new HashMap<>();
+
+        if (allocationName == "Industry"){
+            allocationCount = industryAllocation(allocationCount, portfolioStocksQueryList);
+        }
+
+        else if (allocationName == "Country"){
+            allocationCount = countryAllocation(allocationCount, portfolioStocksQueryList);;
+        }
+
+        else if (allocationName == "Currency"){
+            allocationCount = currencyAllocation(allocationCount, portfolioStocksQueryList);
+
+        }
+
+        for (Entry<String, Integer> allocationField : allocationCount.entrySet()) {
+
+            AllocationInputModel currentAllocation = allocationInputModel(allocationField.getKey(), allocationField.getValue(), totalStockCount);
+
+            displayAllocation.add(currentAllocation);
+        }
+
+        return displayAllocation;
+    };
 
     public List<PortfolioStockInputModel> getPortfolioStockByTicker(String portfolioId, String ticker){
         PortfolioStock individualStockQuery = portfolioStockRepo.getIndividualStock(portfolioId, ticker).get(0);
