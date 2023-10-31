@@ -212,16 +212,20 @@ const CreatePortfolio = () => {
 
             const formattedData = [
               {
-                fieldname: "ticker",
+                fieldName: "ticker",
                 value: row.Ticker,
               },
               {
-                fieldname: "price",
+                fieldName: "price",
                 value: row.Price,
               },
               {
-                fieldname: "buyDate",
+                fieldName: "buyDate",
                 value: row.BuyDate, // You can set the buyDate to a specific value or get it dynamically
+              },
+              {
+                fieldName: "quantity",
+                value: row.Quantity,
               },
             ];
 
