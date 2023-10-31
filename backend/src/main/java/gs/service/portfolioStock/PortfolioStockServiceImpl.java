@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import gs.common.ApiModel;
 import gs.common.DataRequestModel;
 import gs.common.RequestModel;
+import gs.common.RequestModel2;
 import gs.entity.Portfolio;
 import gs.entity.PortfolioStock;
 import gs.entity.Stock;
@@ -109,44 +110,44 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
         return portfolioStockList;
     }
     
-    public ApiModel addPortfolioStock(HttpServletResponse response, RequestModel requestModel, ApiModel apiModel, String portfolioId) throws DataAccessException, ParseException{
+    public ApiModel addPortfolioStock(HttpServletResponse response, RequestModel2 requestModel2, ApiModel apiModel, String portfolioId) throws DataAccessException, ParseException{
         try {
-            PortfolioStock newPortfolioStock = new PortfolioStock();
-            for (DataRequestModel fe : requestModel.getData()){    
+            for (List<DataRequestModel> obj : requestModel2.getData()){   
 
-                if (fe.getFieldName().equalsIgnoreCase("price")){
-                    newPortfolioStock.setPrice(Double.parseDouble(fe.getValue()));
+                PortfolioStock newPortfolioStock = new PortfolioStock();
+
+                for (DataRequestModel stockToAdd : obj){
+                    System.out.println("========LOOP============");
+                    System.out.println(stockToAdd.getValue());
+                    if (stockToAdd.getFieldName().equalsIgnoreCase("price")){
+                        newPortfolioStock.setPrice(Double.parseDouble(stockToAdd.getValue()));
+                    }
+
+                    else if (stockToAdd.getFieldName().equalsIgnoreCase("quantity")){
+                        newPortfolioStock.setQuantity(Integer.parseInt(stockToAdd.getValue()));
+                    }
+                    
+                    else if (stockToAdd.getFieldName().equalsIgnoreCase("ticker")){
+                        Stock stockQuery = stockRepo.getStockByTicker(stockToAdd.getValue()).get(0);
+
+                        newPortfolioStock.setStock(stockQuery);
+                    }
+
+                    else if (stockToAdd.getFieldName().equalsIgnoreCase("buyDate")){
+                        String dateString = stockToAdd.getValue(); 
+                        SimpleDateFormat dateConverter = new SimpleDateFormat("YYYY-MM-dd");
+                        Date date = dateConverter.parse(dateString);
+
+                        newPortfolioStock.setBuyDate(date);
+                    }
                 }
 
-                else if (fe.getFieldName().equalsIgnoreCase("quantity")){
-                    newPortfolioStock.setQuantity(Integer.parseInt(fe.getValue()));
-                }
-                
-                else if (fe.getFieldName().equalsIgnoreCase("ticker")){
-                    Stock stockQuery = stockRepo.getStockByTicker(fe.getValue()).get(0);
+                newPortfolioStock.setPortfolio(portfolioRepo.getPortfolioByPortfolioId(portfolioId));
 
-                    newPortfolioStock.setStock(stockQuery);
-                }
-
-                else if (fe.getFieldName().equalsIgnoreCase("buyDate")){
-                    String dateString = fe.getValue(); 
-                    SimpleDateFormat dateConverter = new SimpleDateFormat("YYYY-MM-dd");
-                    Date date = dateConverter.parse(dateString);
-
-                    newPortfolioStock.setBuyDate(date);
-                }
+                // save to db
+                portfolioStockRepo.save(newPortfolioStock);
             }
-
-            newPortfolioStock.setPortfolio(portfolioRepo.getPortfolioByPortfolioId(portfolioId));
-
-            // save to db
-            portfolioStockRepo.save(newPortfolioStock);
-
-            // instantiate PortfolioStockInputModel
-            PortfolioStockInputModel inputModel = inputModel(newPortfolioStock);
-
             apiModel.setMessage("Data saved successfully.");
-            apiModel.setData(inputModel);
         }
             
         catch (DataAccessException ex) {
