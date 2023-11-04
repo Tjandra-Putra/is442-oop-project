@@ -1,16 +1,20 @@
 package gs.service.user;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import gs.common.ApiModel;
 import gs.common.DataRequestModel;
 import gs.common.RequestModel;
+import gs.entity.ChangePasswordRequest;
 import gs.entity.User;
 import gs.inputModel.UserInputModel;
 import gs.repository.UserRepo;
@@ -22,6 +26,30 @@ public class UserServiceImpl implements UserService{
     
     @Resource
     protected UserRepo userRepo;
+
+    // CHANGE PASSWORD - START 
+    private final NoOpPasswordEncoder noOpPasswordEncoder;
+
+    public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
+        var user = ((User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal());
+
+        // Check if the current password is correct 
+        if (!noOpPasswordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new IllegalStateException("Wrong Password");
+        }
+
+        // Check if new password is the same as confirmation password
+        if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
+            throw new IllegalStateException("Password are not the same");
+        }
+        
+        // Update the password
+        user.setPassword(noOpPasswordEncoder.encode(request.getNewPassword()));
+        
+        // Saving the new password
+        userRepo.save(user);
+    }
+    // CHANGE PASSWORD - END 
 
     // inputModel fitting methood
     private UserInputModel inputModel(User data){
@@ -125,5 +153,6 @@ public class UserServiceImpl implements UserService{
 
         return apiModel;
     }
+
 
 }

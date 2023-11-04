@@ -1,10 +1,14 @@
 package gs.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import gs.common.ApiModel;
 import gs.common.NullError;
 import gs.common.RequestModel;
+import gs.entity.ChangePasswordRequest;
 import gs.entity.User;
 import gs.inputModel.UserInputModel;
 import gs.service.user.UserService;
@@ -57,5 +62,14 @@ public class UserController {
 
     }
 
-    
+    // CHANGE PASSWORD - START
+    @PatchMapping
+    public ResponseEntity<?> changePassword(
+        @RequestBody ChangePasswordRequest request, // Holds information of changing the password
+        Principal connectedUser
+    ) {
+        userService.changePassword(request, connectedUser);
+        return ResponseEntity.ok().build(); // Inform that request was accepted 
+    }
+    // CHANGE PASSWORD - END
 }
