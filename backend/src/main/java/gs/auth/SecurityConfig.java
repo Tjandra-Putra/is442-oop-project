@@ -42,11 +42,10 @@ public class SecurityConfig {
             .anyRequest().authenticated()
             .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and().addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
-            .logout() // Specify the log out endpoint URL
-            .logoutUrl("/logout") // Specify the URL to redirect after successful log out
-            .invalidateHttpSession(true) // Invalidate the session
-            .deleteCookies("JSESSIONID"); // Delete any cookies associated with the session
-        
+            .logout() 
+                .logoutUrl("/logout") // Specify the URL to redirect after successful log out
+                .permitAll();
+            
         return http.build();
     }
     
