@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService{
     protected UserRepo userRepo;
 
     // CHANGE PASSWORD - START 
-    private final NoOpPasswordEncoder noOpPasswordEncoder;
+    private NoOpPasswordEncoder noOpPasswordEncoder;
 
     public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
         var user = ((User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal());
