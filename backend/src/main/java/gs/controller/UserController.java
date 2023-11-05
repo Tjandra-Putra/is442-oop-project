@@ -3,6 +3,8 @@ package gs.controller;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +15,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import gs.common.ApiModel;
 import gs.common.NullError;
 import gs.common.RequestModel;
 import gs.entity.ChangePasswordRequest;
+import gs.entity.PasswordResetRequest;
 import gs.entity.User;
 import gs.inputModel.UserInputModel;
 import gs.service.user.UserService;
@@ -72,4 +76,66 @@ public class UserController {
         return ResponseEntity.ok().build(); // Inform that request was accepted 
     }
     // CHANGE PASSWORD - END
+
+    // FORGET PASSWORD - START
+    @PostMapping("/passwordResetRequest")
+    public String resetPasswordRequest( @RequestBody PasswordResetRequest passwordResetRequest, final HttpServletRequest httpServletRequest) {
+        
+        // Find user by email
+        Optional<User> user = userService.getUserByEmail(passwordResetRequest.getEmail()); 
+
+        String passwordResetUrl = "";
+
+        // When user email is found
+        if(user.isPresent()){
+            // Create a new password reset token
+            String passwordResetToken = UUID.randomUUID().toString(); 
+
+            // Save the new password reset token into db
+            userService.createPasswordResetTokenForUser(user.get(), passwordResetToken);
+
+            // Generate a link to send to the user via email
+            passwordResetUrl = passwordResetEmailLink(user.get(), applicationUrl(httpServletRequest), passwordResetToken);
+        }
+
+        return passwordResetUrl;
+    }
+
+    
+    private String passwordResetEmailLink(User user, String applicationUrl, String passwordResetToken) {
+        String url = applicationUrl + "api/user/resetPassword?token=" + passwordResetToken;
+        eventListener.sendPasswordResetVerificationEmail(url);
+        log.info("Click the link to reset your password : {}", url);
+
+        return url;
+    }
+
+    @PostMapping("/resetPassword")
+    public String resetPassword(
+        @RequestBody PasswordResetRequest passwordResetRequest, @RequestParam("token") String passwordResetToken
+        ) {
+            // Validate token
+            String tokenValidationResult = userService.validatePasswordResetToken(passwordResetToken);
+
+            if(!tokenValidationResult.equalsIgnoreCase("valid")){
+                return "Invalid password reset token.";
+            }
+
+            // Find user by password reset token
+            User user = userService.findUserByPasswordToken(passwordResetToken);
+
+            if (user != null) {
+                // Reset user password
+                userService.resetUserPassword(user, passwordResetRequest.getNewPassword());
+
+                return "Password reset has been successfully.";                
+            }
+
+            return "Invalid password reset token.";
+        }
+
+    public String applicationUrl(HttpServletRequest httpServletRequest) {
+        return "http://" + httpServletRequest.getServerName() + ":" + httpServletRequest.getServerPort() + httpServletRequest.getContextPath();
+    }
+    // FORGET PASSWORD - END
 }

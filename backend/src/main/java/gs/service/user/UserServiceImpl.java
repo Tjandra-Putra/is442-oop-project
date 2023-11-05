@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +19,7 @@ import gs.entity.ChangePasswordRequest;
 import gs.entity.User;
 import gs.inputModel.UserInputModel;
 import gs.repository.UserRepo;
+import gs.service.passwordReset.PasswordResetTokenService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -50,6 +52,41 @@ public class UserServiceImpl implements UserService{
         userRepo.save(user);
     }
     // CHANGE PASSWORD - END 
+
+    // FORGET PASSWORD - START
+    private PasswordResetTokenService passwordResetTokenService;
+
+    public Optional<User> getUserByEmail(String email) {
+        return userRepo.getUserByEmail(email);
+    }
+
+    public void createPasswordResetTokenForUser(User user, String passwordToken) {
+        passwordResetTokenService.createPasswordResetTokenForUser(user, passwordToken);
+    }
+
+    @Override
+    public String validatePasswordResetToken(String passwordResetToken) {
+        
+        return passwordResetTokenService.validatePasswordResetToken(passwordResetToken);
+    }
+
+    @Override
+    public User findUserByPasswordToken(String passwordResetToken) {
+    
+        return passwordResetTokenService.findUserByPasswordToken(passwordResetToken).get();
+    }
+
+    // Save user new password to db
+    @Override
+    public void resetUserPassword(User user, String newPassword) {
+        user.setPassword(noOpPasswordEncoder.encode(newPassword));
+
+        userRepo.save(user);
+        
+    }
+    // FORGET PASSWORD - END
+    
+    
 
     // inputModel fitting methood
     private UserInputModel inputModel(User data){
