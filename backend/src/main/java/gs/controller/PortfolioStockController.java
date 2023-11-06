@@ -18,7 +18,7 @@ import gs.common.ApiModelHashMap;
 import gs.common.RequestModel;
 import gs.common.RequestModel2;
 import gs.inputModel.PortfolioStockInputModel;
-import gs.inputModel.AllocationInputModel;
+import gs.inputModel.StockAllocationInputModel;
 import gs.service.portfolioStock.PortfolioStockService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -43,31 +43,10 @@ public class PortfolioStockController {
     }
 
     @GetMapping("/getPortfolioStockAllocation/{portfolioId}")
-    public ApiModel<ArrayList<AllocationInputModel>> getPortfolioStockAllocation(
+    public ApiModel<ArrayList<StockAllocationInputModel>> getPortfolioStockAllocation(
         @PathVariable("portfolioId") String portfolioId
     ){
         return ApiModel.ok(portfolioStockService.getPortfolioStockAllocation(portfolioId));
-    }
-
-    @GetMapping("/getPortfolioStockIndustryAllocation/{portfolioId}")
-    public ApiModel<ArrayList<AllocationInputModel>> getPortfolioStockIndustryAllocation(
-        @PathVariable("portfolioId") String portfolioId
-    ){
-        return ApiModel.ok(portfolioStockService.getPortfolioStockTypeAllocation(portfolioId, "Industry"));
-    }
-
-    @GetMapping("/getPortfolioStockCountryAllocation/{portfolioId}")
-    public ApiModel<ArrayList<AllocationInputModel>> getPortfolioStockCountryAllocation(
-        @PathVariable("portfolioId") String portfolioId
-    ){
-        return ApiModel.ok(portfolioStockService.getPortfolioStockTypeAllocation(portfolioId, "Country"));
-    }
-
-    @GetMapping("/getPortfolioStockCurrencyAllocation/{portfolioId}")
-    public ApiModel<ArrayList<AllocationInputModel>> getPortfolioStockCurrencyAllocation(
-        @PathVariable("portfolioId") String portfolioId
-    ){
-        return ApiModel.ok(portfolioStockService.getPortfolioStockTypeAllocation(portfolioId, "Currency"));
     }
 
     

@@ -71,11 +71,17 @@ public class StockInfoServiceImpl implements StockInfoService {
     }
 
     public List<StockInfoInputModel> getStockInfoByTicker(String ticker){
-        StockInfo stockInfoQueryList = stockInfoRepo.getStockInfoByTicker(ticker);
+        List<StockInfo> stockInfoQueryList = stockInfoRepo.getStockInfoByTicker(ticker);
         List<StockInfoInputModel> stockInfoList = new ArrayList<>();
+        
+        for (StockInfo data : stockInfoQueryList){
+            // Logic to populate inputModel is missing here
+            // Example: inputModel.setSomeProperty(data[0]);
+            // Add inputModel to stockInfoList
 
-        StockInfoInputModel inputModel = inputModel(stockInfoQueryList);
-        stockInfoList.add(inputModel);
+            StockInfoInputModel inputModel = inputModel(data);
+            stockInfoList.add(inputModel);
+        }
 
         return stockInfoList;
     }
@@ -223,7 +229,7 @@ public class StockInfoServiceImpl implements StockInfoService {
                             adjustedCloseList.add(adjustedClose);
                            
                             // StockInfo newStockInfo = new StockInfo();
-                            StockInfo currentStock = stockInfoRepo.getStockInfoByTicker(ticker);
+                            StockInfo currentStock = stockInfoRepo.getStockInfoByTicker(ticker).get(0);
                             currentStock.setTodayPrice(Double.parseDouble(adjustedClose));
                             stockInfoRepo.save(currentStock);
                             break;

@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Stack, TextField, Button, Grid, CardContent, Card, Typography, Container } from "@mui/material";
+import TextField from "@mui/material/TextField";
+import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -202,33 +210,29 @@ const CreatePortfolio = () => {
           notifySuccess(res.data.message);
 
           // ================ send selected stock data to backend =================
+
           const postData2 = {
             data: [],
           };
 
           console.log("SUBMIT === selectedRows ===");
           selectedRows.forEach((row) => {
+            console.log(row);
+
             const formattedData = [
               {
-                fieldName: "ticker",
+                fieldname: "ticker",
                 value: row.Ticker,
               },
               {
-                fieldName: "price",
+                fieldname: "price",
                 value: row.Price,
               },
               {
-                fieldName: "buyDate",
-                value: "2000-04-20", // You can set the buyDate to a specific value or get it dynamically
-              },
-              {
-                fieldName: "quantity",
-                value: row.Quantity,
+                fieldname: "buyDate",
+                value: row.BuyDate, // You can set the buyDate to a specific value or get it dynamically
               },
             ];
-
-            console.log("FOR EACHHHHHHHHH ~~~~~~~~~~~~");
-            console.log(formattedData);
 
             postData2.data.push(formattedData);
           });
@@ -245,7 +249,7 @@ const CreatePortfolio = () => {
             })
             .catch((err) => console.log(err));
 
-          navigate(`/portfolio/${portfolioId}`);
+          // navigate("/dashboard");
         }
       })
       .catch((err) => {
