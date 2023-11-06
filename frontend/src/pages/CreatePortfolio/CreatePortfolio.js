@@ -12,6 +12,7 @@ import Box from "@mui/material/Box";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 import style from "./CreatePortfolio.module.css";
 
@@ -81,7 +82,16 @@ const CreatePortfolio = () => {
       }
       return row;
     });
+
     setSelectedRows(newSelectedRows);
+
+    // Update the buyDate state only for the specific row
+    const updatedBuyDate = { ...buyDate };
+    updatedBuyDate[id] = newValue;
+    setBuyDate(updatedBuyDate);
+
+    console.log("BUY DATE === buyDate ===");
+    console.log(updatedBuyDate);
   };
 
   // Material UI DataGrid
@@ -116,15 +126,22 @@ const CreatePortfolio = () => {
       headerName: "Buy Date",
       renderCell: (params) => {
         const today = new Date();
-        const formattedToday = today.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+        const formattedToday = moment(today).format("YYYY-MM-DD");
+
+        console.log("xxxxxxxxxxxxxxx FORMATTED TODAY xxxxxxxxxxxxxxx");
+        console.log(formattedToday);
 
         return (
           <input
+            // type="date"
+            // value={params.row.BuyDate ? params.row.BuyDate : formattedToday}
             type="date"
-            value={params.row.BuyDate ? params.row.BuyDate : formattedToday}
+            value={params.row.BuyDate || formattedToday} // Use "||" to provide a default value
             InputLabelProps={{
               shrink: true,
             }}
+            // value={params.row.BuyDate ? formattedToday : formattedToday}
+
             onChange={(e) => handleBuyDateChange(params.row.id, e.target.value)}
             className={style.quantityInput}
             fullWidth
@@ -152,6 +169,7 @@ const CreatePortfolio = () => {
       return {
         ...row,
         Quantity: quantityValues[row.id],
+        BuyDate: buyDate[row.id],
       };
     });
 
@@ -229,8 +247,13 @@ const CreatePortfolio = () => {
                 value: row.Price,
               },
               {
-                fieldname: "buyDate",
-                value: row.BuyDate, // You can set the buyDate to a specific value or get it dynamically
+                fieldName: "buyDate",
+                value: moment(row.BuyDate).format("YYYY-MM-DD HH:mm:ss.SSSSSS"),
+                // value: row.BuyDate, // You can set the buyDate to a specific value or get it dynamically
+              },
+              {
+                fieldName: "quantity",
+                value: row.Quantity,
               },
             ];
 

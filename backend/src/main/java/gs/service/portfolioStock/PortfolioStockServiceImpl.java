@@ -159,7 +159,7 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
 
                     else if (stockToAdd.getFieldName().equalsIgnoreCase("buyDate")){
                         String dateString = stockToAdd.getValue(); 
-                        SimpleDateFormat dateConverter = new SimpleDateFormat("YYYY-MM-dd");
+                        SimpleDateFormat dateConverter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
                         Date date = dateConverter.parse(dateString);
 
                         newPortfolioStock.setBuyDate(date);
