@@ -1,6 +1,8 @@
 package gs.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import gs.common.ApiModel;
+import gs.common.ApiModelHashMap;
 import gs.common.RequestModel;
 import gs.common.RequestModel2;
 import gs.inputModel.PortfolioStockInputModel;
@@ -76,4 +79,12 @@ public class PortfolioStockController {
         
         return apiModel;
     }
+
+    @GetMapping("/getAnnualReturns/{portfolioId}")
+    public ApiModel<ArrayList<HashMap<Integer,Double>>> getAnnualReturns(
+        @PathVariable("portfolioId") String portfolioId
+    ){
+        return ApiModel.ok(portfolioStockService.getAnnualReturns(portfolioId));
+    }
+
 }

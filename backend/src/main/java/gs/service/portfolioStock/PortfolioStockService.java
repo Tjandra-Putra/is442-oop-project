@@ -1,5 +1,6 @@
 package gs.service.portfolioStock;
 
+import java.util.HashMap;
 import java.util.List;
 
 import gs.common.ApiModel;
@@ -18,6 +19,8 @@ public interface PortfolioStockService {
     List<PortfolioStockInputModel> getPortfolioStockByTicker(String portfolioId, String ticker);
 
     ApiModel addPortfolioStock(HttpServletResponse response, RequestModel2 requestModel, ApiModel apiModel, String portfolioId) throws Exception;
+    
+    List<HashMap<Integer,Double>> getAnnualReturns(String portfolioId);
 
     ApiModel deletePortfolioStock(HttpServletResponse response, ApiModel apiModel, String portfolioId, String ticker) throws Exception;
 }
