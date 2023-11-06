@@ -47,7 +47,7 @@ public class PortfolioServiceImpl implements PortfolioService{
         List<PortfolioStock> portofolioStockQueryList = portfolioStockRepo.getPortfolioStockByPortfolioId(String.valueOf(portfolioId));
 
         for (PortfolioStock portfolioStock : portofolioStockQueryList) {
-            portfolioValue += portfolioValueCalculation(portfolioStock.getQuantity(), stockInfoRepo.getStockInfoByTicker(portfolioStock.getStock().getTicker()).get(0).getTodayPrice());
+            portfolioValue += portfolioValueCalculation(portfolioStock.getQuantity(), stockInfoRepo.getStockInfoByTicker(portfolioStock.getStock().getTicker()).getTodayPrice());
         }
 
         inputModel.setPortfolioValue(portfolioValue);
