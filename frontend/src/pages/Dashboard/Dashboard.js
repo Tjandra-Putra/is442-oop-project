@@ -45,7 +45,6 @@ const Dashboard = () => {
     axios
       .get("http://localhost:8080/api/portfolio/getPortfolio/" + userId)
       .then((res) => {
-        console.log(res.data);
         setPortfolios(res.data.data);
 
         let tempPortfolios = [];
@@ -54,8 +53,6 @@ const Dashboard = () => {
           tempPortfolios.push({ label: res.data.data[i].portfolioName, id: res.data.data[i].portfolioId });
           setSearchListOfPortfolios(tempPortfolios);
         }
-
-        console.log(searchListOfPortfolios);
       })
       .catch((err) => {
         console.log(err);

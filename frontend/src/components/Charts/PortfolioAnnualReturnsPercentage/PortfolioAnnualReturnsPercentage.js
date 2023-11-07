@@ -1,15 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
+import axios from "axios";
 
-const PortfolioAnnualReturnsPercentage = () => {
-  const data = [
-    ["Year", "Sales", "Expenses", "Profit"],
-    ["2014", 1000, 400, 200],
-    ["2015", 1170, 460, 250],
-    ["2016", 660, 1120, 300],
-    ["2017", 1030, 540, 350],
-  ];
+const PortfolioAnnualReturnsPercentage = ({ portfolioId }) => {
+  const [initialData, setInitialDAta] = React.useState([["Year", "Returns"]]);
 
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8080/api/portfolioStock/getAnnualReturns/${portfolioId}`)
+      .then((res) => {
+        let response = res.data.data;
+
+        console.log(response);
+
+        response.forEach((element) => {
+          const year = Object.keys(element)[0];
+          const returns = Object.values(element)[0];
+          initialData.push([year, returns]);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  // Merge the initial data with annualReturns
   const options = {
     chart: {
       // title: "Company Performance",
@@ -17,7 +32,7 @@ const PortfolioAnnualReturnsPercentage = () => {
     },
   };
 
-  return <Chart chartType="Bar" width="100%" height="400px" data={data} options={options} />;
+  return <Chart chartType="Bar" width="100%" height="400px" data={initialData} options={options} />;
 };
 
 export default PortfolioAnnualReturnsPercentage;

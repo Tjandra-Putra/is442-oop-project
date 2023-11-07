@@ -168,7 +168,7 @@ const PortfolioDetailed = () => {
                 style={{ borderColor: "black", color: "black", marginBottom: "1rem" }}
                 onClick={() => navigate("/dashboard")}
               >
-                <i class="fa-solid fa-arrow-left" style={{ marginRight: "7px" }}></i> Back
+                <i className="fa-solid fa-arrow-left" style={{ marginRight: "7px" }}></i> Back
               </Button>
             </div>
             <div>
@@ -177,7 +177,7 @@ const PortfolioDetailed = () => {
                 style={{ backgroundColor: "#12294d" }}
                 onClick={handleUpdatePortfolioModalOpen}
               >
-                <i class="fa-regular fa-pen-to-square" style={{ marginRight: "7px" }}></i> Edit
+                <i className="fa-regular fa-pen-to-square" style={{ marginRight: "7px" }}></i> Edit
               </Button>
               <Modal
                 open={updatePortfolioModalOpen}
@@ -235,7 +235,7 @@ const PortfolioDetailed = () => {
                 // onClick={() => onDeletePortfolio()}
                 onClick={handleDeletePortfolioModalOpen}
               >
-                <i class="fa-solid fa-trash" style={{ marginRight: "7px" }}></i> Delete
+                <i className="fa-solid fa-trash" style={{ marginRight: "7px" }}></i> Delete
               </Button>
 
               <Modal
@@ -339,7 +339,7 @@ const PortfolioDetailed = () => {
             <CardContent>
               <div className={style.cardTitle}>Portfolio Annual Returns (%)</div>
               <br />
-              <PortfolioAnnualReturnsPercentage />
+              <PortfolioAnnualReturnsPercentage portfolioId={id} />
             </CardContent>
           </Card>
         </Grid>
