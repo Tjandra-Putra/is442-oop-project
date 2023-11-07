@@ -307,6 +307,45 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
         return apiModel;
     }
 
+    public ApiModel editPortfolioStock(HttpServletResponse response, RequestModel requestModel, ApiModel myApiModel, String portfolioId, String ticker) throws DataAccessException {
+        try {
+            PortfolioStock existingPortfolioStock = portfolioStockRepo.getIndividualStock(portfolioId, ticker).get(0);
+
+            for (DataRequestModel fe : requestModel.getData()) {
+
+                if (fe.getFieldName().equalsIgnoreCase("quantity")) {
+                    existingPortfolioStock.setQuantity(Integer.parseInt(fe.getValue()));
+                }
+
+                if (fe.getFieldName().equalsIgnoreCase("buyDate")) {
+                    String queryDate = fe.getValue();
+                    existingPortfolioStock.setPrice(historyRepo.getHistoryByDate(queryDate).getAdjClosePrice());
+                }
+
+            }
+
+            // save to db
+            portfolioStockRepo.save(existingPortfolioStock);
+
+            PortfolioStockInputModel inputModel = inputModel(existingPortfolioStock);
+
+            myApiModel.setMessage("Data updated successfully.");
+            myApiModel.setData(inputModel);
+        }
+
+        catch (DataAccessException ex) {
+            // Log the exception for debugging
+            // Optionally, rethrow as a custom exception
+            // INPUT LOGGER for error messages
+            System.out.println(ex.getMessage());
+            myApiModel.setMessage("An error occurred while performing the database operation.");
+        }
+
+        myApiModel.setStatus(String.valueOf(response.getStatus()));
+
+        return myApiModel;
+    }
+
     public ApiModel deletePortfolioStock(HttpServletResponse response, ApiModel apiModel, String portfolioId, String ticker) throws DataAccessException {
         try {
             PortfolioStock portfolioStockQuery = portfolioStockRepo.getIndividualStock(portfolioId, ticker).get(0);

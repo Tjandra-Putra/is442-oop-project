@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -82,6 +83,19 @@ public class PortfolioStockController {
         ApiModel myApiModel = new ApiModel();
         portfolioStockService.addPortfolioStock(response, requestModel2, myApiModel, portfolioId);
 
+        return myApiModel;
+    }
+
+
+    @PutMapping("/editPortfolioStock/{portfolioId}/{ticker}")
+    public ApiModel editPortfolioStock(
+        @PathVariable("portfolioId") String portfolioId,
+        @PathVariable("ticker") String ticker,
+        @RequestBody RequestModel requestModel
+    ) throws Exception{
+        ApiModel myApiModel = new ApiModel();
+        portfolioStockService.editPortfolioStock(response, requestModel, myApiModel, portfolioId, ticker);
+        
         return myApiModel;
     }
 
