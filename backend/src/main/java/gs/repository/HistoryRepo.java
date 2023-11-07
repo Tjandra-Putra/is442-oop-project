@@ -16,4 +16,9 @@ public interface HistoryRepo extends JpaRepository<History, HistoryCompositeKey>
 
     @Query(value = "SELECT * FROM history WHERE (date, ticker) IN (SELECT MAX(date), ticker FROM history WHERE ticker = ? GROUP BY EXTRACT(YEAR FROM date), ticker);", nativeQuery = true)
     List<History> getYearlyClosingByTicker(String ticker);
+
+
+    @Query(value = "select * from history where date = ?;", nativeQuery = true)
+    History getHistoryByDate(String date);
+
 }

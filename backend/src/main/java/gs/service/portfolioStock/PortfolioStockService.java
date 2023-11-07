@@ -24,5 +24,7 @@ public interface PortfolioStockService {
     
     List<HashMap<Integer,Double>> getAnnualReturns(String portfolioId);
 
+    ApiModel editPortfolioStock(HttpServletResponse response, RequestModel requestModel, ApiModel myApiModel, String portfolioId, String ticker);
+
     ApiModel deletePortfolioStock(HttpServletResponse response, ApiModel apiModel, String portfolioId, String ticker) throws Exception;
 }
