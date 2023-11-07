@@ -1,6 +1,5 @@
 package gs.entity;
 
-
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -65,6 +64,11 @@ public class User {
 
     public User(){
     };
+
+    public User(String email, String password){
+        this.email = email;
+        this.password = password;
+    }
 
     public User(long userId, String email, String username, String password) {
         this.userId = userId;

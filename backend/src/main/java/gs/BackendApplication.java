@@ -17,7 +17,7 @@ import jakarta.annotation.Resource;
 import gs.repository.StockRepo;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"gs.controller", "gs.entity", "gs.repository", "gs.service", "gs.config"})
+@ComponentScan(basePackages = {"gs.controller", "gs.entity", "gs.repository", "gs.service", "gs.config" , "gs.auth", "gs.model"})
 @RestController
 public class BackendApplication implements CommandLineRunner {
 // public class BackendApplication {
