@@ -11,17 +11,17 @@ import { years, months, quarters } from "../../../data";
 
 function LineChart({ portfolioId }) {
   const [selectedFilterType, setSelectedFilterType] = useState("yearly");
-  const [selectedFromYear, setSelectedFromYear] = useState();
-  const [selectedToYear, setSelectedToYear] = useState();
-  const [selectedFromQuarter, setSelectedFromQuarter] = useState();
-  const [selectedToQuarter, setSelectedToQuarter] = useState();
-  const [selectedFromMonth, setSelectedFromMonth] = useState();
-  const [selectedToMonth, setSelectedToMonth] = useState();
+  const [selectedFromYear, setSelectedFromYear] = useState(null);
+  const [selectedToYear, setSelectedToYear] = useState(null);
+  const [selectedFromQuarter, setSelectedFromQuarter] = useState(null);
+  const [selectedToQuarter, setSelectedToQuarter] = useState(null);
+  const [selectedFromMonth, setSelectedFromMonth] = useState(null);
+  const [selectedToMonth, setSelectedToMonth] = useState(null);
 
   const [dataQuarterly, setDataQuarterly] = useState([]);
   const [dataMonthly, setDataMonthly] = useState([]);
 
-  const [data, setData] = useState([["Month", "2023", "2024"]]);
+  const [data, setData] = useState();
 
   useEffect(() => {
     // show all data
@@ -144,20 +144,17 @@ function LineChart({ portfolioId }) {
           for (const year in dataMap) {
             const yearData = dataMap[year];
 
-            // Add the year to the first row
-            for (let quarter = 1; quarter < 5; quarter++) {
+            for (let month = 3; month <= 12; month += 3) {
               let currentRow = [];
-              let value = yearData[quarter];
-              var date = new Date(year, quarter);
-              var fromYear = parseInt(selectedFromYear);
-              var toYear = parseInt(selectedToYear);
-              var fromQuarter = parseInt(selectedFromQuarter);
-              var toQuarter = parseInt(selectedToQuarter);
-              var fromDate = new Date(fromYear, fromQuarter);
-              var toDate = new Date(toYear, toQuarter);
-              console.log(fromYear, toYear, fromQuarter, toQuarter);
-              if (date >= fromDate && date <= toDate && toDate >= fromDate) {
-                currentRow.push(date);
+              const value = yearData[month];
+              // Construct a date in the format "YYYY-QQ"
+              const formattedQuarter = `${year}-Q${month}`;
+              const fromDate = `${selectedFromYear}-Q${selectedFromQuarter}`;
+              const toDate = `${selectedToYear}-Q${selectedToQuarter}`;
+
+              // Compare formattedQuarter to the selected range
+              if (formattedQuarter >= fromDate && formattedQuarter <= toDate) {
+                currentRow.push(formattedQuarter);
                 currentRow.push(value);
                 processData.push(currentRow);
               }
