@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 import axios from "axios";
 import { Typography, Select, MenuItem } from "@mui/material/";
+import Loader from "../../Layout/Loader/Loader";
 
 const PortfolioStockCandleStickChart = React.memo(({ ticker }) => {
   // const [initialData, setInitialData] = useState([
@@ -13,6 +14,7 @@ const PortfolioStockCandleStickChart = React.memo(({ ticker }) => {
 
   const [showAllData, setShowAllData] = useState(0); // [true, false
   const [dataSetsToShow, setDataSetsToShow] = useState(10);
+  const [loader, setLoader] = useState(true); // Set the loader initially to true
 
   useEffect(() => {
     axios
@@ -31,9 +33,11 @@ const PortfolioStockCandleStickChart = React.memo(({ ticker }) => {
 
         formattedData.unshift(["date", "openPrice", "closePrice", "lowPrice", "highPrice"]);
         setInitialData(formattedData);
+        setLoader(false); // Set the loader to false when the request is completed
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+        setLoader(false); // Set the loader to false in case of an error
       });
   }, [ticker, dataSetsToShow]);
 
@@ -45,7 +49,9 @@ const PortfolioStockCandleStickChart = React.memo(({ ticker }) => {
     setDataSetsToShow(event.target.value);
   };
 
-  return (
+  return loader ? (
+    <p>Loading...</p>
+  ) : (
     <>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <Typography id="modal-modal-title" variant="h6" component="h2">

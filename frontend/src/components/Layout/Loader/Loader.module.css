@@ -1,0 +1,15 @@
+.loaderWrapper {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: rgba(0, 0, 0, 0.511); */
+  /* background-color: #000000; */
+  color: black !important;
+  z-index: 999999;
+  background-color: gray;
+}
