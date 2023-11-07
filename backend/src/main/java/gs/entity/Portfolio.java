@@ -1,7 +1,7 @@
 package gs.entity;
 
 import java.util.List;
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,53 +19,32 @@ import jakarta.persistence.Table;
 public class Portfolio {
 
     @Id
-    @SequenceGenerator(
-        name = "portfolio_sequence",
-        sequenceName = "portfolio_sequence",
-        allocationSize = 1
-    )
-    @GeneratedValue(
-        strategy = GenerationType.SEQUENCE,
-        generator = "portfolio_sequence"
-    )
-    @Column(
-        name = "portfolio_id",
-        updatable = false
-    )
+    @SequenceGenerator(name = "portfolio_sequence", sequenceName = "portfolio_sequence",
+            allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "portfolio_sequence")
+    @Column(name = "portfolio_id", updatable = false)
     private long portfolioId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(
-        name = "portfolio_name",
-        updatable = true,
-        nullable = false
-    )
+    @Column(name = "portfolio_name", updatable = true, nullable = false)
     private String portfolioName;
 
-    @Column(
-        name = "description",
-        updatable = true,
-        nullable = false
-    )
+    @Column(name = "description", updatable = true, nullable = false)
     private String description;
 
-    @Column(
-        name = "capital_amount",
-        updatable = true,
-        nullable = false
-    )    
+    @Column(name = "capital_amount", updatable = true, nullable = false)
     private double capitalAmt;
 
-    @OneToMany(mappedBy = "portfolio")
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
     private List<PortfolioStock> PortfolioStock;
 
-    public Portfolio() {
-    };
+    public Portfolio() {};
 
-    public Portfolio(long portfolioId, String portfolioName, String description, double capitalAmt) {
+    public Portfolio(long portfolioId, String portfolioName, String description,
+            double capitalAmt) {
         this.portfolioId = portfolioId;
         this.portfolioName = portfolioName;
         this.description = description;

@@ -21,7 +21,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Service
-public class PortfolioServiceImpl implements PortfolioService{
+public class PortfolioServiceImpl implements PortfolioService {
     @Resource
     protected PortfolioRepo portfolioRepo;
 
@@ -32,7 +32,7 @@ public class PortfolioServiceImpl implements PortfolioService{
     protected StockInfoRepo stockInfoRepo;
 
     // inputModel fitting methood
-    private PortfolioInputModel inputModel(Portfolio data){
+    private PortfolioInputModel inputModel(Portfolio data) {
         PortfolioInputModel inputModel = new PortfolioInputModel();
         long portfolioId = data.getPortfolioId();
 
@@ -43,11 +43,13 @@ public class PortfolioServiceImpl implements PortfolioService{
         inputModel.setUserId((Long) data.getUser().getUserId());
 
         double portfolioValue = 0.0;
-        
-        List<PortfolioStock> portofolioStockQueryList = portfolioStockRepo.getPortfolioStockByPortfolioId(String.valueOf(portfolioId));
+
+        List<PortfolioStock> portofolioStockQueryList =
+                portfolioStockRepo.getPortfolioStockByPortfolioId(String.valueOf(portfolioId));
 
         for (PortfolioStock portfolioStock : portofolioStockQueryList) {
-            portfolioValue += portfolioValueCalculation(portfolioStock.getQuantity(), stockInfoRepo.getStockInfoByTicker(portfolioStock.getStock().getTicker()).get(0).getTodayPrice());
+            portfolioValue += portfolioValueCalculation(portfolioStock.getQuantity(), stockInfoRepo
+                    .getStockInfoByTicker(portfolioStock.getStock().getTicker()).getTodayPrice());
         }
 
         inputModel.setPortfolioValue(portfolioValue);
@@ -56,11 +58,11 @@ public class PortfolioServiceImpl implements PortfolioService{
     }
 
     // caluclate porfolio value
-    private double portfolioValueCalculation(int quantity, double todayPrice){
+    private double portfolioValueCalculation(int quantity, double todayPrice) {
         return quantity * todayPrice;
     }
 
-    public List<PortfolioInputModel> getPortfolio(String userId){
+    public List<PortfolioInputModel> getPortfolio(String userId) {
         List<Portfolio> portfolioQueryList = portfolioRepo.getPortfolioByUserId(userId);
         List<PortfolioInputModel> portfolioList = new ArrayList<>();
 
@@ -68,35 +70,36 @@ public class PortfolioServiceImpl implements PortfolioService{
             PortfolioInputModel inputModel = inputModel(data);
 
             portfolioList.add(inputModel);
-            
+
         }
         return portfolioList;
     }
 
-    public List<PortfolioInputModel> getPortfolioById(String userId, String portfolioId){
+    public List<PortfolioInputModel> getPortfolioById(String userId, String portfolioId) {
         Portfolio portfolioQueryList = portfolioRepo.getPortfolioById(userId, portfolioId).get(0);
-        
+
         List<PortfolioInputModel> portfolioList = new ArrayList<>();
         PortfolioInputModel inputModel = inputModel(portfolioQueryList);
         portfolioList.add(inputModel);
-            
+
         return portfolioList;
     }
 
-    public ApiModel addPortfolio(HttpServletResponse response, RequestModel requestModel, ApiModel apiModel, String userId) throws DataAccessException{
+    public ApiModel addPortfolio(HttpServletResponse response, RequestModel requestModel,
+            ApiModel apiModel, String userId) throws DataAccessException {
         try {
             Portfolio newPortfolio = new Portfolio();
-            for (DataRequestModel fe : requestModel.getData()){    
+            for (DataRequestModel fe : requestModel.getData()) {
 
-                if (fe.getFieldName().equalsIgnoreCase("capitalAmt")){
+                if (fe.getFieldName().equalsIgnoreCase("capitalAmt")) {
                     newPortfolio.setPortfolioCapitalAmt(Double.parseDouble(fe.getValue()));
                 }
 
-                if (fe.getFieldName().equalsIgnoreCase("description")){
+                if (fe.getFieldName().equalsIgnoreCase("description")) {
                     newPortfolio.setPortfolioDescription(fe.getValue());
                 }
-                
-                if (fe.getFieldName().equalsIgnoreCase("portfolioName")){
+
+                if (fe.getFieldName().equalsIgnoreCase("portfolioName")) {
                     newPortfolio.setPortfolioName(fe.getValue());
                 }
             }
@@ -115,35 +118,37 @@ public class PortfolioServiceImpl implements PortfolioService{
             apiModel.setMessage("Data saved successfully.");
             apiModel.setData(inputModel);
         }
-            
+
         catch (DataAccessException ex) {
-        // Log the exception for debugging
-        // Optionally, rethrow as a custom exception
+            // Log the exception for debugging
+            // Optionally, rethrow as a custom exception
             // INPUT LOGGER for error messages
             System.out.println(ex.getMessage());
             apiModel.setMessage("An error occurred while performing the database operation.");
         }
-                
+
         apiModel.setStatus(String.valueOf(response.getStatus()));
 
         return apiModel;
     }
 
-    public ApiModel editPortfolio(HttpServletResponse response, RequestModel requestModel, ApiModel myApiModel, String userId, String portfolioId) throws DataAccessException {
+    public ApiModel editPortfolio(HttpServletResponse response, RequestModel requestModel,
+            ApiModel myApiModel, String userId, String portfolioId) throws DataAccessException {
         try {
-            Portfolio existingPortfolio = portfolioRepo.getPortfolioById(userId, portfolioId).get(0);
+            Portfolio existingPortfolio =
+                    portfolioRepo.getPortfolioById(userId, portfolioId).get(0);
 
-            for (DataRequestModel fe : requestModel.getData()){    
+            for (DataRequestModel fe : requestModel.getData()) {
 
-                if (fe.getFieldName().equalsIgnoreCase("capitalAmt")){
+                if (fe.getFieldName().equalsIgnoreCase("capitalAmt")) {
                     existingPortfolio.setPortfolioCapitalAmt(Double.parseDouble(fe.getValue()));
                 }
 
-                if (fe.getFieldName().equalsIgnoreCase("description")){
+                if (fe.getFieldName().equalsIgnoreCase("description")) {
                     existingPortfolio.setPortfolioDescription(fe.getValue());
                 }
-                
-                if (fe.getFieldName().equalsIgnoreCase("portfolioName")){
+
+                if (fe.getFieldName().equalsIgnoreCase("portfolioName")) {
                     existingPortfolio.setPortfolioName(fe.getValue());
                 }
             }
@@ -156,10 +161,10 @@ public class PortfolioServiceImpl implements PortfolioService{
             myApiModel.setMessage("Data updated successfully.");
             myApiModel.setData(inputModel);
         }
-            
+
         catch (DataAccessException ex) {
-        // Log the exception for debugging
-        // Optionally, rethrow as a custom exception
+            // Log the exception for debugging
+            // Optionally, rethrow as a custom exception
             // INPUT LOGGER for error messages
             System.out.println(ex.getMessage());
             myApiModel.setMessage("An error occurred while performing the database operation.");
@@ -170,9 +175,14 @@ public class PortfolioServiceImpl implements PortfolioService{
         return myApiModel;
     }
 
-    public ApiModel deletePortfolio(HttpServletResponse response, ApiModel myApiModel,String userId, String portfolioId) throws DataAccessException {
+    public ApiModel deletePortfolio(HttpServletResponse response, ApiModel myApiModel,
+            String userId, String portfolioId) throws DataAccessException {
         try {
-            Portfolio existingPortfolio = portfolioRepo.getPortfolioById(userId, portfolioId).get(0);
+            System.out.println("====here======");
+            System.out.println(userId);
+            System.out.println(portfolioId);
+            Portfolio existingPortfolio =
+                    portfolioRepo.getPortfolioById(userId, portfolioId).get(0);
 
             // save to db
             portfolioRepo.delete(existingPortfolio);
@@ -181,17 +191,17 @@ public class PortfolioServiceImpl implements PortfolioService{
             myApiModel.setMessage("Data deleted successfully.");
             myApiModel.setData(inputModel);
         }
-            
+
         catch (DataAccessException ex) {
-        // Log the exception for debugging
-        // Optionally, rethrow as a custom exception
+            // Log the exception for debugging
+            // Optionally, rethrow as a custom exception
             // INPUT LOGGER for error messages
             System.out.println(ex.getMessage());
             myApiModel.setMessage("An error occurred while performing the database operation.");
         }
-    
+
         myApiModel.setStatus(String.valueOf(response.getStatus()));
-        
+
         return myApiModel;
     }
 }

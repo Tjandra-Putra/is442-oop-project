@@ -16,11 +16,21 @@ import Grid from "@mui/material/Grid";
 import PortfolioStockCandleStickChart from "../Charts/PortfolioStockCandleStickChart/PortfolioStockCandleStickChart";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import moment from "moment";
 
 import style from "./StockGrid.module.css";
 
-export default function StockGrid({ portfolioId }) {
+export default function StockGrid({ portfolioId, sendDataToParent }) {
+  const notifyError = (message) => toast.error(message, { duration: 5000 });
+  const notifySuccess = (message) => toast.success(message, { duration: 5000 });
   const [apiMyStocks, setApiMyStocks] = React.useState([]);
+  const [stockMarket, setStockMarket] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [stockRows, setStockRows] = useState([]);
+  const [stockColumns, setStockColumns] = useState([]);
+  const [buyDate, setBuyDate] = useState("");
 
   React.useEffect(() => {
     axios
@@ -28,6 +38,8 @@ export default function StockGrid({ portfolioId }) {
       .then((res) => {
         const dataWithUniqueIds = addUniqueIds(res.data.data);
         setApiMyStocks(dataWithUniqueIds);
+
+        sendDataToParent(dataWithUniqueIds.length);
       })
       .catch((err) => {
         console.log(err);
@@ -220,7 +232,6 @@ export default function StockGrid({ portfolioId }) {
     },
   ];
 
-  // const columns = [
   //   { field: "id", headerName: "ID", width: 150 },
   //   { field: "name", headerName: "Name", width: 200 },
   //   {
@@ -304,27 +315,50 @@ export default function StockGrid({ portfolioId }) {
 
   const [selectedRows, setSelectedRows] = React.useState([]);
 
-  const stockColumns = [
-    { field: "id", headerName: "Ticker", width: 100 },
-    { field: "Name", headerName: "Name", width: 130 },
-    {
-      field: "Price",
-      headerName: "Price",
-      type: "number",
-      width: 90,
-    },
-  ];
-
-  const stockRows = [
-    { id: 1, Name: "Snow", Price: 105 },
-    { id: 2, Name: "Snow", Price: 35 },
-    { id: 3, Name: "Snow", Price: 10 },
-    { id: 4, Name: "Snow", Price: 35 },
-    { id: 5, Name: "Snow", Price: 35 },
-    { id: 6, Name: "Snow", Price: 35 },
-  ];
+  React.useEffect(() => {
+    // get current stock market
+    axios
+      .get("http://localhost:8080/api/stock/getStock")
+      .then((res) => {
+        let stockData = res.data.data;
+        setStockMarket(stockData);
+        const generatedStockRows = stockData.map((stock, index) => ({
+          id: index + 1, // Start from 1
+          Ticker: stock.ticker,
+          Name: stock.name,
+        }));
+        setStockRows(generatedStockRows);
+        setStockColumns([
+          { field: "id", headerName: "No.", width: 100 },
+          { field: "Ticker", headerName: "Ticker", width: 100 },
+          { field: "Name", headerName: "Name", width: 230 },
+        ]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const [quantityValues, setQuantityValues] = React.useState(Object.fromEntries(stockRows.map((row) => [row.id, 1])));
+
+  const handleBuyDateChange = (id, newValue) => {
+    const newSelectedRows = selectedRows.map((row) => {
+      if (row.id === id) {
+        return {
+          ...row,
+          BuyDate: newValue,
+        };
+      }
+      return row;
+    });
+
+    setSelectedRows(newSelectedRows);
+
+    // Update the buyDate state only for the specific row
+    const updatedBuyDate = { ...buyDate };
+    updatedBuyDate[id] = newValue;
+    setBuyDate(updatedBuyDate);
+  };
 
   const handleQuantityChange = (id, newValue) => {
     newValue = parseInt(newValue, 10);
@@ -353,17 +387,17 @@ export default function StockGrid({ portfolioId }) {
 
   // Material UI DataGrid
   const selectedStockColumns = [
-    { field: "id", headerName: "Ticker", width: 120 },
+    { field: "id", headerName: "No.", width: 50 },
     {
-      field: "Name",
-      headerName: "Name",
-      width: 130,
+      field: "Ticker",
+      headerName: "Ticker",
+      width: 100,
     },
     {
       field: "Price",
       headerName: "Price",
       type: "number",
-      width: 100,
+      width: 80,
     },
     {
       field: "Quantity",
@@ -380,31 +414,131 @@ export default function StockGrid({ portfolioId }) {
       // editable
     },
     {
+      field: "BuyDate",
+      headerName: "Buy Date",
+      renderCell: (params) => {
+        const today = new Date();
+        const formattedToday = moment(today).format("YYYY-MM-DD");
+
+        return (
+          <input
+            // type="date"
+            // value={params.row.BuyDate ? params.row.BuyDate : formattedToday}
+            type="date"
+            value={params.row.BuyDate || formattedToday} // Use "||" to provide a default value
+            InputLabelProps={{
+              shrink: true,
+            }}
+            // value={params.row.BuyDate ? formattedToday : formattedToday}
+
+            onChange={(e) => handleBuyDateChange(params.row.id, e.target.value)}
+            className={style.quantityInput}
+            fullWidth
+          />
+        );
+      },
+      width: 150, // Adjust the width as needed
+    },
+    {
       field: "Total",
       headerName: "Total",
       type: "number",
-      width: 100,
+      width: 70,
     },
   ];
 
   // return state as one object including quantity, portfolio name, description, capital
-  const getSelectedRows = () => {
-    const selectedRowsWithQuantity = selectedRows.map((row) => {
-      return {
-        ...row,
-        Quantity: quantityValues[row.id],
-      };
+  const filteredStockRows = stockRows.filter((row) => {
+    const searchString = searchQuery.toLowerCase();
+    return row.Ticker.toLowerCase().includes(searchString) || row.Name.toLowerCase().includes(searchString);
+  });
+
+  const getStockPrice = (ticker) => {
+    return axios
+      .get("http://localhost:8080/api/StockInfo/getStockInfo/ticker/" + ticker)
+      .then((res) => {
+        const todayPrice = res.data.data[0]?.todayPrice || 0;
+        return todayPrice;
+      })
+      .catch((error) => {
+        console.error("Error fetching stock price:", error);
+        return 0; // Return 0 in case of an error
+      });
+  };
+
+  const handleRowSelectionModelChange = async (newSelection) => {
+    const getPricePromises = newSelection.map((id) => {
+      const row = filteredStockRows.find((row) => row.id === id);
+      return getStockPrice(row.Ticker);
     });
+    try {
+      const prices = await Promise.all(getPricePromises);
+      const updatedRows = newSelection.map((id, index) => {
+        const row = filteredStockRows.find((row) => row.id === id);
+        const total = prices[index] * (row.Quantity || 1);
+        return {
+          ...row,
+          id: row.id, // ensure you keep the ID
+          Ticker: row.Ticker,
+          Name: row.Name,
+          Price: prices[index],
+          Quantity: row.Quantity || 1, // default to 1 if Quantity is not set
+          Total: total,
+        };
+      });
+      setSelectedRows(updatedRows); // Update the selectedRows state
+    } catch (error) {
+      console.error("Error fetching stock prices:", error);
+    }
   };
 
   // submit form with validation
   const submitFormHandler = () => {
-    let formData = {
-      portfolioId: portfolioId,
-      selectedStocks: getSelectedRows(),
+    if (selectedRows.length === 0) {
+      notifyError("Please select at least one stock");
+      return;
+    }
+
+    const postData2 = {
+      data: [],
     };
 
-    console.log(formData);
+    selectedRows.forEach((row) => {
+      const formattedData = [
+        {
+          fieldName: "ticker",
+          value: row.Ticker,
+        },
+        {
+          fieldName: "price",
+          value: row.Price,
+        },
+        {
+          fieldName: "buyDate",
+          value: moment(row.BuyDate).format("YYYY-MM-DD HH:mm:ss.SSSSSS"),
+          // value: row.BuyDate, // You can set the buyDate to a specific value or get it dynamically
+        },
+        {
+          fieldName: "quantity",
+          value: row.Quantity,
+        },
+      ];
+
+      postData2.data.push(formattedData);
+
+      // Send the selected stocks
+      axios
+        .post("http://localhost:8080/api/portfolioStock/addPortfolioStock/" + portfolioId, postData2)
+        .then((res) => {
+          notifySuccess("Stocks added successfully");
+
+          // refresh the page
+          window.location.reload();
+        })
+        .catch((err) => {
+          notifyError("Error adding stocks");
+        });
+    });
   };
 
   return (
@@ -434,8 +568,10 @@ export default function StockGrid({ portfolioId }) {
                       multiline
                       maxRows={4}
                       variant="outlined"
-                      sx={{ width: "100%", mr: "2rem" }}
+                      sx={{ width: "100%", mr: "2rem", mb: "1rem" }}
                       size="small"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
                     />
                   </Grid>
                   <Grid item md={3} sx={12}>
@@ -447,23 +583,11 @@ export default function StockGrid({ portfolioId }) {
 
                 <div style={{ height: 400, width: "100%" }}>
                   <DataGrid
-                    rows={stockRows}
+                    rows={filteredStockRows}
                     columns={stockColumns}
                     checkboxSelection
                     // onchange
-                    onRowSelectionModelChange={(newSelection) => {
-                      const selectedRows = newSelection.map((id) => {
-                        const row = stockRows.find((row) => row.id === id);
-                        // Extracting only the desired properties
-                        return {
-                          id: row.id,
-                          Name: row.Name,
-                          Price: row.Price,
-                          Total: row.Total ? row.Total : row.Price,
-                        };
-                      });
-                      setSelectedRows(selectedRows);
-                    }}
+                    onRowSelectionModelChange={handleRowSelectionModelChange}
                   />
                 </div>
               </Grid>

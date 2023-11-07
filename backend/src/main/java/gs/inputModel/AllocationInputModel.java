@@ -2,7 +2,7 @@ package gs.inputModel;
 
 import java.io.Serializable;
 
-public class StockAllocationInputModel implements Serializable{
+public class AllocationInputModel implements Serializable{
     private String allocationName;
     private double percentage;
 

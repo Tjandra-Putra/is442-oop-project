@@ -87,11 +87,11 @@ const Register = () => {
               alignItems: "center",
             }}
           >
-            {/* <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <LockOutlinedIcon />
-            </Avatar> */}
+            <div className={styles.iconWrapper}>
+              <i class="fa-solid fa-user"></i>
+            </div>
             <Typography component="h1" variant="h5">
-              Sign up
+              Register an account
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
               <Grid container spacing={2}>
@@ -133,7 +133,7 @@ const Register = () => {
                 <Grid item xs={12}>
                   <FormControlLabel
                     control={<Checkbox value="allowExtraEmails" color="primary" />}
-                    label="I want to receive inspiration, marketing promotions and updates via email."
+                    label="I agree to the terms and conditions"
                   />
                 </Grid>
               </Grid>
@@ -142,7 +142,10 @@ const Register = () => {
               </Button>
               <Grid container justifyContent="flex-end">
                 <Grid item>
-                  <Link to="/login" style={{ cursor: "pointer", color: "#2e82d6", fontSize: "14px" }}>
+                  <Link
+                    to="/login"
+                    style={{ cursor: "pointer", color: "#2e82d6", fontSize: "14px", textDecoration: "none" }}
+                  >
                     Already have an account? Sign in
                   </Link>
                 </Grid>

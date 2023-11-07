@@ -1,18 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import style from "./PortfolioDetailed.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 import StockCard from "../../components/StockCard/StockCard";
 import StockGrid from "../../components/StockGrid/StockGrid";
 import toast from "react-hot-toast";
 import axios from "axios";
-
 import PortfolioStocksAllocationChart from "../../components/Charts/PortfolioStocksAllocationChart/PortfolioStocksAllocationChart";
-import PortfolioStocksBySegmentChart from "../../components/Charts/PortfolioStocksBySegmentChart/PortfolioStocksBySegmentChart";
-import MarketExposureByGeographicalLocationChart from "../../components/Charts/MarketExposureByGeographicalLocationChart/MarketExposureByGeographicalLocationChart";
-import MarketExposureBySegment from "../../components/Charts/MarketExposureBySegment/MarketExposureBySegment";
+import MarketExposureByCountryChart from "../../components/Charts/MarketExposureByCountryChart/MarketExposureByCountryChart";
+import MarketExposureByCurrencyChart from "../../components/Charts/MarketExposureByCurrencyChart/MarketExposureByCurrencyChart";
 import PortfolioReturnsChart from "../../components/Charts/PortfolioReturnsChart/PortfolioReturnsChart";
 import PortfolioAnnualReturnsPercentage from "../../components/Charts/PortfolioAnnualReturnsPercentage/PortfolioAnnualReturnsPercentage";
-
+import PortfolioStocksBySegmentChart from "../../components/Charts/PortfolioStocksBySegmentChart/PortfolioStocksBySegmentChart";
 import {
   Card,
   Grid,
@@ -35,9 +33,15 @@ const PortfolioDetailed = () => {
   const [portfolio, setPortfolio] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [deleteMessage, setDeleteMessage] = React.useState("");
+  const [dataFromChildStocksCount, setDataFromChildStocksCount] = useState(null);
 
   const notifyError = (message) => toast.error(message, { duration: 5000 });
   const notifySuccess = (message) => toast.success(message, { duration: 5000 });
+
+  // Callback function to receive data from the child component
+  const receiveDataFromChildStockGrid = (data) => {
+    setDataFromChildStocksCount(data);
+  };
 
   useEffect(() => {
     const userId = 1;
@@ -123,8 +127,14 @@ const PortfolioDetailed = () => {
 
     const userId = 1;
 
+    console.log("====================================");
+
+    const portfolioId = parseInt(id, 10); // Parse the id as an integer
+    console.log(portfolioId);
+    console.log(userId);
+
     axios
-      .delete(`http://localhost:8080/api/portfolio/deletePortfolio/${userId}/${id}`)
+      .delete(`http://localhost:8080/api/portfolio/deletePortfolio/${userId}/${portfolioId}`)
       .then((res) => {
         console.log(res.data);
 
@@ -162,7 +172,7 @@ const PortfolioDetailed = () => {
                 style={{ borderColor: "black", color: "black", marginBottom: "1rem" }}
                 onClick={() => navigate("/dashboard")}
               >
-                <i class="fa-solid fa-arrow-left" style={{ marginRight: "7px" }}></i> Back
+                <i className="fa-solid fa-arrow-left" style={{ marginRight: "7px" }}></i> Back
               </Button>
             </div>
             <div>
@@ -171,7 +181,7 @@ const PortfolioDetailed = () => {
                 style={{ backgroundColor: "#12294d" }}
                 onClick={handleUpdatePortfolioModalOpen}
               >
-                <i class="fa-regular fa-pen-to-square" style={{ marginRight: "7px" }}></i> Edit
+                <i className="fa-regular fa-pen-to-square" style={{ marginRight: "7px" }}></i> Edit
               </Button>
               <Modal
                 open={updatePortfolioModalOpen}
@@ -229,7 +239,7 @@ const PortfolioDetailed = () => {
                 // onClick={() => onDeletePortfolio()}
                 onClick={handleDeletePortfolioModalOpen}
               >
-                <i class="fa-solid fa-trash" style={{ marginRight: "7px" }}></i> Delete
+                <i className="fa-solid fa-trash" style={{ marginRight: "7px" }}></i> Delete
               </Button>
 
               <Modal
@@ -290,8 +300,8 @@ const PortfolioDetailed = () => {
         <Grid container rowSpacing={5} columnSpacing={{ xs: 2, sm: 2, md: 1 }}>
           <Grid item xs={12} md={6} lg={6}>
             <div className={style.firstContainer}>
-              <StockCard name="Portfolio Value" value="$6,364" />
-              <StockCard name="Total Stocks" value="10" />
+              <StockCard name="Portfolio Value" value="-" />
+              <StockCard name="Total Stocks" value={dataFromChildStocksCount} />
             </div>
 
             <Card className={style.cardCustom}>
@@ -305,14 +315,14 @@ const PortfolioDetailed = () => {
           {/* ============================ RIGHT SECTION ============================ */}
           <Grid item xs={12} md={6} lg={6}>
             <div className={style.firstContainer}>
-              <StockCard name="Net Value" value="20% " />
+              <StockCard name="Net Value" value="-" />
               <StockCard name="Capital" value={`$${portfolio && portfolio.capitalAmt}`} />
             </div>
 
             <Card className={style.cardCustom}>
               <CardContent>
                 <div className={style.cardTitle}>Stocks by Segment</div>
-                <PortfolioStocksBySegmentChart />
+                <PortfolioStocksBySegmentChart portfolioId={id} />
               </CardContent>
             </Card>
           </Grid>
@@ -333,35 +343,39 @@ const PortfolioDetailed = () => {
             <CardContent>
               <div className={style.cardTitle}>Portfolio Annual Returns (%)</div>
               <br />
-              <PortfolioAnnualReturnsPercentage />
+              <PortfolioAnnualReturnsPercentage portfolioId={id} />
             </CardContent>
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={12} lg={12}>
-          <Card className={style.cardCustom}>
-            <CardContent>
-              <div className={style.cardTitle}>Market Exposure by Location</div>
-              <br />
-              <MarketExposureByGeographicalLocationChart />
-            </CardContent>
-          </Card>
+        <Grid container rowSpacing={5} columnSpacing={{ xs: 2, sm: 2, md: 1 }}>
+          <Grid item xs={12} md={6} lg={6}>
+            <Card className={style.cardCustom}>
+              <CardContent>
+                <div className={style.cardTitle}>Market Exposure by Currency</div>
+
+                <br />
+                <MarketExposureByCurrencyChart portfolioId={id} />
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} md={6} lg={6}>
+            <Card className={style.cardCustom}>
+              <CardContent>
+                <div className={style.cardTitle}>Market Exposure by Country</div>
+
+                <br />
+                <MarketExposureByCountryChart portfolioId={id} />
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
 
-        <Grid item xs={12} md={12} lg={12}>
+        <Grid item xs={12} md={6} lg={12}>
           <Card className={style.cardCustom}>
             <CardContent>
-              <div className={style.cardTitle}>Market Exposure by Country</div>
-              <br />
-              <MarketExposureBySegment />
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={12} lg={12}>
-          <Card className={style.cardCustom}>
-            <CardContent>
-              <StockGrid portfolioId={id} />
+              <StockGrid portfolioId={id} sendDataToParent={receiveDataFromChildStockGrid} />
             </CardContent>
           </Card>
         </Grid>

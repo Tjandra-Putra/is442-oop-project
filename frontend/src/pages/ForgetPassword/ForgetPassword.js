@@ -14,29 +14,17 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 
-import styles from "./Login.module.css";
+import styles from "./ForgetPassword.module.css";
 
 const defaultTheme = createTheme();
 
-const Login = () => {
+const ForgetPassword = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    // ====================== get user info from database ======================
-    const userId = 1;
-    axios
-      .get("http://localhost:8080/api/user/getUser/" + userId)
-      .then((res) => {
-        const objectString = JSON.stringify(res.data.data[0]);
-        Cookies.set("userInfo", objectString, { expires: 7 }); // expires in 7 days
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   return (
-    <div className={styles.loginWrapper}>
+    <div className={styles.forgetPasswordWrapper}>
       <ThemeProvider theme={defaultTheme}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
@@ -48,12 +36,15 @@ const Login = () => {
             }}
           >
             <div className={styles.iconWrapper}>
-              <i class="fa-solid fa-key"></i>{" "}
+              <i class="fa-solid fa-lock"></i>
             </div>
             <Typography component="h1" variant="h5">
-              Login to your account
+              Forget Password
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <small className={styles.description}>
+              Enter your email address and we will send you a link to reset your password.
+            </small>
+            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, width: "25rem" }}>
               <TextField
                 margin="normal"
                 required
@@ -64,36 +55,16 @@ const Login = () => {
                 autoComplete="email"
                 autoFocus
               />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-              <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-              <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                Sign In
+              <Button type="submit" fullWidth variant="contained" sx={{ mt: 2, mb: 2 }}>
+                Send Email Link to Reset Password
               </Button>
               <Grid container>
                 <Grid item xs>
                   <Link
-                    to="/forget-password"
+                    to="/login"
                     style={{ cursor: "pointer", color: "#2e82d6", fontSize: "14px", textDecoration: "none" }}
                   >
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link
-                    to="/register"
-                    style={{ cursor: "pointer", color: "#2e82d6", fontSize: "14px", textDecoration: "none" }}
-                  >
-                    {" "}
-                    {"Don't have an account? Sign Up"}
+                    <i class="fa-solid fa-arrow-left" style={{ marginRight: "0.5rem" }}></i> Return to Sign In
                   </Link>
                 </Grid>
               </Grid>
@@ -105,4 +76,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgetPassword;

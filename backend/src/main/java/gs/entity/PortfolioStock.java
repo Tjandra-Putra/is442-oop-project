@@ -36,14 +36,14 @@ public class PortfolioStock {
 
     @Column(
         name = "buy_date",
-        updatable = false,
+        updatable = true,
         nullable = false
     )    
     private Date buyDate;
 
     @Column(
         name = "price",
-        updatable = false,
+        updatable = true,
         nullable = false
     )    
     private double price;
