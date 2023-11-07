@@ -17,7 +17,7 @@ public interface StockInfoRepo extends JpaRepository<StockInfo, String>{
     List<StockInfo> getStockInfo();
 
     @Query(value = "select * from stock_info where ticker = ? ;", nativeQuery = true)
-    List<StockInfo> getStockInfoByTicker(String ticker);
+    StockInfo getStockInfoByTicker(String ticker);
 
     
     

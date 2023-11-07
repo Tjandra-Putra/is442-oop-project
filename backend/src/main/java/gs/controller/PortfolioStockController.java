@@ -14,11 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import gs.common.ApiModel;
-import gs.common.ApiModelHashMap;
 import gs.common.RequestModel;
 import gs.common.RequestModel2;
+import gs.inputModel.AllocationInputModel;
 import gs.inputModel.PortfolioStockInputModel;
-import gs.inputModel.StockAllocationInputModel;
 import gs.service.portfolioStock.PortfolioStockService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
