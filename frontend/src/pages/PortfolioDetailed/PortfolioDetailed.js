@@ -5,14 +5,12 @@ import StockCard from "../../components/StockCard/StockCard";
 import StockGrid from "../../components/StockGrid/StockGrid";
 import toast from "react-hot-toast";
 import axios from "axios";
-
 import PortfolioStocksAllocationChart from "../../components/Charts/PortfolioStocksAllocationChart/PortfolioStocksAllocationChart";
-import PortfolioStocksBySegmentChart from "../../components/Charts/PortfolioStocksBySegmentChart/PortfolioStocksBySegmentChart";
-import MarketExposureByGeographicalLocationChart from "../../components/Charts/MarketExposureByGeographicalLocationChart/MarketExposureByGeographicalLocationChart";
-import MarketExposureBySegment from "../../components/Charts/MarketExposureBySegment/MarketExposureBySegment";
+import MarketExposureByCountryChart from "../../components/Charts/MarketExposureByCountryChart/MarketExposureByCountryChart";
+import MarketExposureByCurrencyChart from "../../components/Charts/MarketExposureByCurrencyChart/MarketExposureByCurrencyChart";
 import PortfolioReturnsChart from "../../components/Charts/PortfolioReturnsChart/PortfolioReturnsChart";
 import PortfolioAnnualReturnsPercentage from "../../components/Charts/PortfolioAnnualReturnsPercentage/PortfolioAnnualReturnsPercentage";
-
+import PortfolioStocksBySegmentChart from "../../components/Charts/PortfolioStocksBySegmentChart/PortfolioStocksBySegmentChart";
 import {
   Card,
   Grid,
@@ -350,27 +348,31 @@ const PortfolioDetailed = () => {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={12} lg={12}>
-          <Card className={style.cardCustom}>
-            <CardContent>
-              <div className={style.cardTitle}>Market Exposure by Location</div>
-              <br />
-              <MarketExposureByGeographicalLocationChart portfolioId={id} />
-            </CardContent>
-          </Card>
+        <Grid container rowSpacing={5} columnSpacing={{ xs: 2, sm: 2, md: 1 }}>
+          <Grid item xs={12} md={6} lg={6}>
+            <Card className={style.cardCustom}>
+              <CardContent>
+                <div className={style.cardTitle}>Market Exposure by Currency</div>
+
+                <br />
+                <MarketExposureByCurrencyChart portfolioId={id} />
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} md={6} lg={6}>
+            <Card className={style.cardCustom}>
+              <CardContent>
+                <div className={style.cardTitle}>Market Exposure by Country</div>
+
+                <br />
+                <MarketExposureByCountryChart portfolioId={id} />
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
 
-        <Grid item xs={12} md={12} lg={12}>
-          <Card className={style.cardCustom}>
-            <CardContent>
-              <div className={style.cardTitle}>Market Exposure by Country</div>
-              <br />
-              <MarketExposureBySegment portfolioId={id} />
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={12} lg={12}>
+        <Grid item xs={12} md={6} lg={12}>
           <Card className={style.cardCustom}>
             <CardContent>
               <StockGrid portfolioId={id} sendDataToParent={receiveDataFromChildStockGrid} />

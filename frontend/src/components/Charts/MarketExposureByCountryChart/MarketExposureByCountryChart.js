@@ -7,7 +7,7 @@ import Select from "@mui/material/Select";
 import { Grid } from "@mui/material";
 import axios from "axios";
 
-function MarketExposureByGeographicalLocationChart({ portfolioId }) {
+function MarketExposureByCountryChart({ portfolioId }) {
   const [initialData, setInitialData] = useState([]);
 
   useEffect(() => {
@@ -15,7 +15,6 @@ function MarketExposureByGeographicalLocationChart({ portfolioId }) {
       .get(`http://localhost:8080/api/portfolioStock/getPortfolioStockCountryAllocation/${portfolioId}`)
       .then((res) => {
         let response = res.data.data;
-        console.log(response);
 
         const dataMap = {}; // Use an object to store segment data
 
@@ -62,10 +61,10 @@ function MarketExposureByGeographicalLocationChart({ portfolioId }) {
   return (
     <div>
       <Grid container spacing={4}>
-        <Grid item md={6} xs={12}>
+        <Grid item md={12} xs={12}>
           <Chart chartType="PieChart" data={initialData} options={options} width={"100%"} height={"400px"} />
         </Grid>
-        <Grid item md={6} xs={12}>
+        {/* <Grid item md={6} xs={12}>
           <Chart
             chartEvents={[
               {
@@ -85,10 +84,10 @@ function MarketExposureByGeographicalLocationChart({ portfolioId }) {
             data={initialData} // Replace with your GeoChart data
             options={geoChartOptions} // Use GeoChart-specific options
           />
-        </Grid>
+        </Grid> */}
       </Grid>
     </div>
   );
 }
 
-export default MarketExposureByGeographicalLocationChart;
+export default MarketExposureByCountryChart;
