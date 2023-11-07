@@ -67,6 +67,8 @@ function LineChart({ portfolioId }) {
     });
   }, []);
 
+  // filter monthly
+
   if (selectedFilterType === "monthly") {
     if (selectedFromYear && selectedToYear && selectedFromMonth && selectedToMonth) {
       axios
@@ -116,6 +118,7 @@ function LineChart({ portfolioId }) {
         });
     }
   }
+
   if (selectedFilterType === "quarterly") {
     if (selectedFromYear && selectedToYear && selectedFromQuarter && selectedToQuarter) {
       axios
