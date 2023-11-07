@@ -1,6 +1,7 @@
 package gs.service.history;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -14,6 +15,7 @@ import java.time.Year;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.TreeSet;
 import java.util.List;
 import java.util.Map;
 
@@ -260,40 +262,64 @@ public class HistoryServiceImpl implements HistoryService {
 
     public List<MonthlyPrice> getMonthlyPortfolioValue(String userId){
         List<Portfolio> portfolio = portfolioRepo.getPortfolioByUserId(userId);
-        List<String> monthStrings = generateMonthStrings();
+        TreeSet<String> monthStrings = new TreeSet<String>();
         List<List<Double>> returnvalues = new ArrayList<>();
-        for(int m = 1 ; m < 13 ; m++){
-            List<Double> portfoliovalues = new ArrayList<>();
-            for(Portfolio p : portfolio){
-                String portfolioId = String.valueOf(p.getPortfolioId());
-                List<PortfolioStock> ps = portfolioStockRepo.getPortfolioStockByPortfolioId(portfolioId);     
-                double total = 0;
-                for(PortfolioStock pstock : ps){
-                    List<History> history = historyRepo.getMonthlyClosingPrices(pstock.getStock().getTicker());
-                    for(History h : history){
-                        String dateString = h.getDate().toString();
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-                        try {
-                            Date date = dateFormat.parse(dateString);
-                            SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
-                            String month = monthFormat.format(date);
-                            int monthInt = Integer.parseInt(month);
-                            if (monthInt == m) {
-                                total += h.getAdjClosePrice() * pstock.getQuantity();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }                        
-                        
+        List<Integer> years = historyRepo.getUniqueYears();
+
+        // Loop through years
+        for(Integer y : years){
+            // Loop through months
+            for(int m = 1 ; m < 13 ; m++){
+                List<Double> portfoliovalues = new ArrayList<>();
+                // Loop through individual portfolios
+                for(Portfolio p : portfolio){
+                    String portfolioId = String.valueOf(p.getPortfolioId());
+                    List<PortfolioStock> ps = portfolioStockRepo.getPortfolioStockByPortfolioId(portfolioId);     
+                    double total = 0;
+                    // Loop through the individual stocks
+                    for(PortfolioStock pstock : ps){
+                        List<History> history = historyRepo.getMonthlyClosingPrices(pstock.getStock().getTicker());
+                    // Loop through history info of each individual stock
+                        for(History h : history){
+                            String dateString = h.getDate().toString();
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+                            try {
+                                Date date = dateFormat.parse(dateString);
+                                SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+                                SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+                                String year = yearFormat.format(date);
+                                String month = monthFormat.format(date);
+                                int yearInt = Integer.parseInt(year);
+                                int monthInt = Integer.parseInt(month);
+                                if (monthInt == m && yearInt == y) {
+                                    total += h.getAdjClosePrice() * pstock.getQuantity();
+                                    monthStrings.add(y + "-" + m);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }                        
+                            
+                        }
+
+                        portfoliovalues.add(total);
                     }
-                    portfoliovalues.add(total);
-                   
+                    
                 }
+                returnvalues.add(portfoliovalues);
             }
-            returnvalues.add(portfoliovalues);
         }
+        System.out.println(years);
+
+            
         MonthlyPrice inputModel = new MonthlyPrice();
-        inputModel.setMonths(monthStrings);
+        ArrayList<String> result = new ArrayList<>(monthStrings);
+        
+        // CHECK ARRAY LENGTH
+        System.out.println("===here=====");
+        System.out.println(result.size());
+        System.out.println(returnvalues.size());
+
+        inputModel.setMonths(result);
         inputModel.setPortfolioValues(returnvalues);
         List<MonthlyPrice> inputModelList = new ArrayList<>();
         inputModelList.add(inputModel);
@@ -301,13 +327,6 @@ public class HistoryServiceImpl implements HistoryService {
 
     }
 
-    // public List<MonthlyPrice> getQuarterlyPortfolioValue(String userId){
-    //     List<Portfolio> portfolio = portfolioRepo.getPortfolioByUserId(userId);
-    //     List<String> monthStrings = generateMonthStrings();
-    //     List<List<Double>> returnvalues = new ArrayList<>();
-        
-    //     return null;    
-    // }
     public List<MonthlyPrice> getQuarterlyPortfolioValue(String userId){
         List<Portfolio> portfolio = portfolioRepo.getPortfolioByUserId(userId);
         List<String> monthStrings = generateMonthStrings();
@@ -320,6 +339,7 @@ public class HistoryServiceImpl implements HistoryService {
                 double total = 0;
                 for(PortfolioStock pstock : ps){
                     List<History> history = historyRepo.getMonthlyClosingPrices(pstock.getStock().getTicker());
+
                     for(History h : history){
                         String dateString = h.getDate().toString();
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
@@ -334,7 +354,7 @@ public class HistoryServiceImpl implements HistoryService {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }                        
-                        
+                        break;
                     }
                     portfoliovalues.add(total);
                    
