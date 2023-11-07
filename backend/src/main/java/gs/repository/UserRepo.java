@@ -17,6 +17,6 @@ public interface UserRepo extends JpaRepository<User, Long>{
     List<User> getUserById(String id);
 
     @Query(value = "select * from user where email = ?;", nativeQuery = true)
-    Optional<User> getUserByEmail(String email);
+    User getUserByEmail(String email);
 
 }

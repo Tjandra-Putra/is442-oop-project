@@ -57,7 +57,10 @@ public class UserServiceImpl implements UserService{
     private PasswordResetTokenService passwordResetTokenService;
 
     public Optional<User> getUserByEmail(String email) {
-        return userRepo.getUserByEmail(email);
+        User user = userRepo.getUserByEmail(email);
+        Optional<User> optionalUser = Optional.ofNullable(user);
+        
+        return optionalUser;
     }
 
     public void createPasswordResetTokenForUser(User user, String passwordToken) {
