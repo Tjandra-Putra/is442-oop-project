@@ -48,11 +48,18 @@ public class HistoryController {
     //     return CustomApiModel.ok(HistoryService.getPortfolioValue(portfolioId));
     // }
 
-    @GetMapping("getPortfolioValue/{userId}")
-    public ApiModel<ArrayList<YearlyPriceInputmodel>> getPortfolioValue (
-        @PathVariable("userId") String userId
+    // @GetMapping("getPortfolioValue/{userId}")
+    // public ApiModel<ArrayList<YearlyPriceInputmodel>> getPortfolioValue (
+    //     @PathVariable("userId") String userId
+    // ){
+    //     return ApiModel.ok(HistoryService.getPortfolioValue(userId));
+    // }
+
+    @GetMapping("getAnnualPortfolioValue/{portfolioId}")
+    public ApiModel<ArrayList<TreeMap<Integer,Double>>> getAnnualPortfolioValue (
+        @PathVariable("portfolioId") String portfolioId
     ){
-        return ApiModel.ok(HistoryService.getPortfolioValue(userId));
+        return ApiModel.ok(HistoryService.getAnnualPortfolioValue(portfolioId));
     }
 
     @GetMapping("getMonthlyPortfolioValue/{portfolioId}")

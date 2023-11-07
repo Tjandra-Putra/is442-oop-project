@@ -192,45 +192,98 @@ public class HistoryServiceImpl implements HistoryService {
         return historyList;
     }
 
-    public List<YearlyPriceInputmodel> getPortfolioValue(String userId) {
-        List<Portfolio> portfolio = portfolioRepo.getPortfolioByUserId(userId);
-        List<List<Double>> returnvalues = new ArrayList<>();
-        List<String> Portfolionames = new ArrayList<>();
-        for(Portfolio p : portfolio){
-            Portfolionames.add(p.getPortfolioName());
-        }
+
+    public ArrayList<TreeMap<Integer, Double>> getAnnualPortfolioValue(String portfolioId){
+
+        ArrayList<TreeMap<Integer, Double>> result = new ArrayList<>();
+        TreeMap<Integer, Double> yearly = new TreeMap<>();
+
+        // Loop through all years found in the History data
         List<Integer> years = historyRepo.getUniqueYears();
-        for(Integer y : years){
-            for(Portfolio p : portfolio){
-                String portfolioId = String.valueOf(p.getPortfolioId());
-                List<PortfolioStock> ps = portfolioStockRepo.getPortfolioStockByPortfolioId(portfolioId);
-                List<Double> portfoliovalues = new ArrayList<>();
-                for(PortfolioStock pstock : ps){
-                    List<History> history = historyRepo.getClosingPricesForYear(pstock.getStock().getTicker(), y);
-                    double total = 0;
-                    for(History h : history){
-                        total += h.getAdjClosePrice() * pstock.getQuantity();
+        for (Integer y : years) {
+
+            double currentAnnualValue = 0.0;
+
+            // Loop through the individual stocks of the portfolio
+            List<PortfolioStock> portfolioStocks = portfolioStockRepo.getPortfolioStockByPortfolioId(portfolioId);
+            for (PortfolioStock ps : portfolioStocks) {
+
+                String ticker = ps.getStock().getTicker();
+                List<History> history = historyRepo.getClosingPricesForYear(ticker, y);
+
+                for (History h : history) {
+
+                    String dateString = h.getDate().toString();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+                    try {
+                        Date date = dateFormat.parse(dateString);
+                        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+                        String year = yearFormat.format(date);
+                        int yearInt = Integer.parseInt(year);
+                        if (yearInt == y) {
+                            currentAnnualValue += h.getAdjClosePrice() * ps.getQuantity();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    if (!history.isEmpty()) {
-                        portfoliovalues.add(total);
-                    }
-                }
-                
-                if (!portfoliovalues.isEmpty()) {
-                    returnvalues.add(portfoliovalues);
-                }
+                }                      
             }
-            
+
+            yearly.put(y, currentAnnualValue);
+
         }
-       
-        YearlyPriceInputmodel inputModel = new YearlyPriceInputmodel();
-        inputModel.setYears(years);
-        inputModel.setPortfolioNames(Portfolionames);
-        inputModel.setPortfolioValues(returnvalues);
-        List<YearlyPriceInputmodel> inputModelList = new ArrayList<>();
-        inputModelList.add(inputModel);
-        return inputModelList;
+
+        Set<Integer> yearSet = yearly.keySet();
+        for (Integer year : yearSet) {
+            TreeMap<Integer, Double> yearlyData = new TreeMap<>();
+            yearlyData.put(year, yearly.get(year));
+            result.add(yearlyData);
+        }
+
+        return result;
+        
     }
+
+
+    // public List<YearlyPriceInputmodel> getPortfolioValue(String userId) {
+    //     List<Portfolio> portfolio = portfolioRepo.getPortfolioByUserId(userId);
+    //     List<List<Double>> returnvalues = new ArrayList<>();
+    //     List<String> Portfolionames = new ArrayList<>();
+    //     for(Portfolio p : portfolio){
+    //         Portfolionames.add(p.getPortfolioName());
+    //     }
+    //     List<Integer> years = historyRepo.getUniqueYears();
+    //     for(Integer y : years){
+    //         for(Portfolio p : portfolio){
+    //             String portfolioId = String.valueOf(p.getPortfolioId());
+    //             List<PortfolioStock> ps = portfolioStockRepo.getPortfolioStockByPortfolioId(portfolioId);
+    //             List<Double> portfoliovalues = new ArrayList<>();
+    //             for(PortfolioStock pstock : ps){
+    //                 List<History> history = historyRepo.getClosingPricesForYear(pstock.getStock().getTicker(), y);
+    //                 double total = 0;
+    //                 for(History h : history){
+    //                     total += h.getAdjClosePrice() * pstock.getQuantity();
+    //                 }
+    //                 if (!history.isEmpty()) {
+    //                     portfoliovalues.add(total);
+    //                 }
+    //             }
+                
+    //             if (!portfoliovalues.isEmpty()) {
+    //                 returnvalues.add(portfoliovalues);
+    //             }
+    //         }
+            
+    //     }
+       
+    //     YearlyPriceInputmodel inputModel = new YearlyPriceInputmodel();
+    //     inputModel.setYears(years);
+    //     inputModel.setPortfolioNames(Portfolionames);
+    //     inputModel.setPortfolioValues(returnvalues);
+    //     List<YearlyPriceInputmodel> inputModelList = new ArrayList<>();
+    //     inputModelList.add(inputModel);
+    //     return inputModelList;
+    // }
 
     public ArrayList<TreeMap<Integer, TreeMap<Integer, Double>>> getMonthlyPortfolioValue(String portfolioId){
 

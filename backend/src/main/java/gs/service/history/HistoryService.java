@@ -17,7 +17,9 @@ public interface HistoryService {
     List<HistoryInputModel> getYearlyClosingByTicker(String ticker);
 
     // Retrieve the portfolio values over the years -> working
-    List<YearlyPriceInputmodel> getPortfolioValue(String userId);
+    // List<YearlyPriceInputmodel> getPortfolioValue(String userId);
+
+    ArrayList<TreeMap<Integer, Double>> getAnnualPortfolioValue(String portfolioId);
 
     //  Retrieve the portfolio values over the months -> Done
     ArrayList<TreeMap<Integer, TreeMap<Integer, Double>>> getMonthlyPortfolioValue(String portfolioId);
