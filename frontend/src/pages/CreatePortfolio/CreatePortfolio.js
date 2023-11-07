@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
-import TextField from "@mui/material/TextField";
-import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
+import { Box, Stack, TextField, Button, Grid, CardContent, Card, Typography, Container } from "@mui/material";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -27,7 +19,6 @@ const CreatePortfolio = () => {
   const [stockColumns, setStockColumns] = useState([]);
   const [stockRows, setStockRows] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [portfolioId, setPortfolioId] = useState(null);
   const [buyDate, setBuyDate] = useState("");
   const [quantityValues, setQuantityValues] = useState(Object.fromEntries(stockRows.map((row) => [row.id, 1])));
 
@@ -175,9 +166,6 @@ const CreatePortfolio = () => {
 
     return {
       selectedRows: selectedRowsWithQuantity,
-      // portfolioName: portfolioName,
-      // portfolioDescription: portfolioDescription,
-      // portfolioCapital: portfolioCapital,
     };
   };
 
@@ -239,11 +227,11 @@ const CreatePortfolio = () => {
 
             const formattedData = [
               {
-                fieldname: "ticker",
+                fieldName: "ticker",
                 value: row.Ticker,
               },
               {
-                fieldname: "price",
+                fieldName: "price",
                 value: row.Price,
               },
               {
@@ -272,7 +260,7 @@ const CreatePortfolio = () => {
             })
             .catch((err) => console.log(err));
 
-          // navigate("/dashboard");
+          navigate("/dashboard");
         }
       })
       .catch((err) => {
