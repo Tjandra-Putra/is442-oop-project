@@ -3,6 +3,7 @@ package gs.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -71,18 +72,18 @@ public class HistoryController {
         return ApiModel.ok(HistoryService.getPortfolioValue(userId));
     }
 
-    @GetMapping("getMonthlyPortfolioValue/{userId}")
-    public ApiModel<ArrayList<MonthlyPrice>> getMonthlyPortfolioValue (
-        @PathVariable("userId") String userId
+    @GetMapping("getMonthlyPortfolioValue/{portfolioId}")
+    public ApiModel<ArrayList<TreeMap<Integer, TreeMap<Integer, Double>>>> getMonthlyPortfolioValue (
+        @PathVariable("portfolioId") String portfolioId
     ){
-        return ApiModel.ok(HistoryService.getMonthlyPortfolioValue(userId));
+        return ApiModel.ok(HistoryService.getMonthlyPortfolioValue(portfolioId));
     }
 
-    @GetMapping("getQuarterlyPortfolioValue/{userId}")
-    public ApiModel<ArrayList<MonthlyPrice>> getQuarterlyPortfolioValue (
-        @PathVariable("userId") String userId
+    @GetMapping("getQuarterlyPortfolioValue/{portfolioId}")
+    public ApiModel<ArrayList<TreeMap<Integer, TreeMap<Integer, Double>>>> getQuarterlyPortfolioValue (
+        @PathVariable("portfolioId") String portfolioId
     ){
-        return ApiModel.ok(HistoryService.getQuarterlyPortfolioValue(userId));
+        return ApiModel.ok(HistoryService.getQuarterlyPortfolioValue(portfolioId));
     }
 
     

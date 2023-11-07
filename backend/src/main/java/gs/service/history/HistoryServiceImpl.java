@@ -10,14 +10,16 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Month;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.TreeSet;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.time.*;
+import java.util.Comparator;
+import java.util.Set;
 
 import javax.sound.sampled.Port;
 
@@ -260,27 +262,97 @@ public class HistoryServiceImpl implements HistoryService {
         return inputModelList;
     }
 
-    public List<MonthlyPrice> getMonthlyPortfolioValue(String userId){
-        List<Portfolio> portfolio = portfolioRepo.getPortfolioByUserId(userId);
-        TreeSet<String> monthStrings = new TreeSet<String>();
-        List<List<Double>> returnvalues = new ArrayList<>();
-        List<Integer> years = historyRepo.getUniqueYears();
+    public ArrayList<TreeMap<Integer, TreeMap<Integer, Double>>> getMonthlyPortfolioValue(String portfolioId){
 
-        // Loop through years
-        for(Integer y : years){
-            // Loop through months
-            for(int m = 1 ; m < 13 ; m++){
-                List<Double> portfoliovalues = new ArrayList<>();
-                // Loop through individual portfolios
-                for(Portfolio p : portfolio){
-                    String portfolioId = String.valueOf(p.getPortfolioId());
-                    List<PortfolioStock> ps = portfolioStockRepo.getPortfolioStockByPortfolioId(portfolioId);     
-                    double total = 0;
-                    // Loop through the individual stocks
-                    for(PortfolioStock pstock : ps){
-                        List<History> history = historyRepo.getMonthlyClosingPrices(pstock.getStock().getTicker());
-                    // Loop through history info of each individual stock
-                        for(History h : history){
+        ArrayList<TreeMap<Integer, TreeMap<Integer, Double>>> result = new ArrayList<>();
+        TreeMap<Integer, TreeMap<Integer, Double>> yearly = new TreeMap<>();
+
+        // Loop through all years found in the History data
+        List<Integer> years = historyRepo.getUniqueYears();
+        for (Integer y : years) {
+
+            TreeMap<Integer, Double> monthlyValue = new TreeMap<>();
+
+            // Loop though all months of the year
+            for (int m = 1 ; m < 13 ; m++) {
+
+                double currentMonthValue = 0;
+
+                // Loop through the individual stocks of the portfolio
+                List<PortfolioStock> portfolioStocks = portfolioStockRepo.getPortfolioStockByPortfolioId(portfolioId);
+                for (PortfolioStock ps : portfolioStocks) {
+
+                    String ticker = ps.getStock().getTicker();
+                    List<History> history = historyRepo.getMonthlyClosingPrices(ticker);
+
+                    for (History h : history) {
+
+                        String dateString = h.getDate().toString();
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+                        try {
+                            Date date = dateFormat.parse(dateString);
+                            SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+                            SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+                            String year = yearFormat.format(date);
+                            String month = monthFormat.format(date);
+                            int yearInt = Integer.parseInt(year);
+                            int monthInt = Integer.parseInt(month);
+                            if (monthInt == m && yearInt == y) {
+                                currentMonthValue += h.getAdjClosePrice() * ps.getQuantity();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }                      
+                }
+
+                monthlyValue.put(m, currentMonthValue);
+
+            }
+            
+            yearly.put(y, monthlyValue);
+
+        }
+
+        Set<Integer> yearSet = yearly.keySet();
+        for (Integer year : yearSet) {
+            TreeMap<Integer, TreeMap<Integer, Double>> yearlyData = new TreeMap<>();
+            yearlyData.put(year, yearly.get(year));
+            result.add(yearlyData);
+        }
+
+        return result;
+        
+    }
+
+
+    public ArrayList<TreeMap<Integer, TreeMap<Integer, Double>>> getQuarterlyPortfolioValue(String portfolioId){
+
+        ArrayList<TreeMap<Integer, TreeMap<Integer, Double>>> result = new ArrayList<>();
+        TreeMap<Integer, TreeMap<Integer, Double>> yearly = new TreeMap<>();
+
+        // Loop through all years found in the History data
+        List<Integer> years = historyRepo.getUniqueYears();
+        for (Integer y : years) {
+
+            TreeMap<Integer, Double> monthlyValue = new TreeMap<>();
+
+            // Loop though all months of the year
+            for (int m = 1 ; m < 13 ; m++) {
+
+                if (m % 3 ==0) {
+
+                    double currentMonthValue = 0;
+
+                    // Loop through the individual stocks of the portfolio
+                    List<PortfolioStock> portfolioStocks = portfolioStockRepo.getPortfolioStockByPortfolioId(portfolioId);
+                    for (PortfolioStock ps : portfolioStocks) {
+
+                        String ticker = ps.getStock().getTicker();
+                        List<History> history = historyRepo.getMonthlyClosingPrices(ticker);
+
+                        for (History h : history) {
+
                             String dateString = h.getDate().toString();
                             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
                             try {
@@ -292,135 +364,33 @@ public class HistoryServiceImpl implements HistoryService {
                                 int yearInt = Integer.parseInt(year);
                                 int monthInt = Integer.parseInt(month);
                                 if (monthInt == m && yearInt == y) {
-                                    total += h.getAdjClosePrice() * pstock.getQuantity();
-                                    monthStrings.add(y + "-" + m);
+                                    currentMonthValue += h.getAdjClosePrice() * ps.getQuantity();
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
-                            }                        
-                            
-                        }
-
-                        portfoliovalues.add(total);
-                    }
-                    
-                }
-                returnvalues.add(portfoliovalues);
-            }
-        }
-        System.out.println(years);
-
-            
-        MonthlyPrice inputModel = new MonthlyPrice();
-        ArrayList<String> result = new ArrayList<>(monthStrings);
-        
-        // CHECK ARRAY LENGTH
-        System.out.println("===here=====");
-        System.out.println(result.size());
-        System.out.println(returnvalues.size());
-
-        inputModel.setMonths(result);
-        inputModel.setPortfolioValues(returnvalues);
-        List<MonthlyPrice> inputModelList = new ArrayList<>();
-        inputModelList.add(inputModel);
-        return inputModelList;
-
-    }
-
-    public List<MonthlyPrice> getQuarterlyPortfolioValue(String userId){
-        List<Portfolio> portfolio = portfolioRepo.getPortfolioByUserId(userId);
-        List<String> monthStrings = generateMonthStrings();
-        List<List<Double>> returnvalues = new ArrayList<>();
-        for(int m = 1 ; m < 13 ; m++){
-            List<Double> portfoliovalues = new ArrayList<>();
-            for(Portfolio p : portfolio){
-                String portfolioId = String.valueOf(p.getPortfolioId());
-                List<PortfolioStock> ps = portfolioStockRepo.getPortfolioStockByPortfolioId(portfolioId);     
-                double total = 0;
-                for(PortfolioStock pstock : ps){
-                    List<History> history = historyRepo.getMonthlyClosingPrices(pstock.getStock().getTicker());
-
-                    for(History h : history){
-                        String dateString = h.getDate().toString();
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-                        try {
-                            Date date = dateFormat.parse(dateString);
-                            SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
-                            String month = monthFormat.format(date);
-                            int monthInt = Integer.parseInt(month);
-                            if (monthInt == m) {
-                                total += h.getAdjClosePrice() * pstock.getQuantity();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }                        
-                        break;
+                        }                      
                     }
-                    portfoliovalues.add(total);
-                   
+
+                    monthlyValue.put(m, currentMonthValue);
+
                 }
+
             }
-            returnvalues.add(portfoliovalues);
+            
+            yearly.put(y, monthlyValue);
+
         }
-        MonthlyPrice inputModel = new MonthlyPrice();
-        inputModel.setMonths(monthStrings);
-        inputModel.setPortfolioValues(returnvalues);
-        List<MonthlyPrice> inputModelList = new ArrayList<>();
-        inputModelList.add(inputModel);
-        return inputModelList;
 
-    }
-    
-    
-    
-
-    // create a function to generate the unique months in a string format in a year eg "jan", "feb" etc
-    public List<String> generateMonthStrings(){
-        List<String> monthStrings = new ArrayList<>();
-        for(int i = 1; i <= 12; i++){
-            if(i == 1){
-                monthStrings.add("Jan");
-            }
-            else if(i == 2){
-                monthStrings.add("Feb");
-            }
-            else if(i == 3){
-                monthStrings.add("Mar");
-            }
-            else if(i == 4){
-                monthStrings.add("Apr");
-            }
-            else if(i == 5){
-                monthStrings.add("May");
-            }
-            else if(i == 6){
-                monthStrings.add("Jun");
-            }
-            else if(i == 7){
-                monthStrings.add("Jul");
-            }
-            else if(i == 8){
-                monthStrings.add("Aug");
-            }
-            else if(i == 9){
-                monthStrings.add("Sep");
-            }
-            else if(i == 10){
-                monthStrings.add("Oct");
-            }
-            else if(i == 11){
-                monthStrings.add("Nov");
-            }
-            else if(i == 12){
-                monthStrings.add("Dec");
-            }
+        Set<Integer> yearSet = yearly.keySet();
+        for (Integer year : yearSet) {
+            TreeMap<Integer, TreeMap<Integer, Double>> yearlyData = new TreeMap<>();
+            yearlyData.put(year, yearly.get(year));
+            result.add(yearlyData);
         }
-        return monthStrings;
+
+        return result;
+        
     }
-
-
-
-    
-
 
 }

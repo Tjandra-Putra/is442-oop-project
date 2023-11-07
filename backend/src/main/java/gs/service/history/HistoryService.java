@@ -1,8 +1,10 @@
 package gs.service.history;
 
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import gs.entity.History;
 import gs.entity.PortfolioStock;
@@ -26,8 +28,9 @@ public interface HistoryService {
     List<YearlyPriceInputmodel> getPortfolioValue(String userId);
 
     //  Retrieve the portfolio values over the months -> Done
-    List<MonthlyPrice> getMonthlyPortfolioValue(String userId);
+    ArrayList<TreeMap<Integer, TreeMap<Integer, Double>>> getMonthlyPortfolioValue(String portfolioId);
 
-    List<MonthlyPrice> getQuarterlyPortfolioValue(String userId);
+    //  Retrieve the portfolio values over quarters
+    ArrayList<TreeMap<Integer, TreeMap<Integer, Double>>> getQuarterlyPortfolioValue(String portfolioId);
 
 }

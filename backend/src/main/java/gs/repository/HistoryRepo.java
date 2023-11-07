@@ -23,31 +23,8 @@ public interface HistoryRepo extends JpaRepository<History, HistoryCompositeKey>
     @Query(value = "SELECT * FROM history WHERE ticker = ? AND EXTRACT(YEAR FROM date) = ?;", nativeQuery = true)
     List<History> getClosingPricesForYear(String ticker, int year);
 
-    // Query to get the monthly closing prices for the latest year
-    // @Query(value = "SELECT * FROM history WHERE ticker = ? AND EXTRACT(YEAR FROM date) = (SELECT MAX(EXTRACT(YEAR FROM date)) FROM history) ORDER BY date;", nativeQuery = true)
-    // List<History> getMonthlyClosingPrices(String ticker);
-
-    @Query(value = "SELECT h1.* " +
-               "FROM history h1 " +
-               "JOIN ( " +
-               "    SELECT " +
-               "        EXTRACT(YEAR FROM date) AS year, " +
-               "        EXTRACT(MONTH FROM date) AS month, " +
-               "        MAX(date) AS max_date " +
-               "    FROM history " +
-               "    WHERE ticker = ?1 " +
-               "    GROUP BY EXTRACT(YEAR FROM date), EXTRACT(MONTH FROM date) " +
-               ") h2 ON EXTRACT(YEAR FROM h1.date) = h2.year " +
-               "      AND EXTRACT(MONTH FROM h1.date) = h2.month " +
-               "      AND h1.date = h2.max_date " +
-               "WHERE h1.ticker = ?1 " +
-               "ORDER BY h1.date;", nativeQuery = true)
-
+    @Query(value = "SELECT h1.* FROM history h1 JOIN (SELECT EXTRACT(YEAR FROM date) AS year, EXTRACT(MONTH FROM date) AS month, MAX(date) AS max_date FROM history WHERE ticker = 'AAPL' GROUP BY EXTRACT(YEAR FROM date), EXTRACT(MONTH FROM date) ) h2 ON EXTRACT(YEAR FROM h1.date) = h2.year AND EXTRACT(MONTH FROM h1.date) = h2.month AND h1.date = h2.max_date WHERE h1.ticker = 'AAPL' ORDER BY h1.date;", nativeQuery = true)
     List<History> getMonthlyClosingPrices(String ticker);
-
-
-    @Query(value = "SELECT h1.* FROM history h1 JOIN (SELECT YEAR(date) AS year, CEIL(MONTH(date) / 3) AS quarter, MAX(date) AS max_date FROM history WHERE ticker = ?1 GROUP BY YEAR(date), CEIL(MONTH(date) / 3)) h2 ON YEAR(h1.date) = h2.year AND CEIL(MONTH(h1.date) / 3) = h2.quarter AND h1.date = h2.max_date WHERE h1.ticker = ?1 ORDER BY h1.date;", nativeQuery = true)
-    List<History> getQuarterlyPortfolioValue(String ticker);
    
 
 }
