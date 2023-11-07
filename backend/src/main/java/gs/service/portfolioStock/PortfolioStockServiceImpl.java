@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import gs.common.ApiModel;
 import gs.common.DataRequestModel;
+import gs.common.RequestModel;
 import gs.common.RequestModel2;
 import gs.entity.History;
 import gs.entity.PortfolioStock;

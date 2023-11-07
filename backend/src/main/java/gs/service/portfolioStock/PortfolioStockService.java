@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import gs.common.ApiModel;
+import gs.common.RequestModel;
 import gs.common.RequestModel2;
 import gs.inputModel.PortfolioStockInputModel;
 import gs.inputModel.AllocationInputModel;
