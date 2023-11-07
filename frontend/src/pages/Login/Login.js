@@ -47,8 +47,11 @@ const Login = () => {
               alignItems: "center",
             }}
           >
+            <div className={styles.iconWrapper}>
+              <i class="fa-solid fa-key"></i>{" "}
+            </div>
             <Typography component="h1" variant="h5">
-              Sign in
+              Login to your account
             </Typography>
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
               <TextField

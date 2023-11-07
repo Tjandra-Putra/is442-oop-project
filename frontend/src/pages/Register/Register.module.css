@@ -6,3 +6,16 @@
   min-height: calc(100vh - 65px);
   height: 100%;
 }
+
+.iconWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 4rem;
+  width: 4rem;
+  background: var(--bg-ocean-blue);
+  align-items: center;
+  border-radius: 50%;
+  color: white;
+  margin-bottom: 1rem;
+}
