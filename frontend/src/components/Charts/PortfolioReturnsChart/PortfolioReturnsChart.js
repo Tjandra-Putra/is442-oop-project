@@ -11,22 +11,19 @@ import { years, months, quarters } from "../../../data";
 
 function LineChart({ portfolioId }) {
   const [selectedFilterType, setSelectedFilterType] = useState("yearly");
-  const [selectedFromYear, setSelectedFromYear] = useState(null);
-  const [selectedToYear, setSelectedToYear] = useState(null);
-  const [selectedFromQuarter, setSelectedFromQuarter] = useState(null);
-  const [selectedToQuarter, setSelectedToQuarter] = useState(null);
-  const [selectedFromMonth, setSelectedFromMonth] = useState(null);
-  const [selectedToMonth, setSelectedToMonth] = useState(null);
-
-  const [dataQuarterly, setDataQuarterly] = useState([]);
-  const [dataMonthly, setDataMonthly] = useState([]);
+  const [selectedFromYear, setSelectedFromYear] = useState();
+  const [selectedToYear, setSelectedToYear] = useState();
+  const [selectedFromQuarter, setSelectedFromQuarter] = useState();
+  const [selectedToQuarter, setSelectedToQuarter] = useState();
+  const [selectedFromMonth, setSelectedFromMonth] = useState();
+  const [selectedToMonth, setSelectedToMonth] = useState();
+  const [uniqueYears, setUniqueYears] = useState([]);
 
   const [data, setData] = useState();
 
   useEffect(() => {
     // show all data
     axios.get(`http://localhost:8080/api/stockHistory/getMonthlyPortfolioValue/${portfolioId}`).then((res) => {
-      console.log("=========== Monthly ===========");
       const response = res.data.data;
       const dataMap = {}; // Use an object to store segment data
 
@@ -41,7 +38,12 @@ function LineChart({ portfolioId }) {
         }
       });
 
-      console.log(dataMap);
+      // store unique years value
+      let uniqueYears = [];
+      for (const year in dataMap) {
+        uniqueYears.push(year);
+      }
+      setUniqueYears(uniqueYears);
 
       let processData = [["Year-Month", "Returns"]];
       for (const year in dataMap) {
@@ -61,9 +63,6 @@ function LineChart({ portfolioId }) {
         }
       }
 
-      console.log("============ PROCESS DATA============");
-      console.log(processData);
-
       setData(processData);
     });
   }, []);
@@ -73,7 +72,6 @@ function LineChart({ portfolioId }) {
       axios
         .get(`http://localhost:8080/api/stockHistory/getMonthlyPortfolioValue/${portfolioId}`)
         .then((res) => {
-          console.log("=========== Monthly ===========");
           const response = res.data.data;
           const dataMap = {}; // Use an object to store segment data
 
@@ -103,7 +101,6 @@ function LineChart({ portfolioId }) {
               var toMonth = parseInt(selectedToMonth);
               var fromDate = new Date(fromYear, fromMonth);
               var toDate = new Date(toYear, toMonth);
-              console.log(fromYear, toYear, fromMonth, toMonth);
               if (date >= fromDate && date <= toDate && toDate >= fromDate) {
                 currentRow.push(date);
                 currentRow.push(value);
@@ -119,13 +116,11 @@ function LineChart({ portfolioId }) {
         });
     }
   }
-
   if (selectedFilterType === "quarterly") {
     if (selectedFromYear && selectedToYear && selectedFromQuarter && selectedToQuarter) {
       axios
         .get(`http://localhost:8080/api/stockHistory/getQuarterlyPortfolioValue/${portfolioId}`)
         .then((res) => {
-          console.log("=========== Quarterly ===========");
           const response = res.data.data;
           const dataMap = {}; // Use an object to store segment data
 
@@ -169,6 +164,51 @@ function LineChart({ portfolioId }) {
     }
   }
 
+  if (selectedFilterType === "yearly") {
+    if (selectedFromYear && selectedToYear) {
+      axios
+        .get(`http://localhost:8080/api/stockHistory/getAnnualPortfolioValue/${portfolioId}`)
+        .then((res) => {
+          console.log("=========== Annual ===========");
+          const response = res.data.data;
+          const dataMap = {}; // Use an object to store segment data
+
+          // Loop through the response to build the dataMap
+          response.forEach((element) => {
+            for (const year in element) {
+              const yearData = element[year];
+              dataMap[year] = dataMap[year] || {}; // Initialize the year if it doesn't exist
+
+              dataMap[year] = yearData;
+            }
+          });
+
+          let processData = [["Year", "Returns"]];
+          for (const year in dataMap) {
+            const yearValue = dataMap[year];
+
+            let currentRow = [];
+            // Construct a date in the format "YYYY-QQ"
+            const formattedYear = `${year}`;
+            const fromDate = `${selectedFromYear}`;
+            const toDate = `${selectedToYear}`;
+
+            // Compare formattedQuarter to the selected range
+            if (formattedYear >= fromDate && formattedYear <= toDate) {
+              currentRow.push(formattedYear);
+              currentRow.push(yearValue);
+              processData.push(currentRow);
+            }
+          }
+
+          setData(processData);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+
   const options = {
     // title: `Portfolio Returns`,
     curveType: "function",
@@ -194,7 +234,7 @@ function LineChart({ portfolioId }) {
               onChange={(e) => setSelectedFromYear(e.target.value)}
               variant="standard"
             >
-              {years.map((year) => (
+              {uniqueYears.map((year) => (
                 <MenuItem key={year} value={year}>
                   {year}
                 </MenuItem>
@@ -212,7 +252,7 @@ function LineChart({ portfolioId }) {
               onChange={(e) => setSelectedToYear(e.target.value)}
               variant="standard"
             >
-              {years.map((year) => (
+              {uniqueYears.map((year) => (
                 <MenuItem key={year} value={year}>
                   {year}
                 </MenuItem>
@@ -236,7 +276,7 @@ function LineChart({ portfolioId }) {
               onChange={(e) => setSelectedFromYear(e.target.value)}
               variant="standard"
             >
-              {years.map((year) => (
+              {uniqueYears.map((year) => (
                 <MenuItem key={year} value={year}>
                   {year}
                 </MenuItem>
@@ -254,7 +294,7 @@ function LineChart({ portfolioId }) {
               onChange={(e) => setSelectedToYear(e.target.value)}
               variant="standard"
             >
-              {years.map((year) => (
+              {uniqueYears.map((year) => (
                 <MenuItem key={year} value={year}>
                   {year}
                 </MenuItem>
@@ -314,7 +354,7 @@ function LineChart({ portfolioId }) {
               onChange={(e) => setSelectedFromYear(e.target.value)}
               variant="standard"
             >
-              {years.map((year) => (
+              {uniqueYears.map((year) => (
                 <MenuItem key={year} value={year}>
                   {year}
                 </MenuItem>
@@ -332,7 +372,7 @@ function LineChart({ portfolioId }) {
               onChange={(e) => setSelectedToYear(e.target.value)}
               variant="standard"
             >
-              {years.map((year) => (
+              {uniqueYears.map((year) => (
                 <MenuItem key={year} value={year}>
                   {year}
                 </MenuItem>
