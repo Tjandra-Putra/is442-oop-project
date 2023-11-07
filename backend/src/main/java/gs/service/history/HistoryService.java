@@ -1,16 +1,8 @@
 package gs.service.history;
 
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
+import gs.inputModel.*;
 
-import gs.entity.History;
-import gs.entity.PortfolioStock;
-import gs.inputModel.HistoryInputModel;
-import gs.inputModel.MonthlyPrice;
-import gs.inputModel.YearlyPriceInputmodel;
 
 public interface HistoryService {
     
@@ -20,7 +12,7 @@ public interface HistoryService {
 
     List<HistoryInputModel> getWeeklyHistoryByTicker(String ticker);
 
-    // List<PortfolioStock> getIndividualStock(String portfolioId, String ticker);
+    //List<PortfolioStock> getIndividualStock(String portfolioId, String ticker);
 
     List<HistoryInputModel> getYearlyClosingByTicker(String ticker);
 

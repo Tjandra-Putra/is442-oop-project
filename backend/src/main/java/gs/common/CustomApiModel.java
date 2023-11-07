@@ -1,7 +1,6 @@
 package gs.common;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.io.Serializable;
 
 public class CustomApiModel<D extends Serializable> extends ApiModel<D> {

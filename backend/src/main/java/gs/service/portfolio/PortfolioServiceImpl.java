@@ -11,7 +11,6 @@ import gs.common.DataRequestModel;
 import gs.common.RequestModel;
 import gs.entity.Portfolio;
 import gs.entity.PortfolioStock;
-import gs.entity.StockInfo;
 import gs.entity.User;
 import gs.inputModel.PortfolioInputModel;
 import gs.repository.PortfolioRepo;

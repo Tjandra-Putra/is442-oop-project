@@ -1,13 +1,7 @@
 package gs.common;
 
-import java.io.Serial;
-import java.io.Serializable;
-import java.util.List;
-import java.util.Objects;
-import java.util.ArrayList;
-import java.util.Map;
-import gs.common.NullError;
-import gs.inputModel.UserInputModel;
+import java.io.*;
+import java.util.*;
 
 public class ApiModel<D extends Serializable> implements Serializable {
     private String status;

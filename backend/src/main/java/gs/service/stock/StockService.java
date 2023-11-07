@@ -3,7 +3,6 @@ package gs.service.stock;
 import java.util.List;
 
 import gs.common.RequestModel;
-import gs.entity.Stock;
 import gs.inputModel.StockInputModel;
 import jakarta.servlet.http.HttpServletResponse;
 

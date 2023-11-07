@@ -1,39 +1,22 @@
 package gs.service.stockInfo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
- import java.util.Iterator;
+import java.util.Iterator;
 import java.util.Collections;
-
-import org.hibernate.annotations.SourceType;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.json.JSONObject;
-
-
-
-
-import gs.common.DataRequestModel;
-import gs.common.RequestModel;
-import gs.entity.Portfolio;
-import gs.entity.PortfolioStock;
 import gs.entity.Stock;
 import gs.entity.StockInfo;
-import gs.inputModel.PortfolioInputModel;
 import gs.inputModel.StockInfoInputModel;
 import gs.repository.PortfolioStockRepo;
 import gs.repository.StockInfoRepo;
 import gs.repository.StockRepo;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletResponse;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.net.URI;
 
 

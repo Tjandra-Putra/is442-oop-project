@@ -1,7 +1,6 @@
 package gs.inputModel;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 public class PortfolioStockInputModel implements Serializable{
     private String ticker;

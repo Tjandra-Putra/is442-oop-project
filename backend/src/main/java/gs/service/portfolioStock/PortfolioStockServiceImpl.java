@@ -12,20 +12,15 @@ import java.util.Map.Entry;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gs.common.ApiModel;
 import gs.common.DataRequestModel;
-import gs.common.RequestModel;
 import gs.common.RequestModel2;
 import gs.entity.History;
-import gs.entity.Portfolio;
 import gs.entity.PortfolioStock;
 import gs.entity.Stock;
 import gs.entity.StockInfo;
-import gs.entity.User;
 import gs.inputModel.HistoryInputModel;
-import gs.inputModel.PortfolioInputModel;
 import gs.inputModel.PortfolioStockInputModel;
 import gs.inputModel.AllocationInputModel;
 import gs.repository.HistoryRepo;

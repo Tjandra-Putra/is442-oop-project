@@ -1,28 +1,11 @@
 package gs.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
+import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import gs.common.ApiModel;
-import gs.common.NullError;
-import gs.common.RequestModel;
-import gs.inputModel.HistoryInputModel;
-import gs.inputModel.MonthlyPrice;
-import gs.inputModel.YearlyPriceInputmodel;
-import gs.inputModel.MonthlyPrice;
+import org.springframework.web.bind.annotation.*;
+import gs.common.*;
+import gs.inputModel.*;
 import gs.service.history.HistoryService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(path = "api/stockHistory")
@@ -44,7 +27,7 @@ public class HistoryController {
         return ApiModel.ok(HistoryService.getHistoryByTicker(ticker));
     }
 
-    @GetMapping("/getHistoryByWeekTicker/{ticker}")
+    @GetMapping("/getWeeklyHistoryByTicker/{ticker}")
     public ApiModel<ArrayList<HistoryInputModel>> getWeeklyHistoryByTicker (
         @PathVariable("ticker") String ticker
     ){
@@ -85,10 +68,6 @@ public class HistoryController {
     ){
         return ApiModel.ok(HistoryService.getQuarterlyPortfolioValue(portfolioId));
     }
-
-    
-
-    
 
 
 }

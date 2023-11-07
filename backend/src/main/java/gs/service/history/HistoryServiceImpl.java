@@ -1,50 +1,20 @@
 package gs.service.history;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.lang.reflect.Array;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
+
+import java.io.*;
+import java.net.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.TreeSet;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.time.*;
-import java.util.Comparator;
-import java.util.Set;
-
-import javax.sound.sampled.Port;
-
-import java.util.Iterator;
-
+import java.text.*;
+import java.util.*;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jakarta.annotation.Resource;
-import gs.entity.History;
-import gs.entity.Portfolio;
-import gs.entity.PortfolioStock;
-import gs.entity.Stock;
-import gs.inputModel.HistoryInputModel;
-import gs.inputModel.YearlyPriceInputmodel;
-import gs.inputModel.MonthlyPrice;
-import gs.repository.HistoryRepo;
-import gs.repository.PortfolioRepo;
-import gs.repository.PortfolioStockRepo;
-import gs.repository.StockRepo;
-
-
+import gs.entity.*;
+import gs.inputModel.*;
+import gs.repository.*;
 
 @Service
 public class HistoryServiceImpl implements HistoryService {
@@ -170,7 +140,7 @@ public class HistoryServiceImpl implements HistoryService {
         String apiKey = "94ANM37S7U3Z5NHS";
         try{
               String url = "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=" + ticker + "&apikey=" + apiKey;
-              HttpClient client = HttpClient.newHttpClient();
+              HttpClient client =  HttpClient.newHttpClient();
                     HttpRequest request = HttpRequest.newBuilder()
                      .uri(URI.create(url))
                      .build();
