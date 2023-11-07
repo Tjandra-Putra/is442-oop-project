@@ -73,14 +73,11 @@ public class StockServiceImpl implements StockService {
         Stock newStock = new Stock();
         newStock.setTicker(ticker);
         newStock.setStockName(stockName);
-        System.out.println("=====DATA=====");
-        System.out.println(newStock.getTicker());
-        System.out.println(newStock.getStockName());
+
         try {
             stockRepo.save(newStock);
         }
         catch (DataAccessException e){
-            System.out.println("=====hERERE=====");
             System.out.println(e.getMessage());
         }
     }
