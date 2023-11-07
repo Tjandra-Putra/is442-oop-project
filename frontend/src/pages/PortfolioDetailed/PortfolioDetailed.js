@@ -52,7 +52,7 @@ const PortfolioDetailed = () => {
       .then((res) => {
         let portfolioRes = res.data.data[0];
         setPortfolio(portfolioRes);
-        console.log(portfolioRes);
+
         setPortfolioTitle(portfolioRes.portfolioName);
         setPortfolioDescription(portfolioRes.description);
         setPortfolioCapital(portfolioRes.capitalAmt);
@@ -300,7 +300,7 @@ const PortfolioDetailed = () => {
         <Grid container rowSpacing={5} columnSpacing={{ xs: 2, sm: 2, md: 1 }}>
           <Grid item xs={12} md={6} lg={6}>
             <div className={style.firstContainer}>
-              <StockCard name="Portfolio Value" value="-" />
+              <StockCard name="Portfolio Value" value={`$${portfolio.portfolioValue}`} />
               <StockCard name="Total Stocks" value={dataFromChildStocksCount} />
             </div>
 
