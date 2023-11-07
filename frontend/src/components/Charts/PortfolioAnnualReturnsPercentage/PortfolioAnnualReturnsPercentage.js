@@ -11,8 +11,6 @@ const PortfolioAnnualReturnsPercentage = ({ portfolioId }) => {
       .then((res) => {
         let response = res.data.data;
 
-        console.log(response);
-
         response.forEach((element) => {
           const year = Object.keys(element)[0];
           const returns = Object.values(element)[0];

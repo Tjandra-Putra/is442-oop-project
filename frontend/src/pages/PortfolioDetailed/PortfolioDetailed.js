@@ -324,7 +324,7 @@ const PortfolioDetailed = () => {
             <Card className={style.cardCustom}>
               <CardContent>
                 <div className={style.cardTitle}>Stocks by Segment</div>
-                <PortfolioStocksBySegmentChart />
+                <PortfolioStocksBySegmentChart portfolioId={id} />
               </CardContent>
             </Card>
           </Grid>

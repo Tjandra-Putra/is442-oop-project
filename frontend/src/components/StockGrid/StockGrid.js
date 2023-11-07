@@ -39,7 +39,6 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
         const dataWithUniqueIds = addUniqueIds(res.data.data);
         setApiMyStocks(dataWithUniqueIds);
 
-        console.log("_________");
         sendDataToParent(dataWithUniqueIds.length);
       })
       .catch((err) => {
@@ -323,7 +322,6 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
       .then((res) => {
         let stockData = res.data.data;
         setStockMarket(stockData);
-        // console.log(res.data.data);
         const generatedStockRows = stockData.map((stock, index) => ({
           id: index + 1, // Start from 1
           Ticker: stock.ticker,
@@ -360,9 +358,6 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
     const updatedBuyDate = { ...buyDate };
     updatedBuyDate[id] = newValue;
     setBuyDate(updatedBuyDate);
-
-    console.log("BUY DATE === buyDate ===");
-    console.log(updatedBuyDate);
   };
 
   const handleQuantityChange = (id, newValue) => {
@@ -462,9 +457,7 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
     return axios
       .get("http://localhost:8080/api/StockInfo/getStockInfo/ticker/" + ticker)
       .then((res) => {
-        console.log("== getStockPrice ==");
         const todayPrice = res.data.data[0]?.todayPrice || 0;
-        console.log(todayPrice); // Logging for verification
         return todayPrice;
       })
       .catch((error) => {
@@ -537,14 +530,12 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
       axios
         .post("http://localhost:8080/api/portfolioStock/addPortfolioStock/" + portfolioId, postData2)
         .then((res) => {
-          console.log(res.data);
           notifySuccess("Stocks added successfully");
 
           // refresh the page
           window.location.reload();
         })
         .catch((err) => {
-          console.log(err);
           notifyError("Error adding stocks");
         });
     });
