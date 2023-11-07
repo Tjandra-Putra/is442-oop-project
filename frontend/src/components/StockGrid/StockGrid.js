@@ -31,6 +31,7 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
   const [stockRows, setStockRows] = useState([]);
   const [stockColumns, setStockColumns] = useState([]);
   const [buyDate, setBuyDate] = useState("");
+  const [selectedStockDataModal, setSelectedStockDataModal] = useState(null);
 
   React.useEffect(() => {
     axios
@@ -159,6 +160,9 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
   };
 
   const handleViewClick = (id) => () => {
+    // get the ticker
+    const stockData = apiMyStocks.find((stock) => stock.id === id);
+    setSelectedStockDataModal(stockData.ticker);
     handleViewStockModalOpen();
   };
 
@@ -232,8 +236,6 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
     },
   ];
 
-  //   { field: "id", headerName: "ID", width: 150 },
-  //   { field: "name", headerName: "Name", width: 200 },
   //   {
   //     field: "description",
   //     headerName: "Description",
@@ -682,10 +684,7 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
         aria-describedby="modal-modal-description"
       >
         <Box className={style.modal}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Stock Name: Apple
-          </Typography>
-          <PortfolioStockCandleStickChart />
+          <PortfolioStockCandleStickChart ticker={selectedStockDataModal} />
         </Box>
       </Modal>
     </>
