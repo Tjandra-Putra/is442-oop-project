@@ -220,13 +220,15 @@ const CreatePortfolio = () => {
     axios
       .post("http://localhost:8080/api/portfolio/addPortfolio/" + userId, postData1)
       .then((res) => {
+        console.log(res.data);
+
         if (res.data && res.data.data === null) {
           notifyError(res.data.message);
-          return;
         } else {
           notifySuccess(res.data.message);
 
           // ================ send selected stock data to backend =================
+
           const postData2 = {
             data: [],
           };
@@ -237,11 +239,11 @@ const CreatePortfolio = () => {
 
             const formattedData = [
               {
-                fieldName: "ticker",
+                fieldname: "ticker",
                 value: row.Ticker,
               },
               {
-                fieldName: "price",
+                fieldname: "price",
                 value: row.Price,
               },
               {
@@ -258,6 +260,8 @@ const CreatePortfolio = () => {
             postData2.data.push(formattedData);
           });
 
+          console.log("POSTDATA2 === postData2 ===" + postData2);
+
           const portfolioId = res.data.data.portfolioId;
 
           // Send the selected stocks
@@ -266,17 +270,13 @@ const CreatePortfolio = () => {
             .then((res) => {
               console.log(res.data);
             })
-            .catch((err) => {
-              console.log(err);
-              return;
-            });
+            .catch((err) => console.log(err));
 
-          navigate("/dashboard");
+          // navigate("/dashboard");
         }
       })
       .catch((err) => {
         notifyError(err.response.data.message);
-        return;
       });
   };
 
