@@ -8,13 +8,9 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import style from "./Dashboard.module.css";
 import { useNavigate } from "react-router-dom";
-import PortfolioReturnsChart from "../../components/Charts/PortfolioReturnsChart/PortfolioReturnsChart";
 import PortfolioCard from "../../components/PorfolioCard/PortfolioCard";
-import Menu from "../../components/Menu/Menu";
-import MarketExposureByGeographicalLocationChart from "../../components/Charts/MarketExposureByGeographicalLocationChart/MarketExposureByGeographicalLocationChart";
 import { TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
-import MarketExposureBySegment from "../../components/Charts/MarketExposureBySegment/MarketExposureBySegment";
 import axios from "axios";
 
 const Dashboard = () => {

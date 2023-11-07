@@ -492,7 +492,7 @@ export default function StockGrid({ portfolioId }) {
           Total: total,
         };
       });
-      setSelectedRows(updatedRows);
+      setSelectedRows(updatedRows); // Update the selectedRows state
     } catch (error) {
       console.error("Error fetching stock prices:", error);
     }
@@ -504,8 +504,6 @@ export default function StockGrid({ portfolioId }) {
       notifyError("Please select at least one stock");
       return;
     }
-
-    const userId = 1;
 
     const postData2 = {
       data: [],
@@ -540,6 +538,9 @@ export default function StockGrid({ portfolioId }) {
         .then((res) => {
           console.log(res.data);
           notifySuccess("Stocks added successfully");
+
+          // refresh the page
+          window.location.reload();
         })
         .catch((err) => {
           console.log(err);

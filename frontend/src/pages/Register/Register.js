@@ -133,7 +133,7 @@ const Register = () => {
                 <Grid item xs={12}>
                   <FormControlLabel
                     control={<Checkbox value="allowExtraEmails" color="primary" />}
-                    label="I want to receive inspiration, marketing promotions and updates via email."
+                    label="I agree to the terms and conditions"
                   />
                 </Grid>
               </Grid>
@@ -142,7 +142,10 @@ const Register = () => {
               </Button>
               <Grid container justifyContent="flex-end">
                 <Grid item>
-                  <Link to="/login" style={{ cursor: "pointer", color: "#2e82d6", fontSize: "14px" }}>
+                  <Link
+                    to="/login"
+                    style={{ cursor: "pointer", color: "#2e82d6", fontSize: "14px", textDecoration: "none" }}
+                  >
                     Already have an account? Sign in
                   </Link>
                 </Grid>

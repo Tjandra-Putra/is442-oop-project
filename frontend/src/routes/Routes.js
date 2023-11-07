@@ -7,5 +7,19 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import AppBarOffSet from "../components/Layout/AppBarOffSet/AppBarOffSet";
 import CreatePortfolio from "../pages/CreatePortfolio/CreatePortfolio";
 import PortfolioDetailed from "../pages/PortfolioDetailed/PortfolioDetailed";
+import ForgetPassword from "../pages/ForgetPassword/ForgetPassword";
+import ChangePassword from "../pages/ChangePassword/ChangePassword";
 
-export { Navbar, Footer, Home, Login, Register, Dashboard, AppBarOffSet, CreatePortfolio, PortfolioDetailed };
+export {
+  Navbar,
+  Footer,
+  Home,
+  Login,
+  Register,
+  Dashboard,
+  AppBarOffSet,
+  CreatePortfolio,
+  PortfolioDetailed,
+  ForgetPassword,
+  ChangePassword,
+};

@@ -14,29 +14,17 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 
-import styles from "./Login.module.css";
+import styles from "./ChangePassword.module.css";
 
 const defaultTheme = createTheme();
 
-const Login = () => {
+const ChangePassword = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    // ====================== get user info from database ======================
-    const userId = 1;
-    axios
-      .get("http://localhost:8080/api/user/getUser/" + userId)
-      .then((res) => {
-        const objectString = JSON.stringify(res.data.data[0]);
-        Cookies.set("userInfo", objectString, { expires: 7 }); // expires in 7 days
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   return (
-    <div className={styles.loginWrapper}>
+    <div className={styles.changePasswordWrapper}>
       <ThemeProvider theme={defaultTheme}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
@@ -47,50 +35,47 @@ const Login = () => {
               alignItems: "center",
             }}
           >
+            <div className={styles.iconWrapper}>
+              <i class="fa-solid fa-key"></i>{" "}
+            </div>
             <Typography component="h1" variant="h5">
-              Sign in
+              Change Password
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <small className={styles.description}>
+              Your new password should be different from previous used passwords.
+            </small>
+            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, width: "25rem" }}>
               <TextField
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="password"
+                label="New Password"
+                name="password"
+                autoComplete="new-password"
                 autoFocus
               />
+
               <TextField
                 margin="normal"
                 required
                 fullWidth
-                name="password"
-                label="Password"
-                type="password"
                 id="password"
-                autoComplete="current-password"
+                label="Confirm New Password"
+                name="password"
+                autoComplete="new-password"
+                autoFocus
               />
-              <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-              <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                Sign In
+              <Button type="submit" fullWidth variant="contained" sx={{ mt: 2, mb: 2 }}>
+                Change Password
               </Button>
               <Grid container>
                 <Grid item xs>
                   <Link
-                    to="/forget-password"
+                    to="/login"
                     style={{ cursor: "pointer", color: "#2e82d6", fontSize: "14px", textDecoration: "none" }}
                   >
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link
-                    to="/register"
-                    style={{ cursor: "pointer", color: "#2e82d6", fontSize: "14px", textDecoration: "none" }}
-                  >
-                    {" "}
-                    {"Don't have an account? Sign Up"}
+                    <i class="fa-solid fa-arrow-left" style={{ marginRight: "0.5rem" }}></i> Return to Sign In
                   </Link>
                 </Grid>
               </Grid>
@@ -102,4 +87,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ChangePassword;
