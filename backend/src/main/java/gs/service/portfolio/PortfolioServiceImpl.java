@@ -172,6 +172,9 @@ public class PortfolioServiceImpl implements PortfolioService{
 
     public ApiModel deletePortfolio(HttpServletResponse response, ApiModel myApiModel,String userId, String portfolioId) throws DataAccessException {
         try {
+            System.out.println("====here======");
+            System.out.println(userId);
+            System.out.println(portfolioId);
             Portfolio existingPortfolio = portfolioRepo.getPortfolioById(userId, portfolioId).get(0);
 
             // save to db

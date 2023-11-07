@@ -123,8 +123,14 @@ const PortfolioDetailed = () => {
 
     const userId = 1;
 
+    console.log("====================================");
+
+    const portfolioId = parseInt(id, 10); // Parse the id as an integer
+    console.log(portfolioId);
+    console.log(userId);
+
     axios
-      .delete(`http://localhost:8080/api/portfolio/deletePortfolio/${userId}/${id}`)
+      .delete(`http://localhost:8080/api/portfolio/deletePortfolio/${userId}/${portfolioId}`)
       .then((res) => {
         console.log(res.data);
 
