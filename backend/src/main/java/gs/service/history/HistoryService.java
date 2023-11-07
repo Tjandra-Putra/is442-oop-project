@@ -1,5 +1,6 @@
 package gs.service.history;
 
+import java.time.Month;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +25,9 @@ public interface HistoryService {
     // Retrieve the portfolio values over the years -> working
     List<YearlyPriceInputmodel> getPortfolioValue(String userId);
 
-    //  Retrieve the portfolio values over the months -> working in progress
+    //  Retrieve the portfolio values over the months -> Done
     List<MonthlyPrice> getMonthlyPortfolioValue(String userId);
+
+    List<MonthlyPrice> getQuarterlyPortfolioValue(String userId);
 
 }

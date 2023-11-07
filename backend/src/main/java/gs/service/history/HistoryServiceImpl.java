@@ -300,6 +300,56 @@ public class HistoryServiceImpl implements HistoryService {
         return inputModelList;
 
     }
+
+    // public List<MonthlyPrice> getQuarterlyPortfolioValue(String userId){
+    //     List<Portfolio> portfolio = portfolioRepo.getPortfolioByUserId(userId);
+    //     List<String> monthStrings = generateMonthStrings();
+    //     List<List<Double>> returnvalues = new ArrayList<>();
+        
+    //     return null;    
+    // }
+    public List<MonthlyPrice> getQuarterlyPortfolioValue(String userId){
+        List<Portfolio> portfolio = portfolioRepo.getPortfolioByUserId(userId);
+        List<String> monthStrings = generateMonthStrings();
+        List<List<Double>> returnvalues = new ArrayList<>();
+        for(int m = 1 ; m < 13 ; m++){
+            List<Double> portfoliovalues = new ArrayList<>();
+            for(Portfolio p : portfolio){
+                String portfolioId = String.valueOf(p.getPortfolioId());
+                List<PortfolioStock> ps = portfolioStockRepo.getPortfolioStockByPortfolioId(portfolioId);     
+                double total = 0;
+                for(PortfolioStock pstock : ps){
+                    List<History> history = historyRepo.getMonthlyClosingPrices(pstock.getStock().getTicker());
+                    for(History h : history){
+                        String dateString = h.getDate().toString();
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+                        try {
+                            Date date = dateFormat.parse(dateString);
+                            SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+                            String month = monthFormat.format(date);
+                            int monthInt = Integer.parseInt(month);
+                            if (monthInt == m) {
+                                total += h.getAdjClosePrice() * pstock.getQuantity();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }                        
+                        
+                    }
+                    portfoliovalues.add(total);
+                   
+                }
+            }
+            returnvalues.add(portfoliovalues);
+        }
+        MonthlyPrice inputModel = new MonthlyPrice();
+        inputModel.setMonths(monthStrings);
+        inputModel.setPortfolioValues(returnvalues);
+        List<MonthlyPrice> inputModelList = new ArrayList<>();
+        inputModelList.add(inputModel);
+        return inputModelList;
+
+    }
     
     
     

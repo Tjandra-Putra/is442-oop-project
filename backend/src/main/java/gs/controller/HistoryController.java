@@ -78,6 +78,15 @@ public class HistoryController {
         return ApiModel.ok(HistoryService.getMonthlyPortfolioValue(userId));
     }
 
+    @GetMapping("getQuarterlyPortfolioValue/{userId}")
+    public ApiModel<ArrayList<MonthlyPrice>> getQuarterlyPortfolioValue (
+        @PathVariable("userId") String userId
+    ){
+        return ApiModel.ok(HistoryService.getQuarterlyPortfolioValue(userId));
+    }
+
+    
+
     
 
 
