@@ -32,7 +32,7 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
   const [stockColumns, setStockColumns] = useState([]);
   const [buyDate, setBuyDate] = useState("");
   const [selectedStockDataModal, setSelectedStockDataModal] = useState(null);
-
+  
   React.useEffect(() => {
     axios
       .get(`http://localhost:8080/api/portfolioStock/getPortfolioStock/${portfolioId}`)
@@ -98,6 +98,29 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
 
   const handleSaveClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+
+    
+
+    console.log("====================================")
+    console.log(apiMyStocks)
+
+    // return quantity and buydate
+    const stocktoedit = apiMyStocks.find((stock) => stock.id === id);
+  
+    
+  
+    const ticker = stocktoedit.ticker;
+    const portfolioid = stocktoedit.portfolioId;
+
+    console.log("ticker", ticker);
+    console.log("portfolioid", portfolioid);
+    
+    
+    
+    
+
+    
+    
   };
 
   const handleDeleteClick = (id, ticker) => () => {
@@ -169,6 +192,35 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+
+    console.log("--------------------")
+    const ticker = newRow.ticker;
+    const portfolioid = newRow.portfolioId;
+    const quantity = newRow.quantity;
+    const buyDate = newRow.buyDate;
+    
+    const postData = {
+      data: [
+        {
+          fieldName: "quantity",
+          value: quantity
+        }
+      ]
+    };
+    
+    
+    if(ticker && portfolioid && quantity && buyDate){
+      axios.put("http://localhost:8080/api/portfolioStock/editPortfolioStock/" + portfolioid + "/" + ticker , postData)
+      .then((res) => {
+        window.location.reload();
+
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+
+
+    }
     return updatedRow;
   };
 
@@ -178,7 +230,8 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
 
   const columns = [
     { field: "ticker", headerName: "Ticker", width: 150 },
-    { field: "quantity", headerName: "Quantity", width: 150 },
+    { field: "quantity", headerName: "Quantity", width: 150, editable: true,
+  },
     { field: "buyDate", headerName: "Buy Date", width: 150 },
     { field: "price", headerName: "Price", width: 150 },
     {
@@ -542,6 +595,8 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
         });
     });
   };
+
+
 
   return (
     <>
