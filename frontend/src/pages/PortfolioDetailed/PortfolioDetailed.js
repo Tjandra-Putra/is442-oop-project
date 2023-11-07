@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import style from "./PortfolioDetailed.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 import StockCard from "../../components/StockCard/StockCard";
@@ -35,9 +35,15 @@ const PortfolioDetailed = () => {
   const [portfolio, setPortfolio] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [deleteMessage, setDeleteMessage] = React.useState("");
+  const [dataFromChildStocksCount, setDataFromChildStocksCount] = useState(null);
 
   const notifyError = (message) => toast.error(message, { duration: 5000 });
   const notifySuccess = (message) => toast.success(message, { duration: 5000 });
+
+  // Callback function to receive data from the child component
+  const receiveDataFromChildStockGrid = (data) => {
+    setDataFromChildStocksCount(data);
+  };
 
   useEffect(() => {
     const userId = 1;
@@ -296,8 +302,8 @@ const PortfolioDetailed = () => {
         <Grid container rowSpacing={5} columnSpacing={{ xs: 2, sm: 2, md: 1 }}>
           <Grid item xs={12} md={6} lg={6}>
             <div className={style.firstContainer}>
-              <StockCard name="Portfolio Value" value="$6,364" />
-              <StockCard name="Total Stocks" value="10" />
+              <StockCard name="Portfolio Value" value="-" />
+              <StockCard name="Total Stocks" value={dataFromChildStocksCount} />
             </div>
 
             <Card className={style.cardCustom}>
@@ -311,7 +317,7 @@ const PortfolioDetailed = () => {
           {/* ============================ RIGHT SECTION ============================ */}
           <Grid item xs={12} md={6} lg={6}>
             <div className={style.firstContainer}>
-              <StockCard name="Net Value" value="20% " />
+              <StockCard name="Net Value" value="-" />
               <StockCard name="Capital" value={`$${portfolio && portfolio.capitalAmt}`} />
             </div>
 
@@ -367,7 +373,7 @@ const PortfolioDetailed = () => {
         <Grid item xs={12} md={12} lg={12}>
           <Card className={style.cardCustom}>
             <CardContent>
-              <StockGrid portfolioId={id} />
+              <StockGrid portfolioId={id} sendDataToParent={receiveDataFromChildStockGrid} />
             </CardContent>
           </Card>
         </Grid>

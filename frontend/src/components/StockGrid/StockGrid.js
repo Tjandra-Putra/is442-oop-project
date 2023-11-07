@@ -22,7 +22,7 @@ import moment from "moment";
 
 import style from "./StockGrid.module.css";
 
-export default function StockGrid({ portfolioId }) {
+export default function StockGrid({ portfolioId, sendDataToParent }) {
   const notifyError = (message) => toast.error(message, { duration: 5000 });
   const notifySuccess = (message) => toast.success(message, { duration: 5000 });
   const [apiMyStocks, setApiMyStocks] = React.useState([]);
@@ -38,6 +38,9 @@ export default function StockGrid({ portfolioId }) {
       .then((res) => {
         const dataWithUniqueIds = addUniqueIds(res.data.data);
         setApiMyStocks(dataWithUniqueIds);
+
+        console.log("_________");
+        sendDataToParent(dataWithUniqueIds.length);
       })
       .catch((err) => {
         console.log(err);
@@ -230,7 +233,6 @@ export default function StockGrid({ portfolioId }) {
     },
   ];
 
-  // const columns = [
   //   { field: "id", headerName: "ID", width: 150 },
   //   { field: "name", headerName: "Name", width: 200 },
   //   {
@@ -315,7 +317,6 @@ export default function StockGrid({ portfolioId }) {
   const [selectedRows, setSelectedRows] = React.useState([]);
 
   React.useEffect(() => {
-    // http://localhost:8080/api/stockInfo/getStockInfo/ticker/{ticker}
     // get current stock market
     axios
       .get("http://localhost:8080/api/stock/getStock")
