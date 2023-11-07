@@ -18,7 +18,7 @@ const PortfolioStockCandleStickChart = React.memo(({ ticker }) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/stockHistory/getHistoryByWeekTicker/${ticker}`)
+      .get(`http://localhost:8080/api/stockHistory/getWeeklyHistoryByTicker/${ticker}`)
       .then((res) => {
         let responseData = res.data.data; // Define responseData here
         responseData = responseData.reverse(); // Reverse the data so that the most recent data is at the end

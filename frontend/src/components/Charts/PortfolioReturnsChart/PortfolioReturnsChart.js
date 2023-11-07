@@ -1,21 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Chart } from "react-google-charts";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import style from "./PortfolioReturnsChart.module.css";
-
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormLabel from "@mui/material/FormLabel";
-import NativeSelect from "@mui/material/NativeSelect";
-import Box from "@mui/material/Box";
+import axios from "axios";
 
 import { years, months, quarters } from "../../../data";
 
-function LineChart() {
+function LineChart({ portfolioId }) {
   const [selectedFilterType, setSelectedFilterType] = useState("yearly");
   const [selectedFromYear, setSelectedFromYear] = useState();
   const [selectedToYear, setSelectedToYear] = useState();
@@ -24,23 +18,159 @@ function LineChart() {
   const [selectedFromMonth, setSelectedFromMonth] = useState();
   const [selectedToMonth, setSelectedToMonth] = useState();
 
-  const data = [
-    ["Day", "Guardians of the Galaxy", "The Avengers", "Transformers: Age of Extinction"],
-    [1, 37.8, 80.8, 41.8],
-    [2, 30.9, 69.5, 32.4],
-    [3, 25.4, 57, 25.7],
-    [4, 11.7, 18.8, 10.5],
-    [5, 11.9, 17.6, 10.4],
-    [6, 8.8, 13.6, 7.7],
-    [7, 7.6, 12.3, 9.6],
-    [8, 12.3, 29.2, 10.6],
-    [9, 16.9, 42.9, 14.8],
-    [10, 12.8, 30.9, 11.6],
-    [11, 5.3, 7.9, 4.7],
-    [12, 6.6, 8.4, 5.2],
-    [13, 4.8, 6.3, 3.6],
-    [14, 4.2, 6.2, 3.4],
-  ];
+  const [dataQuarterly, setDataQuarterly] = useState([]);
+  const [dataMonthly, setDataMonthly] = useState([]);
+
+  const [data, setData] = useState([["Month", "2023", "2024"]]);
+
+  useEffect(() => {
+    // show all data
+    axios.get(`http://localhost:8080/api/stockHistory/getMonthlyPortfolioValue/${portfolioId}`).then((res) => {
+      console.log("=========== Monthly ===========");
+      const response = res.data.data;
+      const dataMap = {}; // Use an object to store segment data
+
+      // Loop through the response to build the dataMap
+      response.forEach((element) => {
+        for (const year in element) {
+          const yearData = element[year];
+          dataMap[year] = dataMap[year] || {}; // Initialize the year if it doesn't exist
+          for (const month in yearData) {
+            dataMap[year][month] = yearData[month];
+          }
+        }
+      });
+
+      console.log(dataMap);
+
+      let processData = [["Year-Month", "Returns"]];
+      for (const year in dataMap) {
+        const yearData = dataMap[year];
+
+        // Add the year to the first row
+        for (let month = 1; month < 13; month++) {
+          let currentRow = [];
+          let value = yearData[month];
+          let date = new Date(year, month);
+          let currentDate = new Date();
+          if (date <= currentDate) {
+            currentRow.push(date);
+            currentRow.push(value);
+            processData.push(currentRow);
+          }
+        }
+      }
+
+      console.log("============ PROCESS DATA============");
+      console.log(processData);
+
+      setData(processData);
+    });
+  }, []);
+
+  if (selectedFilterType === "monthly") {
+    if (selectedFromYear && selectedToYear && selectedFromMonth && selectedToMonth) {
+      axios
+        .get(`http://localhost:8080/api/stockHistory/getMonthlyPortfolioValue/${portfolioId}`)
+        .then((res) => {
+          console.log("=========== Monthly ===========");
+          const response = res.data.data;
+          const dataMap = {}; // Use an object to store segment data
+
+          // Loop through the response to build the dataMap
+          response.forEach((element) => {
+            for (const year in element) {
+              const yearData = element[year];
+              dataMap[year] = dataMap[year] || {}; // Initialize the year if it doesn't exist
+              for (const month in yearData) {
+                dataMap[year][month] = yearData[month];
+              }
+            }
+          });
+
+          let processData = [["Year-Month", "Returns"]];
+          for (const year in dataMap) {
+            const yearData = dataMap[year];
+
+            // Add the year to the first row
+            for (let month = 1; month < 13; month++) {
+              let currentRow = [];
+              let value = yearData[month];
+              var date = new Date(year, month);
+              var fromYear = parseInt(selectedFromYear);
+              var toYear = parseInt(selectedToYear);
+              var fromMonth = parseInt(selectedFromMonth);
+              var toMonth = parseInt(selectedToMonth);
+              var fromDate = new Date(fromYear, fromMonth);
+              var toDate = new Date(toYear, toMonth);
+              console.log(fromYear, toYear, fromMonth, toMonth);
+              if (date >= fromDate && date <= toDate && toDate >= fromDate) {
+                currentRow.push(date);
+                currentRow.push(value);
+                processData.push(currentRow);
+              }
+            }
+          }
+
+          setData(processData);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+
+  if (selectedFilterType === "quarterly") {
+    if (selectedFromYear && selectedToYear && selectedFromQuarter && selectedToQuarter) {
+      axios
+        .get(`http://localhost:8080/api/stockHistory/getQuarterlyPortfolioValue/${portfolioId}`)
+        .then((res) => {
+          console.log("=========== Quarterly ===========");
+          const response = res.data.data;
+          const dataMap = {}; // Use an object to store segment data
+
+          // Loop through the response to build the dataMap
+          response.forEach((element) => {
+            for (const year in element) {
+              const yearData = element[year];
+              dataMap[year] = dataMap[year] || {}; // Initialize the year if it doesn't exist
+              for (const quarter in yearData) {
+                dataMap[year][quarter] = yearData[quarter];
+              }
+            }
+          });
+
+          let processData = [["Year-Quarter", "Returns"]];
+          for (const year in dataMap) {
+            const yearData = dataMap[year];
+
+            // Add the year to the first row
+            for (let quarter = 1; quarter < 5; quarter++) {
+              let currentRow = [];
+              let value = yearData[quarter];
+              var date = new Date(year, quarter);
+              var fromYear = parseInt(selectedFromYear);
+              var toYear = parseInt(selectedToYear);
+              var fromQuarter = parseInt(selectedFromQuarter);
+              var toQuarter = parseInt(selectedToQuarter);
+              var fromDate = new Date(fromYear, fromQuarter);
+              var toDate = new Date(toYear, toQuarter);
+              console.log(fromYear, toYear, fromQuarter, toQuarter);
+              if (date >= fromDate && date <= toDate && toDate >= fromDate) {
+                currentRow.push(date);
+                currentRow.push(value);
+                processData.push(currentRow);
+              }
+            }
+          }
+
+          setData(processData);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
 
   const options = {
     // title: `Portfolio Returns`,

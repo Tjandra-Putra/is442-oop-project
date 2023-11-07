@@ -333,7 +333,7 @@ const PortfolioDetailed = () => {
             <CardContent>
               <div className={style.cardTitle}>Portfolio Returns</div>
               <br />
-              <PortfolioReturnsChart />
+              <PortfolioReturnsChart portfolioId={id} />
             </CardContent>
           </Card>
         </Grid>
