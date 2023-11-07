@@ -313,16 +313,11 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
                     existingPortfolioStock.setQuantity(Integer.parseInt(fe.getValue()));
                 }
 
-                if (fe.getFieldName().equalsIgnoreCase("buyDate")) {
-                    String queryDate = fe.getValue();
-                    existingPortfolioStock.setPrice(historyRepo.getHistoryByDate(queryDate).getAdjClosePrice());
-                }
-
             }
 
             // save to db
             portfolioStockRepo.save(existingPortfolioStock);
-
+            
             PortfolioStockInputModel inputModel = inputModel(existingPortfolioStock);
 
             myApiModel.setMessage("Data updated successfully.");
