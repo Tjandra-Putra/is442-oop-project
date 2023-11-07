@@ -1,56 +1,69 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Chart } from "react-google-charts";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Grid } from "@mui/material";
+import axios from "axios";
 
-function MarketExposureByGeographicalLocationChart() {
-  const countries = ["USA", "Germany", "United States", "Brazil", "Canada", "France", "RU"];
+function MarketExposureByGeographicalLocationChart({ portfolioId }) {
+  const [initialData, setInitialData] = useState([]);
 
-  const [selectedCountry, setSelectedCountries] = useState("USA");
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8080/api/portfolioStock/getPortfolioStockCountryAllocation/${portfolioId}`)
+      .then((res) => {
+        let response = res.data.data;
+        console.log(response);
 
-  const dataSets = [
-    ["Country", "Popularity"],
-    ["Germany", 200],
-    ["United States", 300],
-    ["Brazil", 400],
-    ["Canada", 500],
-    ["France", 600],
-    ["RU", 700],
-  ];
+        const dataMap = {}; // Use an object to store segment data
+
+        response.forEach((element) => {
+          const allocationName = element.allocationName;
+          // if (allocationName === "US") {
+          //   allocationName = "United States";
+          // }
+
+          const percentage = element.percentage;
+
+          if (dataMap[allocationName]) {
+            // If the segment exists, add the percentage to it
+            dataMap[allocationName] += percentage;
+          } else {
+            // Otherwise, create a new entry
+            dataMap[allocationName] = percentage;
+          }
+          // Convert the object back to an array for the chart
+          const chartData = [["Allocation Name", "Percentage"]];
+          for (const segment in dataMap) {
+            chartData.push([segment, dataMap[segment]]);
+          }
+
+          setInitialData(chartData); // Update the state with the new data
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const options = {
-    // title: "Market Exposure by Location: " + selectedCountry,
-
     legend: { position: "bottom" },
+  };
+
+  // Define GeoChart-specific options
+  const geoChartOptions = {
+    region: "world", // Display the whole world
+    displayMode: "regions", // Display countries/regions
+    resolution: "countries", // Display countries
   };
 
   return (
     <div>
-      {/* <div style={{ textAlign: "right" }}>
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-          <InputLabel id="demo-select-small-label">Countries</InputLabel>
-          <Select
-            labelId="demo-select-small-label"
-            id="demo-select-small"
-            value={selectedCountry}
-            label="Year"
-            onChange={(e) => selectedCountry(e.target.value)}
-          >
-            {countries.map((country) => (
-              <MenuItem key={country} value={country}>
-                {country}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div> */}
-
       <Grid container spacing={4}>
         <Grid item md={6} xs={12}>
-          <Chart chartType="PieChart" data={dataSets} options={options} width={"100%"} height={"400px"} />
+          <Chart chartType="PieChart" data={initialData} options={options} width={"100%"} height={"400px"} />
         </Grid>
         <Grid item md={6} xs={12}>
           <Chart
@@ -61,7 +74,7 @@ function MarketExposureByGeographicalLocationChart() {
                   const chart = chartWrapper.getChart();
                   const selection = chart.getSelection();
                   if (selection.length === 0) return;
-                  const region = dataSets[selection[0].row + 1];
+                  const region = initialData[selection[0].row + 1];
                   console.log("Selected : " + region);
                 },
               },
@@ -69,8 +82,8 @@ function MarketExposureByGeographicalLocationChart() {
             chartType="GeoChart"
             width="100%"
             height="400px"
-            data={dataSets}
-            options={options}
+            data={initialData} // Replace with your GeoChart data
+            options={geoChartOptions} // Use GeoChart-specific options
           />
         </Grid>
       </Grid>

@@ -355,7 +355,7 @@ const PortfolioDetailed = () => {
             <CardContent>
               <div className={style.cardTitle}>Market Exposure by Location</div>
               <br />
-              <MarketExposureByGeographicalLocationChart />
+              <MarketExposureByGeographicalLocationChart portfolioId={id} />
             </CardContent>
           </Card>
         </Grid>
@@ -365,7 +365,7 @@ const PortfolioDetailed = () => {
             <CardContent>
               <div className={style.cardTitle}>Market Exposure by Country</div>
               <br />
-              <MarketExposureBySegment />
+              <MarketExposureBySegment portfolioId={id} />
             </CardContent>
           </Card>
         </Grid>
