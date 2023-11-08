@@ -40,6 +40,7 @@ const CreatePortfolio = () => {
     selectedRows.forEach((row) => {
       totalPrice += row.Total;
     });
+
     return totalPrice;
   };
 
@@ -211,10 +212,10 @@ const CreatePortfolio = () => {
   // submit form with validation
   const submitFormHandler = () => {
     if (portfolioCapital.length === 0) {
-      notifyError("Please enter a valid amount of capital");
+      notifyError("Capital cannot be empty");
       return;
     } else if (portfolioCapital < 0) {
-      notifyError("Please enter a valid amount of capital");
+      notifyError("Capital cannot be negative");
       return;
     } else if (portfolioName.length === 0) {
       notifyError("Please enter a portfolio name");
@@ -225,9 +226,15 @@ const CreatePortfolio = () => {
     } else if (selectedRows.length === 0) {
       notifyError("Please select at least one stock");
       return;
+    } else if (portfolioCapital < getTotalPrice()) {
+      notifyError("Portfolio Capital must be greater than total price of selected stocks");
+      return;
     }
 
-    const userId = 1;
+    console.log("CAPITAL AMOUNT UPDATED");
+    console.log(portfolioCapital);
+    console.log(getTotalPrice());
+    console.log(portfolioCapital - getTotalPrice());
 
     const postData1 = {
       data: [

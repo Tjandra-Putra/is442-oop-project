@@ -47,10 +47,6 @@ const PortfolioDetailed = () => {
     setDataFromChildStocksCount(data);
   };
 
-  const updatePortfolioCapital = (newCapital) => {
-    setPortfolioCapital(newCapital);
-  };
-
   useEffect(() => {
     setLoadingNew(true);
     axios
@@ -86,6 +82,20 @@ const PortfolioDetailed = () => {
   const [portfolioDescription, setPortfolioDescription] = React.useState("");
 
   const onSubmitUpdatePortfolioUpdate = () => {
+    if (portfolioCapital < 0) {
+      notifyError("Capital cannot be negative");
+      return;
+    } else if (portfolioCapital < 0) {
+      notifyError("Capital cannot be negative");
+      return;
+    } else if (portfolioTitle === "") {
+      notifyError("Portfolio title cannot be empty");
+      return;
+    } else if (portfolioDescription === "") {
+      notifyError("Portfolio description cannot be empty");
+      return;
+    }
+
     // update portfolio
     const postData = {
       data: [
@@ -390,7 +400,6 @@ const PortfolioDetailed = () => {
               <StockGrid
                 portfolioId={id}
                 sendDataToParent={receiveDataFromChildStockGrid}
-                updatePortfolioCapital={updatePortfolioCapital} // Pass the callback function
                 portfolioCapital={portfolioCapital}
               />
             </CardContent>
