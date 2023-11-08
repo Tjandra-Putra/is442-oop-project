@@ -240,7 +240,7 @@ const PortfolioDetailed = () => {
                       variant="outlined"
                       style={{ width: "100%", marginBottom: "1rem" }}
                       type="number"
-                      value={portfolioCapital}
+                      value={portfolioCapital.toFixed(2)}
                       onChange={(e) => setPortfolioCapital(e.target.value)}
                     />
 
