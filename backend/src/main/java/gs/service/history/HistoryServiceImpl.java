@@ -60,10 +60,16 @@ public class HistoryServiceImpl implements HistoryService {
 
         try {
             updateHistoryFromAPI(ticker); // Get data from API (if not exist in database
-            History historyQueryList = historyRepo.getHistoryByTicker(ticker);
-
-            HistoryInputModel inputModel = inputModel(historyQueryList);
-            historyList.add(inputModel);
+            //History historyQueryList = historyRepo.getHistoryByTicker(ticker);
+            List<History> historyQueryList = historyRepo.getHistoryByTicker(ticker);
+            System.out.println("ticker: " + ticker);
+            System.out.println("historyQueryList: " + historyQueryList);
+            for (History history : historyQueryList){
+                HistoryInputModel inputModel = inputModel(history);
+                historyList.add(inputModel);
+            }
+            // HistoryInputModel inputModel = inputModel(historyQueryList);
+            // historyList.add(inputModel);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,7 +79,8 @@ public class HistoryServiceImpl implements HistoryService {
     
     public void updateHistoryFromAPI(String ticker){
         try {
-            URL url = new URL("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=IBM&apikey=demo");
+            System.out.println(ticker);
+            URL url = new URL("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" + ticker + "&apikey=94ANM37S7U3Z5NHS");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
