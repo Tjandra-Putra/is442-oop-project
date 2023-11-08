@@ -66,12 +66,45 @@ const CreatePortfolio = () => {
     }
   };
 
-  const handleBuyDateChange = (id, newValue) => {
+  const handleBuyDateChange = (id, userSelect) => {
+    console.log("== handleBuyDateChange ==");
+
     const newSelectedRows = selectedRows.map((row) => {
       if (row.id === id) {
+        console.log("$@#@#$#@$@#$#@$#@");
+        console.log(row.Ticker);
+
+        let tempPrice = 0;
+
+        console.log(user?.token);
+
+        if (user?.token) {
+          axios
+            .get(`http://localhost:8080/api/stockHistory/getStockHistoryPriceByDate/${row.Ticker}/${userSelect}`, {
+              headers: {
+                Authorization: `Bearer ${user?.token}`,
+              },
+            })
+            .then((res) => {
+              // Handle the successful response
+              let response = res.data.data[0]?.adjClosePrice || 0;
+              tempPrice = response;
+            })
+            .catch((err) => {
+              if (err.response && err.response.status === 403) {
+                console.error("Forbidden error:", err.response.data);
+                // Handle the 403 error here
+              } else {
+                console.error("Request error:", err);
+                // Handle other errors here
+              }
+            });
+        }
+
         return {
           ...row,
-          BuyDate: newValue,
+          BuyDate: "2023-09-01",
+          Price: tempPrice,
         };
       }
       return row;
@@ -81,7 +114,7 @@ const CreatePortfolio = () => {
 
     // Update the buyDate state only for the specific row
     const updatedBuyDate = { ...buyDate };
-    updatedBuyDate[id] = newValue;
+    updatedBuyDate[id] = userSelect;
     setBuyDate(updatedBuyDate);
   };
 
