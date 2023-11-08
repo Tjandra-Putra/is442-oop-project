@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
+import gs.common.DateUtils;
 import gs.entity.*;
 import gs.inputModel.*;
 import gs.repository.*;
@@ -60,7 +61,7 @@ public class HistoryServiceImpl implements HistoryService {
 
         try {
             updateHistoryFromAPI(ticker); // Get data from API (if not exist in database
-            //History historyQueryList = historyRepo.getHistoryByTicker(ticker);
+
             List<History> historyQueryList = historyRepo.getHistoryByTicker(ticker);
             System.out.println("ticker: " + ticker);
             System.out.println("historyQueryList: " + historyQueryList);
@@ -68,8 +69,6 @@ public class HistoryServiceImpl implements HistoryService {
                 HistoryInputModel inputModel = inputModel(history);
                 historyList.add(inputModel);
             }
-            // HistoryInputModel inputModel = inputModel(historyQueryList);
-            // historyList.add(inputModel);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -129,11 +128,13 @@ public class HistoryServiceImpl implements HistoryService {
 
     public List<HistoryInputModel> getWeeklyHistoryByTicker(String ticker){
         updateWeeklyHistory(ticker);
-        History historyQueryList = historyRepo.getHistoryByTicker(ticker);
+        List<History> historyQueryList = historyRepo.getHistoryByTicker(ticker);
         List<HistoryInputModel> historyList = new ArrayList<>();
 
-        HistoryInputModel inputModel = inputModel(historyQueryList);
-        historyList.add(inputModel);
+        for (History history : historyQueryList){
+            HistoryInputModel inputModel = inputModel(history);
+            historyList.add(inputModel);
+        }
 
         return historyList;
 
@@ -376,6 +377,27 @@ public class HistoryServiceImpl implements HistoryService {
 
         return result;
         
+    }
+
+    public List<HistoryInputModel> getStockHistoryPriceByDate(String ticker, String buyDate) {
+        List<HistoryInputModel> returnList = new ArrayList<>();
+        List<History> tickerPriceList = historyRepo.getHistoryByTicker(ticker);
+        HistoryInputModel inputModel = new HistoryInputModel();
+
+        for (History historyRow : tickerPriceList) {
+            Date rowDate = historyRow.getDate();
+            String rowDateString = DateUtils.dateFormatter(rowDate);
+
+            if (rowDateString.equals(buyDate)) {
+                inputModel.setTicker(ticker);
+                inputModel.setDate(buyDate);
+                inputModel.setAdjClosePrice(historyRow.getAdjClosePrice());
+                returnList.add(inputModel);
+                break;
+            }
+        }
+
+        return returnList;
     }
 
 }

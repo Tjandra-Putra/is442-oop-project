@@ -12,7 +12,7 @@ public interface HistoryService {
 
     List<HistoryInputModel> getWeeklyHistoryByTicker(String ticker);
 
-    //List<PortfolioStock> getIndividualStock(String portfolioId, String ticker);
+    List<HistoryInputModel> getStockHistoryPriceByDate(String ticker, String buyDate);
 
     List<HistoryInputModel> getYearlyClosingByTicker(String ticker);
 

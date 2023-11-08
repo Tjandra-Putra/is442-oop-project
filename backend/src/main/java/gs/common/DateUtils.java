@@ -13,5 +13,12 @@ public class DateUtils {
 
         return buyDateFormatted;
     }
+
+    public static String dateFormatter(Date buyDate) {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        String buyDateFormatted = dateFormatter.format(buyDate);
+
+        return buyDateFormatted;
+    }
     
 }
