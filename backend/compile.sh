@@ -1,0 +1,4 @@
+@REM # Copy dependencies to the bin directory
+@REM mvn dependency:copy-dependencies -DoutputDirectory=bin
+@REM # Compile the Java source code using javac
+mvn dependency:copy-dependencies -DoutputDirectory=bin & javac -d target -cp "bin/*;src/main/java" src/main/java/gs/*.java src/main/java/cronjob/*.java src/main/java/gs/common/*.java src/main/java/gs/auth/*.java src/main/java/gs/config/*.java src/main/java/gs/controller/*.java src/main/java/gs/entity/*.java src/main/java/gs/event/*.java src/main/java/gs/inputModel/*.java src/main/java/gs/model/*.java src/main/java/gs/repository/*.java src/main/java/gs/service/history/*.java src/main/java/gs/service/portfolio/*.java src/main/java/gs/service/passwordReset/*.java src/main/java/gs/service/portfolioStock/*.java src/main/java/gs/service/stock/*.java src/main/java/gs/service/stockInfo/*.java src/main/java/gs/service/user/*.java
