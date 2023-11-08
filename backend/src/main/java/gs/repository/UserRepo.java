@@ -1,7 +1,6 @@
 package gs.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +13,7 @@ public interface UserRepo extends JpaRepository<User, Long>{
     List<User> getUser();
     
     @Query(value = "select * from user where user_id = ?;", nativeQuery = true)
-    List<User> getUserById(String id);
+    User getUserById(String id);
 
     @Query(value = "select * from user where email = ?;", nativeQuery = true)
     User getUserByEmail(String email);

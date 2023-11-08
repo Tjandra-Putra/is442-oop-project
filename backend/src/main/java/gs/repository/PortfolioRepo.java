@@ -13,7 +13,7 @@ public interface PortfolioRepo extends JpaRepository<Portfolio, Long>{
     List<Portfolio> getPortfolioByUserId(String userid);
 
     @Query(value = "select * from portfolio where user_id = ? and portfolio_id = ?;", nativeQuery = true)
-    List<Portfolio> getPortfolioById(String userid, String portfolioId);
+    Portfolio getPortfolioById(String userid, String portfolioId);
 
     @Query(value = "select * from portfolio where portfolio_id = ?;", nativeQuery = true)
     Portfolio getPortfolioByPortfolioId(String portfolioId);

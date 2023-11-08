@@ -14,7 +14,7 @@ public interface PortfolioStockRepo extends JpaRepository<PortfolioStock, Portfo
     List<PortfolioStock> getPortfolioStockByPortfolioId(String portfolioId);
 
     @Query(value = "select * from portfolio_stock where portfolio_id = ? and ticker = ?;", nativeQuery = true)
-    List<PortfolioStock> getIndividualStock(String portfolioId, String ticker);
+    PortfolioStock getIndividualStock(String portfolioId, String ticker);
 
     @Query(value = "select distinct(ticker) from portfolio_stock;", nativeQuery = true)
     List<String> getTickerList();

@@ -56,7 +56,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         return inputModel;
     }
 
-    // caluclate porfolio value
+    // caluclate porfolio's stock value
     private double portfolioValueCalculation(int quantity, double todayPrice) {
         return quantity * todayPrice;
     }
@@ -75,7 +75,7 @@ public class PortfolioServiceImpl implements PortfolioService {
     }
 
     public List<PortfolioInputModel> getPortfolioById(String userId, String portfolioId) {
-        Portfolio portfolioQueryList = portfolioRepo.getPortfolioById(userId, portfolioId).get(0);
+        Portfolio portfolioQueryList = portfolioRepo.getPortfolioById(userId, portfolioId);
 
         List<PortfolioInputModel> portfolioList = new ArrayList<>();
         PortfolioInputModel inputModel = inputModel(portfolioQueryList);
@@ -120,14 +120,10 @@ public class PortfolioServiceImpl implements PortfolioService {
 
         catch (DataAccessException ex) {
             // Log the exception for debugging
-            // Optionally, rethrow as a custom exception
-            // INPUT LOGGER for error messages
-            System.out.println(ex.getMessage());
             apiModel.setMessage("An error occurred while performing the database operation.");
         }
 
         apiModel.setStatus(String.valueOf(response.getStatus()));
-
         return apiModel;
     }
 
@@ -135,7 +131,7 @@ public class PortfolioServiceImpl implements PortfolioService {
             ApiModel myApiModel, String userId, String portfolioId) throws DataAccessException {
         try {
             Portfolio existingPortfolio =
-                    portfolioRepo.getPortfolioById(userId, portfolioId).get(0);
+                    portfolioRepo.getPortfolioById(userId, portfolioId);
 
             for (DataRequestModel fe : requestModel.getData()) {
 
@@ -163,9 +159,6 @@ public class PortfolioServiceImpl implements PortfolioService {
 
         catch (DataAccessException ex) {
             // Log the exception for debugging
-            // Optionally, rethrow as a custom exception
-            // INPUT LOGGER for error messages
-            System.out.println(ex.getMessage());
             myApiModel.setMessage("An error occurred while performing the database operation.");
         }
 
@@ -177,11 +170,8 @@ public class PortfolioServiceImpl implements PortfolioService {
     public ApiModel deletePortfolio(HttpServletResponse response, ApiModel myApiModel,
             String userId, String portfolioId) throws DataAccessException {
         try {
-            System.out.println("====here======");
-            System.out.println(userId);
-            System.out.println(portfolioId);
             Portfolio existingPortfolio =
-                    portfolioRepo.getPortfolioById(userId, portfolioId).get(0);
+                    portfolioRepo.getPortfolioById(userId, portfolioId);
 
             // save to db
             portfolioRepo.delete(existingPortfolio);
@@ -193,9 +183,6 @@ public class PortfolioServiceImpl implements PortfolioService {
 
         catch (DataAccessException ex) {
             // Log the exception for debugging
-            // Optionally, rethrow as a custom exception
-            // INPUT LOGGER for error messages
-            System.out.println(ex.getMessage());
             myApiModel.setMessage("An error occurred while performing the database operation.");
         }
 

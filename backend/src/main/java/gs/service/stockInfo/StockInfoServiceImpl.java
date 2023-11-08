@@ -101,7 +101,6 @@ public class StockInfoServiceImpl implements StockInfoService {
 
                     // loop through the keylist and retrieve the values for each key
                     for (String key : keyList) {
-                        System.out.println(key);
                     
                         JSONObject value = obj.getJSONObject("Time Series (Daily)").getJSONObject(key);
                         String adjustedClose = value.getString("5. adjusted close");
@@ -137,7 +136,7 @@ public class StockInfoServiceImpl implements StockInfoService {
                 counter = counter + 1;
 
                 StockInfo newStockInfo = new StockInfo();
-                Stock currentStock = stockRepo.getStockByTicker(ticker).get(0);
+                Stock currentStock = stockRepo.getStockByTicker(ticker);
                 newStockInfo.setStock(currentStock);
                 newStockInfo.setCountry(secondObj.getString("Country"));
                 newStockInfo.setCurrency(secondObj.getString("Currency"));
@@ -197,15 +196,13 @@ public class StockInfoServiceImpl implements StockInfoService {
 
                     // loop through the keylist and retrieve the values for each key
                     for (String key : keyList) {
-                        System.out.println(key);
                     
                         JSONObject value = obj.getJSONObject("Time Series (Daily)").getJSONObject(key);
                         String adjustedClose = value.getString("5. adjusted close");
                     
                         if (!firstAdjustedCloseStored) {
                             adjustedCloseList.add(adjustedClose);
-                           
-                            // StockInfo newStockInfo = new StockInfo();
+                        
                             StockInfo currentStock = stockInfoRepo.getStockInfoByTicker(ticker);
                             currentStock.setTodayPrice(Double.parseDouble(adjustedClose));
                             stockInfoRepo.save(currentStock);

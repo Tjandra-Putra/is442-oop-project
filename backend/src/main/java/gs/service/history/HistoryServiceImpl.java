@@ -19,15 +19,16 @@ import gs.repository.*;
 @Service
 public class HistoryServiceImpl implements HistoryService {
     @Resource
-    public HistoryRepo historyRepo;
+    protected HistoryRepo historyRepo;
 
     @Resource
-    public StockRepo stockRepo;
+    protected StockRepo stockRepo;
 
     @Resource
-    public PortfolioStockRepo portfolioStockRepo;
+    protected PortfolioStockRepo portfolioStockRepo;
 
-    @Resource PortfolioRepo portfolioRepo;
+    @Resource
+    protected PortfolioRepo portfolioRepo;
 
     // Input into inputModel
     private HistoryInputModel inputModel(History data){
@@ -51,9 +52,7 @@ public class HistoryServiceImpl implements HistoryService {
             stockList.add(inputModel);
         }
         
-
         return stockList;
-
     }
 
     public List<HistoryInputModel> getHistoryByTicker(String ticker){
@@ -61,13 +60,11 @@ public class HistoryServiceImpl implements HistoryService {
 
         try {
             updateHistoryFromAPI(ticker); // Get data from API (if not exist in database
-            List<History> historyQueryList = historyRepo.getHistoryByTicker(ticker);
-            System.out.println("ticker: " + ticker);
-            System.out.println("historyQueryList: " + historyQueryList);
-            for (History history : historyQueryList){
-                HistoryInputModel inputModel = inputModel(history);
-                historyList.add(inputModel);
-            }
+            History historyQueryList = historyRepo.getHistoryByTicker(ticker);
+
+            HistoryInputModel inputModel = inputModel(historyQueryList);
+            historyList.add(inputModel);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -111,7 +108,7 @@ public class HistoryServiceImpl implements HistoryService {
                     String adjClosePrice = data.get("5. adjusted close").asText();
                     
                     History history = new History(ticker, dt, Double.parseDouble(openPrice), Double.parseDouble(highPrice), Double.parseDouble(lowPrice), Double.parseDouble(adjClosePrice));
-                    Stock stock = stockRepo.getStockByTicker(ticker).get(0);
+                    Stock stock = stockRepo.getStockByTicker(ticker);
                     history.setStock(stock);
                     historyRepo.save(history);
 
@@ -125,12 +122,11 @@ public class HistoryServiceImpl implements HistoryService {
 
     public List<HistoryInputModel> getWeeklyHistoryByTicker(String ticker){
         updateWeeklyHistory(ticker);
-        List<History> historyQueryList = historyRepo.getHistoryByTicker(ticker);
+        History historyQueryList = historyRepo.getHistoryByTicker(ticker);
         List<HistoryInputModel> historyList = new ArrayList<>();
-        for (History history : historyQueryList){
-            HistoryInputModel inputModel = inputModel(history);
-            historyList.add(inputModel);
-        }
+
+        HistoryInputModel inputModel = inputModel(historyQueryList);
+        historyList.add(inputModel);
 
         return historyList;
 
@@ -167,7 +163,7 @@ public class HistoryServiceImpl implements HistoryService {
 
                         // add to database using the input model
                         History history = new History(inputticker, new SimpleDateFormat("yyyy-MM-dd").parse(date), opening, high, low, adjustedclosing);
-                        Stock stock = stockRepo.getStockByTicker(ticker).get(0);
+                        Stock stock = stockRepo.getStockByTicker(ticker);
                         history.setStock(stock);
                         historyRepo.save(history);
 
@@ -243,47 +239,6 @@ public class HistoryServiceImpl implements HistoryService {
         return result;
         
     }
-
-
-    // public List<YearlyPriceInputmodel> getPortfolioValue(String userId) {
-    //     List<Portfolio> portfolio = portfolioRepo.getPortfolioByUserId(userId);
-    //     List<List<Double>> returnvalues = new ArrayList<>();
-    //     List<String> Portfolionames = new ArrayList<>();
-    //     for(Portfolio p : portfolio){
-    //         Portfolionames.add(p.getPortfolioName());
-    //     }
-    //     List<Integer> years = historyRepo.getUniqueYears();
-    //     for(Integer y : years){
-    //         for(Portfolio p : portfolio){
-    //             String portfolioId = String.valueOf(p.getPortfolioId());
-    //             List<PortfolioStock> ps = portfolioStockRepo.getPortfolioStockByPortfolioId(portfolioId);
-    //             List<Double> portfoliovalues = new ArrayList<>();
-    //             for(PortfolioStock pstock : ps){
-    //                 List<History> history = historyRepo.getClosingPricesForYear(pstock.getStock().getTicker(), y);
-    //                 double total = 0;
-    //                 for(History h : history){
-    //                     total += h.getAdjClosePrice() * pstock.getQuantity();
-    //                 }
-    //                 if (!history.isEmpty()) {
-    //                     portfoliovalues.add(total);
-    //                 }
-    //             }
-                
-    //             if (!portfoliovalues.isEmpty()) {
-    //                 returnvalues.add(portfoliovalues);
-    //             }
-    //         }
-            
-    //     }
-       
-    //     YearlyPriceInputmodel inputModel = new YearlyPriceInputmodel();
-    //     inputModel.setYears(years);
-    //     inputModel.setPortfolioNames(Portfolionames);
-    //     inputModel.setPortfolioValues(returnvalues);
-    //     List<YearlyPriceInputmodel> inputModelList = new ArrayList<>();
-    //     inputModelList.add(inputModel);
-    //     return inputModelList;
-    // }
 
     public ArrayList<TreeMap<Integer, TreeMap<Integer, Double>>> getMonthlyPortfolioValue(String portfolioId){
 

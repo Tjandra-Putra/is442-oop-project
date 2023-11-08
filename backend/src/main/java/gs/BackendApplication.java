@@ -10,17 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 import cronjob.stockAPI;
 import java.util.Map;
 
-import gs.repository.StockRepo;
 import gs.service.stock.StockService;
-import gs.service.stock.StockServiceImpl;
-import jakarta.annotation.Resource;
-import gs.repository.StockRepo;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"gs.controller", "gs.entity", "gs.repository", "gs.service", "gs.config" , "gs.auth", "gs.model"})
 @RestController
 public class BackendApplication implements CommandLineRunner {
-// public class BackendApplication {
 
 	@Autowired
 	protected StockService stockService;

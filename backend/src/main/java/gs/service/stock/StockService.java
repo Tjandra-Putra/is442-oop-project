@@ -2,9 +2,7 @@ package gs.service.stock;
 
 import java.util.List;
 
-import gs.common.RequestModel;
 import gs.inputModel.StockInputModel;
-import jakarta.servlet.http.HttpServletResponse;
 
 public interface StockService {
     List<StockInputModel> getStock();
@@ -15,5 +13,4 @@ public interface StockService {
 
     void addStock(String ticker, String stockName);
 
-    void addStock(HttpServletResponse response, RequestModel requestModel) throws Exception;
 }
