@@ -66,57 +66,64 @@ const CreatePortfolio = () => {
     }
   };
 
-  const handleBuyDateChange = (id, userSelect) => {
+  
+ 
+  const handleBuyDateChange = async (id, userSelect) => {
     console.log("== handleBuyDateChange ==");
-
-    const newSelectedRows = selectedRows.map((row) => {
+  
+    const newSelectedRows = selectedRows.map(async (row) => {
       if (row.id === id) {
         console.log("$@#@#$#@$@#$#@$#@");
         console.log(row.Ticker);
-
+  
         let tempPrice = 0;
-
+  
         console.log(user?.token);
-
+  
         if (user?.token) {
-          axios
-            .get(`http://localhost:8080/api/stockHistory/getStockHistoryPriceByDate/${row.Ticker}/${userSelect}`, {
+          try {
+            const res = await axios.get(`http://localhost:8080/api/stockHistory/getStockHistoryPriceByDate/${row.Ticker}/${userSelect}`, {
               headers: {
                 Authorization: `Bearer ${user?.token}`,
               },
-            })
-            .then((res) => {
-              // Handle the successful response
-              let response = res.data.data[0]?.adjClosePrice || 0;
-              tempPrice = response;
-            })
-            .catch((err) => {
-              if (err.response && err.response.status === 403) {
-                console.error("Forbidden error:", err.response.data);
-                // Handle the 403 error here
-              } else {
-                console.error("Request error:", err);
-                // Handle other errors here
-              }
             });
+  
+            // Handle the successful response
+            let response = res.data.data[0]?.adjClosePrice || 0;
+            tempPrice = response;
+          } catch (err) {
+            if (err.response && err.response.status === 403) {
+              console.error("Forbidden error:", err.response.data);
+              // Handle the 403 error here
+            } else {
+              console.error("Request error:", err);
+              // Handle other errors here
+            }
+          }
         }
-
+  
+        console.log(tempPrice);
+  
         return {
           ...row,
-          BuyDate: "2023-09-01",
+          BuyDate: userSelect,
           Price: tempPrice,
         };
       }
       return row;
     });
-
-    setSelectedRows(newSelectedRows);
-
+  
+    // Use Promise.all to resolve the mapped promises
+    const updatedRows = await Promise.all(newSelectedRows);
+    setSelectedRows(updatedRows);
+  
     // Update the buyDate state only for the specific row
     const updatedBuyDate = { ...buyDate };
     updatedBuyDate[id] = userSelect;
     setBuyDate(updatedBuyDate);
   };
+  
+  
 
   // Material UI DataGrid
   const selectedStockColumns = [
