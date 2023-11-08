@@ -10,6 +10,8 @@ import java.util.UUID;
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -106,15 +108,6 @@ public class UserController {
         return passwordResetUrl;
     }
 
-    
-    // private String passwordResetEmailLink(User user, String applicationUrl, String passwordResetToken) {
-    //     String url = applicationUrl + "api/user/resetPassword?token=" + passwordResetToken;
-    //     eventListener.sendPasswordResetVerificationEmail(url);
-    //     // log.info("Click the link to reset your password : {}", url); // Console log to see the url 
-
-    //     return url;
-    // }
-
     private String passwordResetEmailLink(User user, String applicationUrl,
                                           String passwordToken) throws MessagingException, UnsupportedEncodingException {
         String url = applicationUrl+"/register/reset-password?token="+passwordToken;
@@ -151,4 +144,15 @@ public class UserController {
         return "http://" + httpServletRequest.getServerName() + ":" + httpServletRequest.getServerPort() + httpServletRequest.getContextPath();
     }
     // FORGET PASSWORD - END
+
+
+    // LOGOUT 
+    SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+
+    @PostMapping("/logout")
+    public String performLogout(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
+        // .. perform logout
+        this.logoutHandler.logout(request, response, authentication);
+        return "redirect:/home"; // CHANGE ACCORDINGLY
+    }
 }
