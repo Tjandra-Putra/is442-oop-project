@@ -24,9 +24,23 @@ This project is a portfolio analysis web application, where users can search for
 |  <img width="40px" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" />
 
 ## Prerequisites
-List any software, tools, or dependencies that users need to have installed before they can use your project. For example:
+### Installed Technologies
 - Node.js and npm
 - Java JDK17
+
+### Database Setup
+#### Option 1: Simple Schema Setup
+1. Turn on WAMP/MAMP
+2. Login into phpMyAdmin by typing `http://localhost/phpmyadmin/` in your browser and click the `Databases` Tab
+3. Type `gs` into the "Database name" field and click 'Create'
+4. Proceed with <a href="#backend">Backend Steps</a>
+
+#### Option 2: Using `deploy.sql`
+1. Turn on WAMP/MAMP
+2. Login into phpMyAdmin by typing `http://localhost/phpmyadmin/` in your browser and click the `Import` tab
+3. Click `Choose file` and navigate to `backend/sql` and select `deploy.sql`
+4. Click `Go`
+5. Proceed with <a href="#backend">Backend Steps</a>
 
 ## Installation
 
