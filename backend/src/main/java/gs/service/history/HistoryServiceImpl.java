@@ -8,6 +8,7 @@ import java.net.http.HttpResponse;
 import java.text.*;
 import java.util.*;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +20,10 @@ import gs.repository.*;
 
 @Service
 public class HistoryServiceImpl implements HistoryService {
+
+    @Value("${api.key}")
+    private String apiKey;
+    
     @Resource
     protected HistoryRepo historyRepo;
 
@@ -94,7 +99,7 @@ public class HistoryServiceImpl implements HistoryService {
     public void updateHistoryFromAPI(String ticker){
         try {
             System.out.println(ticker);
-            URL url = new URL("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" + ticker + "&apikey=94ANM37S7U3Z5NHS");
+            URL url = new URL("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" + ticker + "&apikey=" + apiKey);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -156,7 +161,6 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     public void updateWeeklyHistory(String ticker){
-        String apiKey = "94ANM37S7U3Z5NHS";
         try{
               String url = "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=" + ticker + "&apikey=" + apiKey;
               HttpClient client =  HttpClient.newHttpClient();

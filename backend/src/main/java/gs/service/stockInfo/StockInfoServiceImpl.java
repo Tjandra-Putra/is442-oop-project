@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 import java.util.Collections;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.json.JSONObject;
@@ -22,6 +24,8 @@ import java.net.URI;
 
 @Service
 public class StockInfoServiceImpl implements StockInfoService {
+    @Value("${api.key}")
+    private String apiKey;
 
     @Resource
     protected StockInfoRepo stockInfoRepo;
@@ -70,7 +74,7 @@ public class StockInfoServiceImpl implements StockInfoService {
         List<String> portfolioStocks = portfolioStockRepo.getTickerList();
         List<StockInfoInputModel> stockInfoList = new ArrayList<>();
         List<String> adjustedCloseList = new ArrayList<String>();
-        String apiKey = "";
+        
         for (String ticker : portfolioStocks) {  
                  String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" + ticker + "&apikey=" + apiKey;
 
@@ -165,7 +169,7 @@ public class StockInfoServiceImpl implements StockInfoService {
         List<String> portfolioStocks = portfolioStockRepo.getTickerList();
         List<StockInfoInputModel> stockInfoList = new ArrayList<>();
         List<String> adjustedCloseList = new ArrayList<String>();
-        String apiKey = "";
+
         for (String ticker : portfolioStocks) {  
                  String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" + ticker + "&apikey=" + apiKey;
 

@@ -6,9 +6,17 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import java.util.HashMap;
 
+@Service
 public class stockAPI {
+
+    @Value("${api.key}")
+    private String apiKey;
 
     public stockAPI() {}
 
