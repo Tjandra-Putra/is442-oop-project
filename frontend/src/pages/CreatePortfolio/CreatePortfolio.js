@@ -12,7 +12,7 @@ import style from "./CreatePortfolio.module.css";
 const CreatePortfolio = () => {
   const navigate = useNavigate();
 
-  const { user, loading, error, isAuth } = useSelector((state) => state.userReducer);
+  const { user, error, isAuth } = useSelector((state) => state.userReducer);
 
   const [selectedRows, setSelectedRows] = useState([]);
   const [portfolioName, setPortfolioName] = useState("");
@@ -24,6 +24,8 @@ const CreatePortfolio = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [buyDate, setBuyDate] = useState("");
   const [quantityValues, setQuantityValues] = useState(Object.fromEntries(stockRows.map((row) => [row.id, 1])));
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     console.log("Selected Rows Updated:", selectedRows);
@@ -66,22 +68,61 @@ const CreatePortfolio = () => {
     }
   };
 
-  const handleBuyDateChange = (id, newValue) => {
-    const newSelectedRows = selectedRows.map((row) => {
+  const handleBuyDateChange = async (id, userSelect) => {
+    console.log("== handleBuyDateChange ==");
+
+    const newSelectedRows = selectedRows.map(async (row) => {
       if (row.id === id) {
+        console.log("$@#@#$#@$@#$#@$#@");
+        console.log(row.Ticker);
+
+        let tempPrice = 0;
+
+        console.log(user?.token);
+
+        if (user?.token) {
+          try {
+            const res = await axios.get(
+              `http://localhost:8080/api/stockHistory/getStockHistoryPriceByDate/${row.Ticker}/${userSelect}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${user?.token}`,
+                },
+              }
+            );
+
+            // Handle the successful response
+            let response = res.data.data[0]?.adjClosePrice || 0;
+            tempPrice = response;
+          } catch (err) {
+            if (err.response && err.response.status === 403) {
+              console.error("Forbidden error:", err.response.data);
+              // Handle the 403 error here
+            } else {
+              console.error("Request error:", err);
+              // Handle other errors here
+            }
+          }
+        }
+
+        console.log(tempPrice);
+
         return {
           ...row,
-          BuyDate: newValue,
+          BuyDate: userSelect,
+          Price: tempPrice,
         };
       }
       return row;
     });
 
-    setSelectedRows(newSelectedRows);
+    // Use Promise.all to resolve the mapped promises
+    const updatedRows = await Promise.all(newSelectedRows);
+    setSelectedRows(updatedRows);
 
     // Update the buyDate state only for the specific row
     const updatedBuyDate = { ...buyDate };
-    updatedBuyDate[id] = newValue;
+    updatedBuyDate[id] = userSelect;
     setBuyDate(updatedBuyDate);
   };
 
@@ -213,8 +254,6 @@ const CreatePortfolio = () => {
         if (res.data && res.data.data === null) {
           notifyError(res.data.message);
         } else {
-          notifySuccess(res.data.message);
-
           // ================ send selected stock data to backend =================
 
           const postData2 = {
@@ -259,8 +298,29 @@ const CreatePortfolio = () => {
             })
             .catch((err) => console.log(err));
 
-          navigate("/dashboard");
+          // navigate("/dashboard");
         }
+      })
+      .then((y) => {
+        // update DATABASE
+        setLoading(true);
+        axios
+          .get(`http://localhost:8080/api/StockInfo/getStockInfo/portfolio`, {
+            headers: {
+              Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            setLoading(false);
+
+            notifySuccess("Please wait while we update your portfolio");
+            navigate("/dashboard");
+          })
+          .catch((err) => {
+            console.log(err);
+            setLoading(false);
+          });
       })
       .catch((err) => {
         notifyError(err.response.data.message);
@@ -333,7 +393,7 @@ const CreatePortfolio = () => {
       var result = 0;
 
       // populate database base on ticker
-      axios
+      return axios
         .get(`http://localhost:8080/api/stockHistory/getHistoryPriceByTicker/${row.Ticker}`, {
           headers: {
             Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
@@ -341,13 +401,12 @@ const CreatePortfolio = () => {
         })
         .then((res1) => {
           console.log("== getHistoryPriceByTicker CALLED ==");
-        });
 
-      return axios
-        .get(`http://localhost:8080/api/stockHistory/getHistoryByTicker/${row.Ticker}`, {
-          headers: {
-            Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
-          },
+          return axios.get(`http://localhost:8080/api/stockHistory/getHistoryByTicker/${row.Ticker}`, {
+            headers: {
+              Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+            },
+          });
         })
         .then((res2) => {
           let adjustedClosePrice = res2.data.data[0]?.adjClosePrice || 0;
@@ -390,7 +449,7 @@ const CreatePortfolio = () => {
         <Container maxWidth="xl">
           <div className="banner-content">
             <Typography variant="h5" style={{ letterSpacing: "1px" }}>
-              Create Portfolio
+              Create Portfolio {loading ? <span>(creating ...)</span> : null}
             </Typography>
           </div>
         </Container>
@@ -496,7 +555,7 @@ const CreatePortfolio = () => {
                     </div>
                     <div>
                       <span className={style.cardTitle}>Total</span>
-                      <span> ${getTotalPrice()}</span>
+                      <span> ${getTotalPrice().toFixed(2)}</span>
                     </div>
                   </Stack>
 

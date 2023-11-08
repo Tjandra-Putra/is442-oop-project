@@ -43,13 +43,13 @@ public class PortfolioServiceImpl implements PortfolioService {
 
         double portfolioValue = 0.0;
 
-        List<PortfolioStock> portofolioStockQueryList =
-                portfolioStockRepo.getPortfolioStockByPortfolioId(String.valueOf(portfolioId));
+        // List<PortfolioStock> portofolioStockQueryList =
+        //         portfolioStockRepo.getPortfolioStockByPortfolioId(String.valueOf(portfolioId));
 
-        for (PortfolioStock portfolioStock : portofolioStockQueryList) {
-            portfolioValue += portfolioValueCalculation(portfolioStock.getQuantity(), stockInfoRepo
-                    .getStockInfoByTicker(portfolioStock.getStock().getTicker()).getTodayPrice());
-        }
+        // for (PortfolioStock portfolioStock : portofolioStockQueryList) {
+        //     portfolioValue += portfolioValueCalculation(portfolioStock.getQuantity(), stockInfoRepo
+        //             .getStockInfoByTicker(portfolioStock.getStock().getTicker()).getTodayPrice());
+        // }
 
         inputModel.setPortfolioValue(portfolioValue);
 

@@ -48,7 +48,7 @@ public class HistoryController {
         return ApiModel.ok(HistoryService.getYearlyClosingByTicker(ticker));
     }
 
-    @PostMapping("/getStockHistoryPriceByDate/{ticker}/{buyDate}")
+    @GetMapping("/getStockHistoryPriceByDate/{ticker}/{buyDate}")
     public ApiModel<ArrayList<HistoryInputModel>> getStockHistoryPriceByDate (
         @PathVariable("ticker") String ticker,
         @PathVariable("buyDate") String buyDate

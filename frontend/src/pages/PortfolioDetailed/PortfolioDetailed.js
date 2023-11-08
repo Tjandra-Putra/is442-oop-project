@@ -37,6 +37,7 @@ const PortfolioDetailed = () => {
   const [loadingNew, setLoadingNew] = React.useState(false);
   const [deleteMessage, setDeleteMessage] = React.useState("");
   const [dataFromChildStocksCount, setDataFromChildStocksCount] = useState(null);
+  const [portfolioCapital, setPortfolioCapital] = React.useState("");
 
   const notifyError = (message) => toast.error(message, { duration: 5000 });
   const notifySuccess = (message) => toast.success(message, { duration: 5000 });
@@ -44,6 +45,10 @@ const PortfolioDetailed = () => {
   // Callback function to receive data from the child component
   const receiveDataFromChildStockGrid = (data) => {
     setDataFromChildStocksCount(data);
+  };
+
+  const updatePortfolioCapital = (newCapital) => {
+    setPortfolioCapital(newCapital);
   };
 
   useEffect(() => {
@@ -79,7 +84,6 @@ const PortfolioDetailed = () => {
 
   const [portfolioTitle, setPortfolioTitle] = React.useState("");
   const [portfolioDescription, setPortfolioDescription] = React.useState("");
-  const [portfolioCapital, setPortfolioCapital] = React.useState("");
 
   const onSubmitUpdatePortfolioUpdate = () => {
     // update portfolio
@@ -307,10 +311,10 @@ const PortfolioDetailed = () => {
         {/* ============================ LEFT SECTION ============================ */}
         <Grid container rowSpacing={5} columnSpacing={{ xs: 2, sm: 2, md: 1 }}>
           <Grid item xs={12} md={6} lg={6}>
-            <div className={style.firstContainer}>
+            {/* <div className={style.firstContainer}>
               <StockCard name="Portfolio Value" value={`$${portfolio && portfolio.portfolioValue}`} />
               <StockCard name="Total Stocks" value={dataFromChildStocksCount} />
-            </div>
+            </div> */}
 
             <Card className={style.cardCustom}>
               <CardContent>
@@ -322,10 +326,10 @@ const PortfolioDetailed = () => {
 
           {/* ============================ RIGHT SECTION ============================ */}
           <Grid item xs={12} md={6} lg={6}>
-            <div className={style.firstContainer}>
+            {/* <div className={style.firstContainer}>
               <StockCard name="Net Value" value="-" />
               <StockCard name="Capital" value={`$${portfolio && portfolio.capitalAmt}`} />
-            </div>
+            </div> */}
 
             <Card className={style.cardCustom}>
               <CardContent>
@@ -383,7 +387,12 @@ const PortfolioDetailed = () => {
         <Grid item xs={12} md={6} lg={12}>
           <Card className={style.cardCustom}>
             <CardContent>
-              <StockGrid portfolioId={id} sendDataToParent={receiveDataFromChildStockGrid} />
+              <StockGrid
+                portfolioId={id}
+                sendDataToParent={receiveDataFromChildStockGrid}
+                updatePortfolioCapital={updatePortfolioCapital} // Pass the callback function
+                portfolioCapital={portfolioCapital}
+              />
             </CardContent>
           </Card>
         </Grid>

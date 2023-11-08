@@ -23,7 +23,7 @@ import { useSelector } from "react-redux";
 
 import style from "./StockGrid.module.css";
 
-export default function StockGrid({ portfolioId, sendDataToParent }) {
+export default function StockGrid({ portfolioId, sendDataToParent, portfolioCapital, updatePortfolioCapital }) {
   const { user, loading, error, isAuth } = useSelector((state) => state.userReducer);
 
   const notifyError = (message) => toast.error(message, { duration: 5000 });
@@ -35,6 +35,7 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
   const [stockColumns, setStockColumns] = useState([]);
   const [buyDate, setBuyDate] = useState("");
   const [selectedStockDataModal, setSelectedStockDataModal] = useState(null);
+  // const [updatedPortfolioCapital, setUpdatedPortfolioCapital] = useState(null);
 
   React.useEffect(() => {
     axios
@@ -365,7 +366,7 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
     selectedRows.forEach((row) => {
       totalPrice += row.Total;
     });
-    return totalPrice;
+    return totalPrice.toFixed(2);
   };
 
   const [selectedRows, setSelectedRows] = React.useState([]);
@@ -566,7 +567,11 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
       data: [],
     };
 
+    let total = 0;
+
     selectedRows.forEach((row) => {
+      total += row.Total;
+
       const formattedData = [
         {
           fieldName: "ticker",
@@ -579,7 +584,6 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
         {
           fieldName: "buyDate",
           value: moment(row.BuyDate).format("YYYY-MM-DD HH:mm:ss.SSSSSS"),
-          // value: row.BuyDate, // You can set the buyDate to a specific value or get it dynamically
         },
         {
           fieldName: "quantity",
@@ -588,24 +592,30 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
       ];
 
       postData2.data.push(formattedData);
-
-      // Send the selected stocks
-      axios
-        .post("http://localhost:8080/api/portfolioStock/addPortfolioStock/" + portfolioId, postData2, {
-          headers: {
-            Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
-          },
-        })
-        .then((res) => {
-          notifySuccess("Stocks added successfully");
-
-          // refresh the page
-          window.location.reload();
-        })
-        .catch((err) => {
-          notifyError("Error adding stocks");
-        });
     });
+
+    if (total > portfolioCapital) {
+      notifyError("You do not have enough capital to buy these stocks");
+      return;
+    }
+
+    axios
+      .post("http://localhost:8080/api/portfolioStock/addPortfolioStock/" + portfolioId, postData2, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      })
+      .then((res) => {
+        notifySuccess("Stocks added successfully");
+        portfolioCapital = portfolioCapital - total;
+        updatePortfolioCapital(portfolioCapital);
+        // setUpdatedPortfolioCapital(portfolioCapital);
+        // refresh the page
+        window.location.reload();
+      })
+      .catch((err) => {
+        notifyError("Error adding stocks");
+      });
   };
 
   return (
