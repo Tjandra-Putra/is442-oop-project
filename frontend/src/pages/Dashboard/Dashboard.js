@@ -43,10 +43,8 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    const userId = 1;
-
     axios
-      .get("http://localhost:8080/api/portfolio/getPortfolio/" + userId, {
+      .get("http://localhost:8080/api/portfolio/getPortfolio/" + user.userId, {
         headers: {
           Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
         },
@@ -78,100 +76,11 @@ const Dashboard = () => {
         </Container>
       </div>
       <Container maxWidth="xl">
-        {/* <Grid container spacing={2} mt={0}>
-          <Grid item md={3} xs={6}>
-            <Card className={style.figuresBar}>
-              <div className={style.figuresBarTop}>
-                <div variant="h7" className={style.portfolioWorthText}>
-                  Portfolios' Worth
-                </div>
-                <div className={style.iconWrapper}>
-                  <i class="fa-solid fa-dollar-sign"></i>
-                </div>
-              </div>
-
-              <div variant="h5" mr={2} className={style.portfolioWorthFigure}>
-                $46,509.00
-              </div>
-            </Card>
-          </Grid>
-          <Grid item md={3} xs={6}>
-            <Card className={style.figuresBar}>
-              <div className={style.figuresBarTop}>
-                <div variant="h7" className={style.portfolioWorthText}>
-                  Net Profit / Loss ?
-                </div>
-                <div className={style.iconWrapper}>
-                  <i class="fa-solid fa-chart-line"></i>
-                </div>
-              </div>
-
-              <div variant="h7" mr={2} className={style.portfolioWorthFigure}>
-                $3039.00
-              </div>
-            </Card>
-          </Grid>
-          <Grid item md={3} xs={6}>
-            <Card className={style.figuresBar}>
-              <div className={style.figuresBarTop}>
-                <div variant="h7" className={style.portfolioWorthText}>
-                  Wallet Balance ?
-                </div>
-                <div className={style.iconWrapper}>
-                  <i class="fa-solid fa-wallet"></i>
-                </div>
-              </div>
-
-              <div variant="h7" mr={2} className={style.portfolioWorthFigure}>
-                $1093.00
-              </div>
-            </Card>
-          </Grid>
-          <Grid item md={3} xs={6}>
-            <Card className={style.figuresBar}>
-              <div className={style.figuresBarTop}>
-                <div variant="h7" className={style.portfolioWorthText}>
-                  Daily Profit / Loss
-                </div>
-                <div className={style.iconWrapper}>
-                  <i class="fa-regular fa-calendar-check"></i>
-                </div>
-              </div>
-
-              <div variant="h7" mr={2} className={style.portfolioWorthFigure}>
-                $204.00
-              </div>
-            </Card>
-          </Grid>
-        </Grid> */}
-
         <Grid container spacing={2} sx={{ mt: 1 }}>
           <Grid item md={9} xs={12}>
-            {/* <Card className={style.chart} sx={{ minHeight: 540 }}>
-              <CardContent>
-                <PortfolioReturnsChart />
-              </CardContent>
-            </Card>
-
-            <Card className={style.chart} sx={{ minHeight: 540 }}>
-              <CardContent>
-                <MarketExposureByGeographicalLocationChart />
-              </CardContent>
-            </Card>
-
-            <Card className={style.chart} sx={{ minHeight: 540 }}>
-              <CardContent>
-                <MarketExposureBySegment />
-              </CardContent>
-            </Card> */}
-
             <div className="portfolios" style={{ marginTop: "0rem" }}>
               <Grid container spacing={4}>
-                <Grid item md={6} xs={12}>
-                  {/* <Typography variant="h6" className={style.portfoliosText}>
-                    My Portfolios
-                  </Typography> */}
-                </Grid>
+                <Grid item md={6} xs={12}></Grid>
               </Grid>
               <Grid container spacing={4}>
                 {portfolios?.map((portfolio, index) => (
@@ -219,19 +128,6 @@ const Dashboard = () => {
                   sx={{ width: 300, mt: 1 }}
                   renderInput={(params) => <TextField {...params} label="My Portfolios" />}
                 />
-                {/* <TextField
-                  id="outlined-basic"
-                  label="Name of Portfolio"
-                  variant="standard"
-                  multiline
-                  maxRows={2}
-                  sx={{
-                    width: "100%",
-                  }}
-                  value={portfolioName}
-                  onChange={(e) => setPortfolioName(e.target.value)}
-                  helperText="Enter the name of the portfolio you want to navigate to."
-                /> */}
               </CardContent>
 
               <hr className={style.horizontalLine} />

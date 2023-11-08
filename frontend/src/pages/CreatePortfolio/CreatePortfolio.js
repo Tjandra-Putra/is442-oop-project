@@ -5,11 +5,14 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import { useSelector } from "react-redux";
 
 import style from "./CreatePortfolio.module.css";
 
 const CreatePortfolio = () => {
   const navigate = useNavigate();
+
+  const { user, loading, error, isAuth } = useSelector((state) => state.userReducer);
 
   const [selectedRows, setSelectedRows] = useState([]);
   const [portfolioName, setPortfolioName] = useState("");
@@ -80,9 +83,6 @@ const CreatePortfolio = () => {
     const updatedBuyDate = { ...buyDate };
     updatedBuyDate[id] = newValue;
     setBuyDate(updatedBuyDate);
-
-    console.log("BUY DATE === buyDate ===");
-    console.log(updatedBuyDate);
   };
 
   // Material UI DataGrid
@@ -118,9 +118,6 @@ const CreatePortfolio = () => {
       renderCell: (params) => {
         const today = new Date();
         const formattedToday = moment(today).format("YYYY-MM-DD");
-
-        console.log("xxxxxxxxxxxxxxx FORMATTED TODAY xxxxxxxxxxxxxxx");
-        console.log(formattedToday);
 
         return (
           <input
@@ -206,10 +203,12 @@ const CreatePortfolio = () => {
 
     // send the portfolio name, description, capital
     axios
-      .post("http://localhost:8080/api/portfolio/addPortfolio/" + userId, postData1)
+      .post("http://localhost:8080/api/portfolio/addPortfolio/" + user.userId, postData1, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+        },
+      })
       .then((res) => {
-        console.log(res.data);
-
         if (res.data && res.data.data === null) {
           notifyError(res.data.message);
         } else {
@@ -221,10 +220,7 @@ const CreatePortfolio = () => {
             data: [],
           };
 
-          console.log("SUBMIT === selectedRows ===");
           selectedRows.forEach((row) => {
-            console.log(row);
-
             const formattedData = [
               {
                 fieldName: "ticker",
@@ -248,13 +244,15 @@ const CreatePortfolio = () => {
             postData2.data.push(formattedData);
           });
 
-          console.log("POSTDATA2 === postData2 ===" + postData2);
-
           const portfolioId = res.data.data.portfolioId;
 
           // Send the selected stocks
           axios
-            .post("http://localhost:8080/api/portfolioStock/addPortfolioStock/" + portfolioId, postData2)
+            .post("http://localhost:8080/api/portfolioStock/addPortfolioStock/" + portfolioId, postData2, {
+              headers: {
+                Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+              },
+            })
             .then((res) => {
               console.log(res.data);
             })
@@ -273,11 +271,14 @@ const CreatePortfolio = () => {
     // get current stock market
 
     axios
-      .get("http://localhost:8080/api/stock/getStock")
+      .get("http://localhost:8080/api/stock/getStock", {
+        headers: {
+          Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+        },
+      })
       .then((res) => {
         let stockData = res.data.data;
         setStockMarket(stockData);
-        // console.log(res.data.data);
 
         const generatedStockRows = stockData.map((stock, index) => ({
           id: index + 1, // Start from 1
@@ -304,7 +305,11 @@ const CreatePortfolio = () => {
 
   const getStockPrice = (ticker) => {
     return axios
-      .get("http://localhost:8080/api/StockInfo/getStockInfo/ticker/" + ticker)
+      .get("http://localhost:8080/api/StockInfo/getStockInfo/ticker/" + ticker, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+        },
+      })
       .then((res) => {
         console.log("== getStockPrice ==");
         const todayPrice = res.data.data[0]?.todayPrice || 0;
