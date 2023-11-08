@@ -132,7 +132,7 @@ const Dashboard = () => {
 
               <hr className={style.horizontalLine} />
 
-              <CardContent>
+              {/* <CardContent>
                 <Typography variant="h6" className={style.portfolioWorthText}>
                   Top Performing Portfolio
                 </Typography>
@@ -166,7 +166,7 @@ const Dashboard = () => {
                     />
                   </li>
                 </ul>
-              </CardContent>
+              </CardContent> */}
             </Card>
           </Grid>
         </Grid>

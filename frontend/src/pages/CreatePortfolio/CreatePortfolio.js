@@ -449,7 +449,7 @@ const CreatePortfolio = () => {
         <Container maxWidth="xl">
           <div className="banner-content">
             <Typography variant="h5" style={{ letterSpacing: "1px" }}>
-              Create Portfolio ( {loading ? <p>Creating Portfolio...</p> : null})
+              Create Portfolio {loading ? <span>(creating ...)</span> : null}
             </Typography>
           </div>
         </Container>
