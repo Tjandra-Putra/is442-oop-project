@@ -7,18 +7,33 @@ import Checkbox from "@mui/material/Checkbox";
 import axios from "axios";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
-import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+
+import { useNavigate } from "react-router-dom";
+import { login } from "../../redux/actions/user";
 
 import styles from "./Login.module.css";
 
 const defaultTheme = createTheme();
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { user, loading, error, isAuth } = useSelector((state) => state.userReducer);
+
+  React.useEffect(() => {
+    // check error
+    if (error) {
+      console.log(error);
+      dispatch({ type: "CLEAR_ERRORS" });
+    }
+  }, [error]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -32,20 +47,8 @@ const Login = () => {
       password: password,
     };
 
-    // Now you can use the postData object to send the data to your server or perform any other actions
-    console.log("Form Data:", postData);
-
     // Example: Send the data to your server
-    axios
-      .post("http://localhost:8080/rest/auth/login", postData,)
-      .then((response) => {
-        // Handle the server response
-        console.log("Server Response:", response);
-      })
-      .catch((error) => {
-        // Handle errors
-        console.error(error);
-      });
+    dispatch(login(postData));
   };
 
   return (

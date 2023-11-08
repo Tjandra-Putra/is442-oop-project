@@ -61,4 +61,9 @@ export const userReducer = createReducer(initialState, (builder) => {
     state.success = null;
     state.loading = false;
   });
+
+  // ============================ Clear Errors ============================
+  builder.addCase("CLEAR_ERRORS", (state, action) => {
+    state.error = null;
+  });
 });

@@ -271,6 +271,7 @@ const CreatePortfolio = () => {
   useEffect(() => {
     // http://localhost:8080/api/stockInfo/getStockInfo/ticker/{ticker}
     // get current stock market
+
     axios
       .get("http://localhost:8080/api/stock/getStock")
       .then((res) => {

@@ -12,8 +12,11 @@ import PortfolioCard from "../../components/PorfolioCard/PortfolioCard";
 import { TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const Dashboard = () => {
+  const { user, loading, error, isAuth } = useSelector((state) => state.userReducer);
+
   const navigate = useNavigate();
 
   const [portfolioName, setPortfolioName] = React.useState("");
@@ -43,7 +46,11 @@ const Dashboard = () => {
     const userId = 1;
 
     axios
-      .get("http://localhost:8080/api/portfolio/getPortfolio/" + userId)
+      .get("http://localhost:8080/api/portfolio/getPortfolio/" + userId, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+        },
+      })
       .then((res) => {
         setPortfolios(res.data.data);
 

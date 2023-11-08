@@ -5,6 +5,7 @@ import { configureStore, getDefaultMiddleware, combineReducers } from "@reduxjs/
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import logger from "redux-logger";
+import { userReducer } from "./reducers/user";
 
 const persistConfig = {
   key: "root",
