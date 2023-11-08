@@ -33,6 +33,7 @@ import { useSelector } from "react-redux";
 
 import style from "./Navbar.module.css";
 import { Button } from "@mui/material";
+import axios from "axios";
 
 const Navbar = () => {
   const { user, loading, error, isAuth } = useSelector((state) => state.userReducer);
@@ -48,6 +49,18 @@ const Navbar = () => {
     boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
     zIndex: 1000,
   };
+
+  // const logoutHandler = () => {
+  //   axios
+  //     .get("http://localhost:8080/logout", {
+  //       headers: {
+  //         Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+  //       },
+  //     })
+  //     .then((res) => {
+  //       console.log(res);
+  //     });
+  // };
 
   // Drawer Styling
   const AppBar = styled(MuiAppBar, {
@@ -125,7 +138,7 @@ const Navbar = () => {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>My Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      <MenuItem onClick={() => navigate("/login")}>Logout</MenuItem>
     </Menu>
   );
 
@@ -210,7 +223,7 @@ const Navbar = () => {
                 </IconButton>
 
                 <div className={style.userNameWrapper}>
-                  <span className={style.userName}>{user.email.split("@")[0].toLowerCase()}</span>
+                  <span className={style.userName}>{user?.email.split("@")[0].toLowerCase()}</span>
                 </div>
               </Box>
             ) : (
@@ -267,7 +280,7 @@ const Navbar = () => {
               <ListItemIcon>
                 <LogoutIcon />
               </ListItemIcon>
-              <ListItemText primary="Logout" />
+              <ListItemText primary="Logout" onClick={() => navigate("/login")} />
             </ListItemButton>
           </ListItem>
         </List>
