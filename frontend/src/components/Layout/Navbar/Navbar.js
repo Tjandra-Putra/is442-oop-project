@@ -17,25 +17,25 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import Container from "@mui/material/Container";
-import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import { deepOrange, deepPurple } from "@mui/material/colors";
-import Cookies from "js-cookie";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import style from "./Navbar.module.css";
 import { Button } from "@mui/material";
 import axios from "axios";
+import { logout } from "../../../redux/actions/user";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+
   const { user, loading, error, isAuth } = useSelector((state) => state.userReducer);
 
   const navigate = useNavigate();
@@ -50,17 +50,12 @@ const Navbar = () => {
     zIndex: 1000,
   };
 
-  // const logoutHandler = () => {
-  //   axios
-  //     .get("http://localhost:8080/logout", {
-  //       headers: {
-  //         Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
-  //       },
-  //     })
-  //     .then((res) => {
-  //       console.log(res);
-  //     });
-  // };
+  const logoutHandler = () => {
+    // Dispatch the logout action to clear the user state.
+    dispatch(logout());
+
+    // Perform any other necessary logout actions, such as clearing cookies or redirecting.
+  };
 
   // Drawer Styling
   const AppBar = styled(MuiAppBar, {
@@ -121,26 +116,25 @@ const Navbar = () => {
   };
 
   const menuId = "primary-search-account-menu";
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>My Profile</MenuItem>
-      <MenuItem onClick={() => navigate("/login")}>Logout</MenuItem>
-    </Menu>
-  );
+  const renderMenu = null;
+  // <Menu
+  //   anchorEl={anchorEl}
+  //   anchorOrigin={{
+  //     vertical: "top",
+  //     horizontal: "right",
+  //   }}
+  //   id={menuId}
+  //   keepMounted
+  //   transformOrigin={{
+  //     vertical: "top",
+  //     horizontal: "right",
+  //   }}
+  //   open={isMenuOpen}
+  //   onClose={handleMenuClose}
+  // >
+  //   <MenuItem onClick={handleMenuClose}>My Profile</MenuItem>
+  //   <MenuItem onClick={() => navigate("/login")}>Logout</MenuItem>
+  // </Menu>
 
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
@@ -158,29 +152,7 @@ const Navbar = () => {
       }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <EmailOutlinedIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircleOutlinedIcon />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
+    ></Menu>
   );
 
   return (
@@ -260,18 +232,6 @@ const Navbar = () => {
               <ListItemText primary="Dashboard" />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>{<AccountCircleOutlinedIcon />}</ListItemIcon>
-              <ListItemText primary="Profile" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>{<AccountBalanceWalletIcon />}</ListItemIcon>
-              <ListItemText primary="Wallet" />
-            </ListItemButton>
-          </ListItem>
         </List>
         <Divider />
         <List>
@@ -280,7 +240,7 @@ const Navbar = () => {
               <ListItemIcon>
                 <LogoutIcon />
               </ListItemIcon>
-              <ListItemText primary="Logout" onClick={() => navigate("/login")} />
+              <ListItemText primary="Logout" onClick={() => logoutHandler()} />
             </ListItemButton>
           </ListItem>
         </List>

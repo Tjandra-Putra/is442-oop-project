@@ -47,3 +47,4 @@ public class StockInfoController {
         return ApiModel.ok(StockInfoService.updateStockInfoByPortfolio());
     }
 }
+

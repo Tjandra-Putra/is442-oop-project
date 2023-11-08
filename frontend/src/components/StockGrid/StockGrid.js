@@ -365,7 +365,7 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
     selectedRows.forEach((row) => {
       totalPrice += row.Total;
     });
-    return totalPrice;
+    return totalPrice.toFixed(2);
   };
 
   const [selectedRows, setSelectedRows] = React.useState([]);

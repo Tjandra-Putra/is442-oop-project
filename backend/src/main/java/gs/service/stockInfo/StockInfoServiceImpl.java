@@ -67,10 +67,13 @@ public class StockInfoServiceImpl implements StockInfoService {
     public PortfolioStockRepo portfolioStockRepo;
 
     public List<StockInfoInputModel> getStockInfoByPortfolio() throws Exception {
+        System.out.println("===REACHED====");
         List<String> portfolioStocks = portfolioStockRepo.getTickerList();
+        System.out.println("====GET STOCK INFO====");
+        System.out.println(portfolioStocks.size());
         List<StockInfoInputModel> stockInfoList = new ArrayList<>();
         List<String> adjustedCloseList = new ArrayList<String>();
-        String apiKey = "";
+        String apiKey = "94ANM37S7U3Z5NHS";
         for (String ticker : portfolioStocks) {  
                  String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" + ticker + "&apikey=" + apiKey;
 
@@ -143,6 +146,9 @@ public class StockInfoServiceImpl implements StockInfoService {
                 newStockInfo.setIndustry(secondObj.getString("Industry"));
                 newStockInfo.setSector(secondObj.getString("Sector"));
                 newStockInfo.setTodayPrice(Double.parseDouble(adjustedClose));
+                System.out.println("======GET STOCK INFO======");
+                System.out.println(currentStock.getStockName());
+                System.out.println(currentStock.getTicker());
                 stockInfoRepo.save(newStockInfo);
 
              }
@@ -163,9 +169,11 @@ public class StockInfoServiceImpl implements StockInfoService {
     
     public List<StockInfoInputModel> updateStockInfoByPortfolio() throws Exception{
         List<String> portfolioStocks = portfolioStockRepo.getTickerList();
+        System.out.println("====UPDATE=====");
+        System.out.println(portfolioStocks.size());
         List<StockInfoInputModel> stockInfoList = new ArrayList<>();
         List<String> adjustedCloseList = new ArrayList<String>();
-        String apiKey = "";
+        String apiKey = "94ANM37S7U3Z5NHS";
         for (String ticker : portfolioStocks) {  
                  String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" + ticker + "&apikey=" + apiKey;
 
@@ -204,6 +212,7 @@ public class StockInfoServiceImpl implements StockInfoService {
                             adjustedCloseList.add(adjustedClose);
                         
                             StockInfo currentStock = stockInfoRepo.getStockInfoByTicker(ticker);
+                            // NPE currentStock
                             currentStock.setTodayPrice(Double.parseDouble(adjustedClose));
                             stockInfoRepo.save(currentStock);
                             break;
@@ -218,8 +227,8 @@ public class StockInfoServiceImpl implements StockInfoService {
 
         List<StockInfo> stockInfoQueryList = stockInfoRepo.getStockInfo();
         for (StockInfo data : stockInfoQueryList) {
-            StockInfoInputModel inputModel = inputModel(data);
-            stockInfoList.add(inputModel);
+            StockInfoInputModel returnModel = inputModel(data);
+            stockInfoList.add(returnModel);
         }
         return stockInfoList;
     };

@@ -341,12 +341,12 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
     }
 
     public List<HashMap<Integer,Double>> getAnnualReturns(String portfolioId){
-
+        System.out.println("===REACHED====");
         List<HashMap<Integer,Double>> result = new ArrayList<>();
         HashMap<Integer,Double> annualCloseValue = new HashMap<>();
         
         List<PortfolioStock> portfolioStockQueryList = portfolioStockRepo.getPortfolioStockByPortfolioId(portfolioId);
-
+        System.out.println(portfolioStockQueryList.size());
         List<PortfolioStockInputModel> portfolioStockList = new ArrayList<>();
 
         for (PortfolioStock data : portfolioStockQueryList) {

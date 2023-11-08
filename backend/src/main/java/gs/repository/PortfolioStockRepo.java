@@ -8,12 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 import gs.entity.PortfolioStock;
 import gs.entity.PortfolioStockId;
 
-public interface PortfolioStockRepo extends JpaRepository<PortfolioStock, PortfolioStockId>{
+public interface PortfolioStockRepo extends JpaRepository<PortfolioStock, PortfolioStockId> {
 
     @Query(value = "select * from portfolio_stock where portfolio_id = ?;", nativeQuery = true)
     List<PortfolioStock> getPortfolioStockByPortfolioId(String portfolioId);
 
-    @Query(value = "select * from portfolio_stock where portfolio_id = ? and ticker = ?;", nativeQuery = true)
+    @Query(value = "select * from portfolio_stock where portfolio_id = ? and ticker = ?;",
+            nativeQuery = true)
     PortfolioStock getIndividualStock(String portfolioId, String ticker);
 
     @Query(value = "select distinct(ticker) from portfolio_stock;", nativeQuery = true)
