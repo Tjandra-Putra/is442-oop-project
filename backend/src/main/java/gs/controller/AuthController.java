@@ -14,7 +14,8 @@ import gs.entity.User;
 import gs.model.request.LoginReq;
 import gs.model.response.ErrorRes;
 import gs.model.response.LoginRes;
-
+import gs.repository.UserRepo;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +24,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/rest/auth")
 public class AuthController {
-    
+    @Resource
+    protected UserRepo userRepo;
+
     private final AuthenticationManager authenticationManager;
 
     private JwtUtil jwtUtil;
@@ -44,7 +47,8 @@ public class AuthController {
             User user = new User(email, "");
 
             String token = jwtUtil.createToken(user);
-            LoginRes loginRes = new LoginRes(email, token);
+            String userId = String.valueOf(userRepo.getUserByEmail(email).getUserId());
+            LoginRes loginRes = new LoginRes(email, token, userId);
 
             return ResponseEntity.ok(loginRes);
             
