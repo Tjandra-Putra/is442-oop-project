@@ -15,10 +15,11 @@ import gs.model.request.LoginReq;
 import gs.model.response.ErrorRes;
 import gs.model.response.LoginRes;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/rest/auth")
 public class AuthController {

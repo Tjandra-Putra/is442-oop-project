@@ -22,16 +22,29 @@ const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // ====================== get user info from database ======================
-    const userId = 1;
+    // Access form fields using event.target
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+
+    // Create a postData object with the form data
+    const postData = {
+      email: email,
+      password: password,
+    };
+
+    // Now you can use the postData object to send the data to your server or perform any other actions
+    console.log("Form Data:", postData);
+
+    // Example: Send the data to your server
     axios
-      .get("http://localhost:8080/api/user/getUser/" + userId)
-      .then((res) => {
-        const objectString = JSON.stringify(res.data.data[0]);
-        Cookies.set("userInfo", objectString, { expires: 7 }); // expires in 7 days
+      .post("http://localhost:8080/rest/auth/login", postData,)
+      .then((response) => {
+        // Handle the server response
+        console.log("Server Response:", response);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        // Handle errors
+        console.error(error);
       });
   };
 
