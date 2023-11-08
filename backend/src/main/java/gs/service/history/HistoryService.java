@@ -8,6 +8,8 @@ public interface HistoryService {
     
     List<HistoryInputModel> getAllHistory();
 
+    List<HistoryInputModel> getHistoryPriceByTicker(String ticker);
+    
     List<HistoryInputModel> getHistoryByTicker(String ticker);
 
     List<HistoryInputModel> getWeeklyHistoryByTicker(String ticker);

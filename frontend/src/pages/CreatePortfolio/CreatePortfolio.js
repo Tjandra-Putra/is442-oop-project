@@ -124,7 +124,8 @@ const CreatePortfolio = () => {
             // type="date"
             // value={params.row.BuyDate ? params.row.BuyDate : formattedToday}
             type="date"
-            value={params.row.BuyDate || formattedToday} // Use "||" to provide a default value
+            value={params.row.BuyDate} // Use "||" to provide a default value
+            // value={params.row.BuyDate || formattedToday} // Use "||" to provide a default value
             InputLabelProps={{
               shrink: true,
             }}
@@ -303,29 +304,63 @@ const CreatePortfolio = () => {
     return row.Ticker.toLowerCase().includes(searchString) || row.Name.toLowerCase().includes(searchString);
   });
 
-  const getStockPrice = (ticker) => {
-    return axios
-      .get("http://localhost:8080/api/StockInfo/getStockInfo/ticker/" + ticker, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
-        },
-      })
-      .then((res) => {
-        console.log("== getStockPrice ==");
-        const todayPrice = res.data.data[0]?.todayPrice || 0;
-        console.log(todayPrice); // Logging for verification
-        return todayPrice;
-      })
-      .catch((error) => {
-        console.error("Error fetching stock price:", error);
-        return 0; // Return 0 in case of an error
-      });
-  };
+  // const getStockPrice = (ticker) => {
+  //   return axios
+  //     .get("http://localhost:8080/api/StockInfo/getStockInfo/ticker/" + ticker, {
+  //       headers: {
+  //         Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+  //       },
+  //     })
+  //     .then((res) => {
+  //       console.log("== getStockPrice ==");
+  //       const todayPrice = res.data.data[0]?.todayPrice || 0;
+  //       console.log("-----------------K");
+  //       console.log(res); // Logging for verification
+  //       return todayPrice;
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching stock price:", error);
+  //       return 0; // Return 0 in case of an error
+  //     });
+  // };
 
   const handleRowSelectionModelChange = async (newSelection) => {
     const getPricePromises = newSelection.map((id) => {
       const row = filteredStockRows.find((row) => row.id === id);
-      return getStockPrice(row.Ticker);
+
+      console.log("TOUCHHHH" + row.Ticker);
+
+      var result = 0;
+
+      // populate database base on ticker
+      axios
+        .get(`http://localhost:8080/api/stockHistory/getHistoryPriceByTicker/${row.Ticker}`, {
+          headers: {
+            Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+          },
+        })
+        .then((res1) => {
+          console.log("== getHistoryPriceByTicker CALLED ==");
+        });
+
+      return axios
+        .get(`http://localhost:8080/api/stockHistory/getHistoryByTicker/${row.Ticker}`, {
+          headers: {
+            Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+          },
+        })
+        .then((res2) => {
+          let adjustedClosePrice = res2.data.data[0]?.adjClosePrice || 0;
+          let date = res2.data.data[0].date;
+          console.log("ADJUSTED: " + adjustedClosePrice);
+
+          result = adjustedClosePrice;
+          console.log("RESULT: " + result);
+          return result;
+        });
+
+      // return getStockPrice(row.Ticker);
+      // return getStockPrice();
     });
 
     try {

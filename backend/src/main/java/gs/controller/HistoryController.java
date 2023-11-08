@@ -20,6 +20,13 @@ public class HistoryController {
         return ApiModel.ok(HistoryService.getAllHistory());
     }
 
+    @GetMapping("/getHistoryPriceByTicker/{ticker}")
+    public ApiModel<ArrayList<HistoryInputModel>> getHistoryPriceByTicker(
+        @PathVariable("ticker") String ticker
+    ){
+        return ApiModel.ok(HistoryService.getHistoryPriceByTicker(ticker));
+    }
+
     @GetMapping("/getHistoryByTicker/{ticker}")
     public ApiModel<ArrayList<HistoryInputModel>> getHistoryByTicker(
         @PathVariable("ticker") String ticker

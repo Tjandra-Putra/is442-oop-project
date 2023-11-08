@@ -57,6 +57,21 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     public List<HistoryInputModel> getHistoryByTicker(String ticker){
+        List<HistoryInputModel> returnList = new ArrayList<>();
+        List<History> tickerPriceList = historyRepo.getHistoryByTicker(ticker);
+
+        HistoryInputModel inputModel = new HistoryInputModel();
+
+        inputModel.setTicker(ticker);
+        inputModel.setDate(DateUtils.dateFormatter(tickerPriceList.get(0).getDate()));
+        inputModel.setAdjClosePrice(tickerPriceList.get(0).getAdjClosePrice());
+
+        returnList.add(inputModel);
+
+        return returnList;
+    }
+
+    public List<HistoryInputModel> getHistoryPriceByTicker(String ticker){
         List<HistoryInputModel> historyList = new ArrayList<>();
 
         try {
