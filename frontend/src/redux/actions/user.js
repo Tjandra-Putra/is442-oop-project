@@ -55,9 +55,11 @@ export const login = (formData) => async (dispatch) => {
 // ============================ Logout ============================
 export const logout = () => async (dispatch) => {
   try {
-    await axios.get(`${DEVELOPMENT_SERVER_PATH}/api/auth/logout`, {
-      withCredentials: true,
-    });
+    // await axios.get(`${DEVELOPMENT_SERVER_PATH}/api/auth/logout`, {
+    //   withCredentials: true,
+    // });
+
+    // clear initialState from userReducer.js
 
     dispatch({ type: "LOGOUT_USER" });
   } catch (error) {

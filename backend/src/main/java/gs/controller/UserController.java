@@ -59,16 +59,16 @@ public class UserController {
         return ApiModel.ok(userService.getUserById(id));
     }
 
-    @PostMapping("/addUser")
-    public ApiModel addUser(
-        @RequestBody RequestModel requestModel
-    ) throws Exception{
-        ApiModel myApiModel = new ApiModel();
-        userService.addUser(response, requestModel, myApiModel);
+    // @PostMapping("/addUser")
+    // public ApiModel addUser(
+    //     @RequestBody RequestModel requestModel
+    // ) throws Exception{
+    //     ApiModel myApiModel = new ApiModel();
+    //     userService.addUser(response, requestModel, myApiModel);
 
-        return myApiModel;
+    //     return myApiModel;
 
-    }
+    // }
 
     // CHANGE PASSWORD - START
     @PatchMapping

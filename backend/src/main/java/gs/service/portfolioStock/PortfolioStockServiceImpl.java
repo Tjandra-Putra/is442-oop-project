@@ -22,6 +22,7 @@ import gs.common.DataRequestModel;
 import gs.common.RequestModel;
 import gs.common.RequestModel2;
 import gs.entity.History;
+import gs.entity.Portfolio;
 import gs.entity.PortfolioStock;
 import gs.entity.Stock;
 import gs.entity.StockInfo;
@@ -238,14 +239,18 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
             for (List<DataRequestModel> obj : requestModel2.getData()){   
 
                 PortfolioStock newPortfolioStock = new PortfolioStock();
+                double price = 0;
+                int quantity = 0;
 
                 for (DataRequestModel stockToAdd : obj){
                     if (stockToAdd.getFieldName().equalsIgnoreCase("price")){
                         newPortfolioStock.setPrice(Double.parseDouble(stockToAdd.getValue()));
+                        price = Double.parseDouble(stockToAdd.getValue());
                     }
 
                     else if (stockToAdd.getFieldName().equalsIgnoreCase("quantity")){
                         newPortfolioStock.setQuantity(Integer.parseInt(stockToAdd.getValue()));
+                        quantity = Integer.parseInt(stockToAdd.getValue());
                     }
                     
                     else if (stockToAdd.getFieldName().equalsIgnoreCase("ticker")){
@@ -264,6 +269,10 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
                 }
 
                 newPortfolioStock.setPortfolio(portfolioRepo.getPortfolioByPortfolioId(portfolioId));
+
+                Portfolio currentPortfolio = portfolioRepo.getPortfolioByPortfolioId(portfolioId);
+                currentPortfolio.setPortfolioCapitalAmt(currentPortfolio.getPortfolioCapitalAmt() - (quantity * price));
+                portfolioRepo.save(currentPortfolio);;
 
                 // save to db
                 portfolioStockRepo.save(newPortfolioStock);
@@ -341,12 +350,12 @@ public class PortfolioStockServiceImpl implements PortfolioStockService{
     }
 
     public List<HashMap<Integer,Double>> getAnnualReturns(String portfolioId){
-
+        System.out.println("===REACHED====");
         List<HashMap<Integer,Double>> result = new ArrayList<>();
         HashMap<Integer,Double> annualCloseValue = new HashMap<>();
         
         List<PortfolioStock> portfolioStockQueryList = portfolioStockRepo.getPortfolioStockByPortfolioId(portfolioId);
-
+        System.out.println(portfolioStockQueryList.size());
         List<PortfolioStockInputModel> portfolioStockList = new ArrayList<>();
 
         for (PortfolioStock data : portfolioStockQueryList) {

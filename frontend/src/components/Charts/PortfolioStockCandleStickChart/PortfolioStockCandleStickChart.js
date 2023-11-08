@@ -35,10 +35,14 @@ const PortfolioStockCandleStickChart = React.memo(({ ticker }) => {
         const formattedData = [];
         for (let i = 0; i < responseData.length && i < dataSetsToShow; i++) {
           const item = responseData[i];
-          formattedData.push([item.date, item.openPrice, item.adjClosePrice, item.lowPrice, item.highPrice]);
+          // formattedData.push([item.date, item.openPrice, item.adjClosePrice, item.lowPrice, item.highPrice]);
+          formattedData.push([item.date, item.lowPrice, item.openPrice, item.adjClosePrice, item.highPrice]);
+          console.log(formattedData);
         }
 
-        formattedData.unshift(["date", "openPrice", "closePrice", "lowPrice", "highPrice"]);
+        formattedData.unshift(["date", "lowPrice", "openPrice", "closePrice", "highPrice"]);
+
+        // formattedData.unshift(["date", "openPrice", "closePrice", "lowPrice", "highPrice"]);
         setInitialData(formattedData);
         setLoader(false); // Set the loader to false when the request is completed
       })
