@@ -5,6 +5,7 @@ import StockCard from "../../components/StockCard/StockCard";
 import StockGrid from "../../components/StockGrid/StockGrid";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useSelector } from "react-redux";
 import PortfolioStocksAllocationChart from "../../components/Charts/PortfolioStocksAllocationChart/PortfolioStocksAllocationChart";
 import MarketExposureByCountryChart from "../../components/Charts/MarketExposureByCountryChart/MarketExposureByCountryChart";
 import MarketExposureByCurrencyChart from "../../components/Charts/MarketExposureByCurrencyChart/MarketExposureByCurrencyChart";
@@ -28,10 +29,12 @@ import {
 const PortfolioDetailed = () => {
   const navigate = useNavigate();
 
+  const { user, loading, error, isAuth } = useSelector((state) => state.userReducer);
+
   // get id from url paramter
   const { id } = useParams();
   const [portfolio, setPortfolio] = React.useState(null);
-  const [loading, setLoading] = React.useState(false);
+  const [loadingNew, setLoadingNew] = React.useState(false);
   const [deleteMessage, setDeleteMessage] = React.useState("");
   const [dataFromChildStocksCount, setDataFromChildStocksCount] = useState(null);
 
@@ -44,11 +47,13 @@ const PortfolioDetailed = () => {
   };
 
   useEffect(() => {
-    const userId = 1;
-
-    setLoading(true);
+    setLoadingNew(true);
     axios
-      .get(`http://localhost:8080/api/portfolio/getPortfolio/${userId}/${id}`)
+      .get(`http://localhost:8080/api/portfolio/getPortfolio/${user.userId}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+        },
+      })
       .then((res) => {
         let portfolioRes = res.data.data[0];
         setPortfolio(portfolioRes);
@@ -61,7 +66,7 @@ const PortfolioDetailed = () => {
         console.log(err);
       });
 
-    setLoading(false);
+    setLoadingNew(false);
   }, [id]);
 
   // modal update portfolio
@@ -92,10 +97,12 @@ const PortfolioDetailed = () => {
       ],
     };
 
-    const userId = 1;
-
     axios
-      .put(`http://localhost:8080/api/portfolio/editPortfolio/${userId}/${id}`, postData)
+      .put(`http://localhost:8080/api/portfolio/editPortfolio/${user.userId}/${id}`, postData, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+        },
+      })
       .then((res) => {
         console.log("updateeeeeee");
         console.log(res.data);
@@ -125,16 +132,17 @@ const PortfolioDetailed = () => {
       return;
     }
 
-    const userId = 1;
-
     console.log("====================================");
 
     const portfolioId = parseInt(id, 10); // Parse the id as an integer
     console.log(portfolioId);
-    console.log(userId);
 
     axios
-      .delete(`http://localhost:8080/api/portfolio/deletePortfolio/${userId}/${portfolioId}`)
+      .delete(`http://localhost:8080/api/portfolio/deletePortfolio/${user.userId}/${portfolioId}`, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+        },
+      })
       .then((res) => {
         console.log(res.data);
 
@@ -189,7 +197,7 @@ const PortfolioDetailed = () => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
               >
-                {!loading && (
+                {!loadingNew && (
                   <Box className={style.updatePortfolioModal}>
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                       Edit Portfolio

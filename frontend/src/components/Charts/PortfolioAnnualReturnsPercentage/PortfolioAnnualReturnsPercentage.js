@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const PortfolioAnnualReturnsPercentage = ({ portfolioId }) => {
+  const { user, loading, error, isAuth } = useSelector((state) => state.userReducer);
+
   const [initialData, setInitialDAta] = React.useState([["Year", "Returns"]]);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/portfolioStock/getAnnualReturns/${portfolioId}`)
+      .get(`http://localhost:8080/api/portfolioStock/getAnnualReturns/${portfolioId}`, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+        },
+      })
       .then((res) => {
         let response = res.data.data;
 

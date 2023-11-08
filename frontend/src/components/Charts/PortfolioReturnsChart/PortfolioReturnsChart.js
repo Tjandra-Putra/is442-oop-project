@@ -6,10 +6,13 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import style from "./PortfolioReturnsChart.module.css";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 import { years, months, quarters } from "../../../data";
 
 function LineChart({ portfolioId }) {
+  const { user, loading, error, isAuth } = useSelector((state) => state.userReducer);
+
   const [selectedFilterType, setSelectedFilterType] = useState("yearly");
   const [selectedFromYear, setSelectedFromYear] = useState();
   const [selectedToYear, setSelectedToYear] = useState();
@@ -23,48 +26,54 @@ function LineChart({ portfolioId }) {
 
   useEffect(() => {
     // show all data
-    axios.get(`http://localhost:8080/api/stockHistory/getMonthlyPortfolioValue/${portfolioId}`).then((res) => {
-      const response = res.data.data;
-      const dataMap = {}; // Use an object to store segment data
+    axios
+      .get(`http://localhost:8080/api/stockHistory/getMonthlyPortfolioValue/${portfolioId}`, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+        },
+      })
+      .then((res) => {
+        const response = res.data.data;
+        const dataMap = {}; // Use an object to store segment data
 
-      // Loop through the response to build the dataMap
-      response.forEach((element) => {
-        for (const year in element) {
-          const yearData = element[year];
-          dataMap[year] = dataMap[year] || {}; // Initialize the year if it doesn't exist
-          for (const month in yearData) {
-            dataMap[year][month] = yearData[month];
+        // Loop through the response to build the dataMap
+        response.forEach((element) => {
+          for (const year in element) {
+            const yearData = element[year];
+            dataMap[year] = dataMap[year] || {}; // Initialize the year if it doesn't exist
+            for (const month in yearData) {
+              dataMap[year][month] = yearData[month];
+            }
+          }
+        });
+
+        // store unique years value
+        let uniqueYears = [];
+        for (const year in dataMap) {
+          uniqueYears.push(year);
+        }
+        setUniqueYears(uniqueYears);
+
+        let processData = [["Year-Month", "Returns"]];
+        for (const year in dataMap) {
+          const yearData = dataMap[year];
+
+          // Add the year to the first row
+          for (let month = 1; month < 13; month++) {
+            let currentRow = [];
+            let value = yearData[month];
+            let date = new Date(year, month);
+            let currentDate = new Date();
+            if (date <= currentDate) {
+              currentRow.push(date);
+              currentRow.push(value);
+              processData.push(currentRow);
+            }
           }
         }
+
+        setData(processData);
       });
-
-      // store unique years value
-      let uniqueYears = [];
-      for (const year in dataMap) {
-        uniqueYears.push(year);
-      }
-      setUniqueYears(uniqueYears);
-
-      let processData = [["Year-Month", "Returns"]];
-      for (const year in dataMap) {
-        const yearData = dataMap[year];
-
-        // Add the year to the first row
-        for (let month = 1; month < 13; month++) {
-          let currentRow = [];
-          let value = yearData[month];
-          let date = new Date(year, month);
-          let currentDate = new Date();
-          if (date <= currentDate) {
-            currentRow.push(date);
-            currentRow.push(value);
-            processData.push(currentRow);
-          }
-        }
-      }
-
-      setData(processData);
-    });
   }, []);
 
   // filter monthly
@@ -72,7 +81,11 @@ function LineChart({ portfolioId }) {
   if (selectedFilterType === "monthly") {
     if (selectedFromYear && selectedToYear && selectedFromMonth && selectedToMonth) {
       axios
-        .get(`http://localhost:8080/api/stockHistory/getMonthlyPortfolioValue/${portfolioId}`)
+        .get(`http://localhost:8080/api/stockHistory/getMonthlyPortfolioValue/${portfolioId}`, {
+          headers: {
+            Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+          },
+        })
         .then((res) => {
           const response = res.data.data;
           const dataMap = {}; // Use an object to store segment data
@@ -122,7 +135,11 @@ function LineChart({ portfolioId }) {
   if (selectedFilterType === "quarterly") {
     if (selectedFromYear && selectedToYear && selectedFromQuarter && selectedToQuarter) {
       axios
-        .get(`http://localhost:8080/api/stockHistory/getQuarterlyPortfolioValue/${portfolioId}`)
+        .get(`http://localhost:8080/api/stockHistory/getQuarterlyPortfolioValue/${portfolioId}`, {
+          headers: {
+            Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+          },
+        })
         .then((res) => {
           const response = res.data.data;
           const dataMap = {}; // Use an object to store segment data
@@ -170,7 +187,11 @@ function LineChart({ portfolioId }) {
   if (selectedFilterType === "yearly") {
     if (selectedFromYear && selectedToYear) {
       axios
-        .get(`http://localhost:8080/api/stockHistory/getAnnualPortfolioValue/${portfolioId}`)
+        .get(`http://localhost:8080/api/stockHistory/getAnnualPortfolioValue/${portfolioId}`, {
+          headers: {
+            Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+          },
+        })
         .then((res) => {
           console.log("=========== Annual ===========");
           const response = res.data.data;

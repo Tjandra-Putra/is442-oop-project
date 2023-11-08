@@ -6,13 +6,20 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Grid } from "@mui/material";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 function MarketExposureByCurrencyChart({ portfolioId }) {
+  const { user, loading, error, isAuth } = useSelector((state) => state.userReducer);
+
   const [initialData, setInitialData] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/portfolioStock/getPortfolioStockCurrencyAllocation/${portfolioId}`)
+      .get(`http://localhost:8080/api/portfolioStock/getPortfolioStockCurrencyAllocation/${portfolioId}`, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+        },
+      })
       .then((res) => {
         let response = res.data.data;
         console.log("RESPONSE: ", response);

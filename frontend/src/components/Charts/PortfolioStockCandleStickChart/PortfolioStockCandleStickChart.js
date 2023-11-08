@@ -3,8 +3,11 @@ import { Chart } from "react-google-charts";
 import axios from "axios";
 import { Typography, Select, MenuItem } from "@mui/material/";
 import Loader from "../../Layout/Loader/Loader";
+import { useSelector } from "react-redux";
 
 const PortfolioStockCandleStickChart = React.memo(({ ticker }) => {
+  const { user, loading, error, isAuth } = useSelector((state) => state.userReducer);
+
   // const [initialData, setInitialData] = useState([
   // adjustprice is closingPrice
   //   ["date", "openPrice", "lowPrice", "highPrice", "adjustedClosingPrice"],
@@ -18,7 +21,11 @@ const PortfolioStockCandleStickChart = React.memo(({ ticker }) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/stockHistory/getWeeklyHistoryByTicker/${ticker}`)
+      .get(`http://localhost:8080/api/stockHistory/getWeeklyHistoryByTicker/${ticker}`, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+        },
+      })
       .then((res) => {
         let responseData = res.data.data; // Define responseData here
         responseData = responseData.reverse(); // Reverse the data so that the most recent data is at the end

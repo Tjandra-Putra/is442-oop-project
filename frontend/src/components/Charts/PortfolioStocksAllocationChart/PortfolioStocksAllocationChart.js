@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 function PortfolioStocksAllocationChart({ portfolioId }) {
+  const { user, loading, error, isAuth } = useSelector((state) => state.userReducer);
+
   const [portfolioStocksAllocation, setPortfolioStocksAllocation] = useState([]);
   const [data, setData] = useState([["Task", "Hours per Day"]]);
 
@@ -10,7 +13,12 @@ function PortfolioStocksAllocationChart({ portfolioId }) {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/portfolioStock/getPortfolioStockAllocation/${portfolioId}`
+          `http://localhost:8080/api/portfolioStock/getPortfolioStockAllocation/${portfolioId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+            },
+          }
         );
         const responseData = response.data;
 

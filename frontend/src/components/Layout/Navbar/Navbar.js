@@ -29,23 +29,15 @@ import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import { deepOrange, deepPurple } from "@mui/material/colors";
 import Cookies from "js-cookie";
+import { useSelector } from "react-redux";
 
 import style from "./Navbar.module.css";
 import { Button } from "@mui/material";
 
 const Navbar = () => {
+  const { user, loading, error, isAuth } = useSelector((state) => state.userReducer);
+
   const navigate = useNavigate();
-  const [isAuth, setIsAuth] = React.useState(true);
-  const [userInfo, setUserInfo] = React.useState(Cookies.get("userInfo"));
-
-  React.useEffect(() => {
-    // get cookie user info
-    const getCookieValue = Cookies.get("userInfo");
-    const object = getCookieValue ? JSON.parse(getCookieValue) : null;
-    setUserInfo(object);
-
-    console.log("cookie: " + object);
-  }, []);
 
   const drawerWidth = 240;
 
@@ -218,7 +210,7 @@ const Navbar = () => {
                 </IconButton>
 
                 <div className={style.userNameWrapper}>
-                  <span className={style.userName}>{userInfo ? userInfo.username : null}</span>
+                  <span className={style.userName}>{user.email.split("@")[0].toLowerCase()}</span>
                 </div>
               </Box>
             ) : (

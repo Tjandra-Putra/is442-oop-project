@@ -19,10 +19,13 @@ import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import moment from "moment";
+import { useSelector } from "react-redux";
 
 import style from "./StockGrid.module.css";
 
 export default function StockGrid({ portfolioId, sendDataToParent }) {
+  const { user, loading, error, isAuth } = useSelector((state) => state.userReducer);
+
   const notifyError = (message) => toast.error(message, { duration: 5000 });
   const notifySuccess = (message) => toast.success(message, { duration: 5000 });
   const [apiMyStocks, setApiMyStocks] = React.useState([]);
@@ -32,10 +35,14 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
   const [stockColumns, setStockColumns] = useState([]);
   const [buyDate, setBuyDate] = useState("");
   const [selectedStockDataModal, setSelectedStockDataModal] = useState(null);
-  
+
   React.useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/portfolioStock/getPortfolioStock/${portfolioId}`)
+      .get(`http://localhost:8080/api/portfolioStock/getPortfolioStock/${portfolioId}`, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+        },
+      })
       .then((res) => {
         const dataWithUniqueIds = addUniqueIds(res.data.data);
         setApiMyStocks(dataWithUniqueIds);
@@ -99,28 +106,17 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
   const handleSaveClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
 
-    
-
-    console.log("====================================")
-    console.log(apiMyStocks)
+    console.log("====================================");
+    console.log(apiMyStocks);
 
     // return quantity and buydate
     const stocktoedit = apiMyStocks.find((stock) => stock.id === id);
-  
-    
-  
+
     const ticker = stocktoedit.ticker;
     const portfolioid = stocktoedit.portfolioId;
 
     console.log("ticker", ticker);
     console.log("portfolioid", portfolioid);
-    
-    
-    
-    
-
-    
-    
   };
 
   const handleDeleteClick = (id, ticker) => () => {
@@ -145,7 +141,12 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
         if (stockToDelete) {
           axios
             .delete(
-              `http://localhost:8080/api/portfolioStock/deletePortfolioStock/${stockToDelete.portfolioId}/${stockToDelete.ticker}`
+              `http://localhost:8080/api/portfolioStock/deletePortfolioStock/${stockToDelete.portfolioId}/${stockToDelete.ticker}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+                },
+              }
             )
             .then(() => {
               // Update state by removing the row with the specified ID
@@ -193,33 +194,34 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
 
-    console.log("--------------------")
+    console.log("--------------------");
     const ticker = newRow.ticker;
     const portfolioid = newRow.portfolioId;
     const quantity = newRow.quantity;
     const buyDate = newRow.buyDate;
-    
+
     const postData = {
       data: [
         {
           fieldName: "quantity",
-          value: quantity
-        }
-      ]
+          value: quantity,
+        },
+      ],
     };
-    
-    
-    if(ticker && portfolioid && quantity && buyDate){
-      axios.put("http://localhost:8080/api/portfolioStock/editPortfolioStock/" + portfolioid + "/" + ticker , postData)
-      .then((res) => {
-        window.location.reload();
 
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-
-
+    if (ticker && portfolioid && quantity && buyDate) {
+      axios
+        .put("http://localhost:8080/api/portfolioStock/editPortfolioStock/" + portfolioid + "/" + ticker, postData, {
+          headers: {
+            Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+          },
+        })
+        .then((res) => {
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
     return updatedRow;
   };
@@ -230,8 +232,7 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
 
   const columns = [
     { field: "ticker", headerName: "Ticker", width: 150 },
-    { field: "quantity", headerName: "Quantity", width: 150, editable: true,
-  },
+    { field: "quantity", headerName: "Quantity", width: 150, editable: true },
     { field: "buyDate", headerName: "Buy Date", width: 150 },
     { field: "price", headerName: "Price", width: 150 },
     {
@@ -289,7 +290,6 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
     },
   ];
 
-  //   {
   //     field: "description",
   //     headerName: "Description",
   //     width: 300,
@@ -373,7 +373,11 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
   React.useEffect(() => {
     // get current stock market
     axios
-      .get("http://localhost:8080/api/stock/getStock")
+      .get("http://localhost:8080/api/stock/getStock", {
+        headers: {
+          Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+        },
+      })
       .then((res) => {
         let stockData = res.data.data;
         setStockMarket(stockData);
@@ -510,7 +514,11 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
 
   const getStockPrice = (ticker) => {
     return axios
-      .get("http://localhost:8080/api/StockInfo/getStockInfo/ticker/" + ticker)
+      .get("http://localhost:8080/api/StockInfo/getStockInfo/ticker/" + ticker, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+        },
+      })
       .then((res) => {
         const todayPrice = res.data.data[0]?.todayPrice || 0;
         return todayPrice;
@@ -583,7 +591,11 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
 
       // Send the selected stocks
       axios
-        .post("http://localhost:8080/api/portfolioStock/addPortfolioStock/" + portfolioId, postData2)
+        .post("http://localhost:8080/api/portfolioStock/addPortfolioStock/" + portfolioId, postData2, {
+          headers: {
+            Authorization: `Bearer ${user?.token}`, // Replace "yourTokenHere" with your actual token
+          },
+        })
         .then((res) => {
           notifySuccess("Stocks added successfully");
 
@@ -595,8 +607,6 @@ export default function StockGrid({ portfolioId, sendDataToParent }) {
         });
     });
   };
-
-
 
   return (
     <>
