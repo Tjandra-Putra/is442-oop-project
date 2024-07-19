@@ -2,6 +2,9 @@
 
 This project is a portfolio analysis web application, where users can search for stocks, add it to their portfolios and view its performance over weeks, months, quarters or years. Users can also view the market exposure of each portfolio based on Industry, Country or Currency.
 
+### Video Showcase
+[Watch the video](https://www.youtube.com/watch?v=bpvDhF9ldK8)
+
 ### Team Members
 
 | Members               | School Email     | 
