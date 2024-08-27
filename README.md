@@ -14,7 +14,7 @@ This project is a portfolio analysis web application, where users can search for
 | Muhammad Faez Bin Abdul Latiff | muhammadal.2021@scis.smu.edu.sg | 
 | Toh Ming Jun | mingjun.toh.2021@scis.smu.edu.sg | 
 | Teo Jun Wee Ryan | ryan.teo.2021@scis.smu.edu.sg | 
-| Tjandra Putra | tjandrap.2021@scis.smu.edu.sg  | 
+| Tjandra Putra (Front-end Lead) | tjandrap.2021@scis.smu.edu.sg  | 
 
 ## Technologies Used
 
